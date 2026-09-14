@@ -58,9 +58,9 @@ OpenAPI export creates an application context but does not connect to PostgreSQL
 | `pnpm typecheck` | Check all workspace source and API tests; run after the build graph has generated artifacts |
 | `pnpm contract:check` | Regenerate and compare contract/client artifacts; run after build |
 | `pnpm db:migrate` | Apply committed Prisma migrations to `DATABASE_URL`; do not point it at an unintended database |
-| `pnpm test:unit` | Environment-boundary tests |
+| `pnpm test:unit` | Environment-boundary and session-lifetime policy tests |
 | `pnpm test:http` | Health HTTP tests using compiled API and mocked database availability |
-| `pnpm test:db` | Actual PostgreSQL singleton and rollback tests; requires migrated, empty disposable `_test` database |
+| `pnpm test:db` | Actual PostgreSQL rollback, independent-account, authentication, and session-isolation tests; requires a migrated disposable `_test` database |
 | `pnpm test:e2e` | Built web/API browser journey; requires installed Chromium |
 | `pnpm dev` | Build required artifacts, then watch API compilation/server and run Vite; compilation is not authorized in the current local workflow |
 
@@ -70,7 +70,9 @@ Changing an API response requires regenerating the schema/client and rebuilding 
 
 `.env.example` documents local development values. API startup reads typed environment configuration; the database URL must use a PostgreSQL protocol. Startup fails without it, while `/api/v1/health/live` does not query the database. `/api/v1/health/ready` performs a bounded database check and returns 503 with `DATABASE_UNAVAILABLE` on failure.
 
-The baseline migration creates an empty `owners` table with an enforceable singleton constraint. It creates no owner credentials or data. Authentication and bootstrap are phase-3 work.
+The baseline created an empty `owners` table. The phase-3 migration preserves those rows as `users`, removes singleton uniqueness, and adds `credentials` and `sessions`. Web registration creates a user and credential atomically; there are no default credentials. Do not edit or remove the old migration to achieve this change.
+
+`APP_ORIGIN` is required to match the browser's exact origin. Production uses HTTPS and a Secure cookie; test/development allow loopback HTTP. Use `http://127.0.0.1:5173` for Vite and `http://127.0.0.1:4173` for browser tests. `TRUST_PROXY=false` is the default; a known proxy IP/CIDR list is an explicit deployment setting. When the API is behind a proxy, configure that list so per-IP throttling sees real client addresses instead of grouping every request under the proxy address.
 
 For a separately authorized development environment with Docker:
 
@@ -90,10 +92,29 @@ Prepare `.env` from the example first. Development PostgreSQL is bound only to `
 - API readiness: `http://127.0.0.1:3000/api/v1/health/ready`.
 - Development-only OpenAPI JSON: `http://127.0.0.1:3000/api/openapi.json`.
 
-Vite proxies `/api` to the API so the browser uses one origin. The localized foundation page checks API liveness through the generated client; it deliberately does not claim that the database is connected. There are no financial endpoints or access flows yet.
+Vite proxies `/api` to the API so the browser uses one origin. `/register` and `/login` are public access screens; `/` and `/settings/security` require a valid session. The shell shows an honest pre-financial-feature state and the current user's sessions. Financial endpoints remain subsequent-phase work.
+
+## Operator-only access recovery
+
+On the deployment host, with migrated database configuration and compiled API:
+
+```sh
+pnpm --filter @personal-finance/api auth:reset-password user@example.com
+pnpm --filter @personal-finance/api auth:prune-sessions
+```
+
+The password-reset command prompts for a hidden password and confirmation in a terminal. Standard input is supported for controlled non-interactive operation; never pass a password as a command-line argument. It updates one existing account and invalidates that account's sessions, including credentials-version races. Session pruning removes expired/revoked session records only. These are operator actions, not commands to execute on the owner's Mac during development.
+
+The equivalent commands in the API container are `node dist/modules/identity/cli.js reset-password <email>` and `node dist/modules/identity/cli.js prune-sessions`. Registration is performed through the web, not a bootstrap command. Email delivery/verification and self-service email recovery are not implemented.
+
+## Visual review without a build
+
+Open `docs/design/phase-3-preview.html` in a browser directly. It has no external assets, API requests, or storage. Use the screen, viewport, and state controls to review synthetic financial layouts. English labels belong to design documentation; production-facing Spanish copy remains in i18n resources. CI captures desktop/mobile screenshots of access screens, the private shell, and this prototype as browser-evidence artifacts.
 
 ## Evidence boundary
 
 Local dependency installation and ESLint have completed using the existing Node runtime. With owner authorization, Prettier was applied to source/configuration and ESLint passed again afterward. No local build, type check, migration, unit/HTTP/database/browser test, or container execution has been performed. GitHub workflow files describe future execution and are not evidence of a successful run.
 
-The first reported CI run failed during dependency installation with `ERR_PNPM_IGNORED_BUILDS`: the workspace still used the removed `onlyBuiltDependencies` option. It has been replaced by the explicit `allowBuilds` policy above. A new CI run is required to verify this correction; the earlier local lint/format results do not validate it.
+The first reported CI run failed during dependency installation with `ERR_PNPM_IGNORED_BUILDS`: the workspace still used the removed `onlyBuiltDependencies` option. It was replaced by the explicit `allowBuilds` policy above, and the owner subsequently reported phase-2 CI green. Phase-3 authentication and migration checks require a new CI run; local lint/format results do not validate runtime behavior.
+
+Phase-3 local evidence: the two approved Fastify plugins were installed using `--ignore-scripts`, Prettier was applied with authorization, and ESLint passed. No local build, type check, generation, test, migration, or container execution was performed. Owner review of the financial design proposal remains pending.

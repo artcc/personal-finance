@@ -2,6 +2,8 @@
 
 Status: accepted direction. Date: 2026-09-14.
 
+Scope evolution: ADR 009 later adds independent registered users. The original single-owner context below explains the initial choice; the modular monolith remains the accepted architecture for the expanded scope.
+
 ## Context
 
 The application serves one owner but must support clear business rules, reliable history, tests, and self-hosted operation. The owner requested separate frontend/backend applications with a maintainable architecture.

@@ -10,7 +10,7 @@ Provide explicit monthly expected income for planning, including salary and prof
 
 | Record | Fields |
 | --- | --- |
-| Income source | `id`, `ownerId`, `kind`, user-entered `name`, receiving destination, version |
+| Income source | `id`, session-derived `userId`, `kind`, user-entered `name`, receiving destination, version |
 | Income revision | Source ID, revision ID, `effectiveFromMonth`, `startsOn`, optional `endsOn`, typed calculation inputs |
 | Salary inputs | Explicit monthly net amount; optional descriptive annual gross/extras/variable metadata |
 | Professional inputs | Explicit base or exact hourly rate and hours; VAT/withholding/commission rates; deducted-commission mode |

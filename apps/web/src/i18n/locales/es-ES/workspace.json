@@ -1,0 +1,18 @@
+{
+  "eyebrow": "Tu espacio financiero",
+  "welcome": "Hola, {{name}}.",
+  "description": "Todo empieza con una visión clara de lo que quieres organizar.",
+  "privateBadge": "Tu cuenta está preparada",
+  "emptyTitle": "Aquí empieza tu planificación.",
+  "emptyDescription": "Ya tienes acceso a tu espacio privado. Los módulos para añadir cuentas, ingresos y compromisos llegarán en las próximas fases.",
+  "accountAction": "Revisar mi cuenta",
+  "nextTitle": "Los siguientes pasos",
+  "nextDescription": "Así construiremos tu visión mensual, sin complicaciones.",
+  "upcoming": "Próximamente",
+  "accountsTitle": "Tus cuentas, en orden",
+  "accountsDescription": "Define dónde guardas y repartes el dinero, incluidas las cuentas y sus espacios.",
+  "incomeTitle": "Lo que esperas recibir",
+  "incomeDescription": "Organiza tu salario y los ingresos profesionales que correspondan a cada mes.",
+  "commitmentsTitle": "Lo que quieres prever",
+  "commitmentsDescription": "Reúne los pagos recurrentes y prepara las provisiones para los gastos anuales."
+}

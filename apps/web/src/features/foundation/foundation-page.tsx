@@ -1,102 +1,57 @@
-import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import { Link, useOutletContext } from 'react-router-dom';
 import { Button } from '../../components/ui/button';
-import { api } from '../../lib/api';
+import type { Session } from '../auth/session';
 
 export function FoundationPage() {
-  const { t } = useTranslation(['common', 'foundation']);
-  const connection = useQuery({
-    queryKey: ['system', 'liveness'],
-    queryFn: async ({ signal }) => {
-      const result = await api.GET('/api/v1/health/live', { signal });
-      if (!result.response.ok || !result.data) throw new Error('API_UNAVAILABLE');
-      return result.data;
-    },
-    retry: false,
-  });
-  const state = connection.isFetching ? 'pending' : connection.isError ? 'error' : 'success';
-  const statusKey = {
-    pending: 'connectionPending',
-    error: 'connectionError',
-    success: 'connectionSuccess',
-  } as const;
-
+  const { t } = useTranslation('workspace');
+  const session = useOutletContext<Session>();
   return (
-    <div className="app-canvas">
-      <a href="#main-content" className="skip-link">
-        {t('skipToContent')}
-      </a>
-      <header className="site-header">
-        <div className="brand">
-          <span className="brand-mark" aria-hidden="true">
-            ∑
-          </span>
-          <span>{t('appName')}</span>
-        </div>
-        <span className="stage-badge">{t('foundation:badge')}</span>
+    <>
+      <header className="private-page-heading">
+        <p className="eyebrow">{t('eyebrow')}</p>
+        <h1>{t('welcome', { name: session.user.displayName })}</h1>
+        <p>{t('description')}</p>
       </header>
-      <main id="main-content" className="main-content" tabIndex={-1}>
-        <section className="intro" aria-labelledby="page-heading">
-          <p className="eyebrow">{t('foundation:eyebrow')}</p>
-          <h1 id="page-heading">{t('foundation:heading')}</h1>
-          <p className="intro-description">{t('foundation:description')}</p>
-        </section>
-        <section className="connection-panel" aria-labelledby="connection-heading">
+      <section className="welcome-panel" aria-labelledby="welcome-heading">
+        <div className="welcome-copy">
+          <span className="section-kicker">{t('privateBadge')}</span>
+          <h2 id="welcome-heading">{t('emptyTitle')}</h2>
+          <p>{t('emptyDescription')}</p>
+          <Button asChild>
+            <Link to="/settings/security">{t('accountAction')}</Link>
+          </Button>
+        </div>
+        <div className="welcome-art" aria-hidden="true">
+          <span className="art-card art-card--back" />
+          <span className="art-card art-card--front">
+            <i />
+            <i />
+            <i />
+            <b>✓</b>
+          </span>
+        </div>
+      </section>
+      <section className="scope-section" aria-labelledby="next-heading">
+        <div className="section-heading">
           <div>
-            <p className="section-kicker">{t('foundation:badge')}</p>
-            <h2 id="connection-heading">{t('foundation:connectionTitle')}</h2>
-            <p>{t('foundation:connectionDescription')}</p>
+            <h2 id="next-heading">{t('nextTitle')}</h2>
+            <p>{t('nextDescription')}</p>
           </div>
-          <div className="connection-detail">
-            <p
-              className={`connection-state connection-state--${state}`}
-              role="status"
-              aria-live="polite"
-            >
-              <span className="status-dot" aria-hidden="true" />
-              {t(`foundation:${statusKey[state]}`)}
-            </p>
-            {state !== 'pending' && (
-              <p className="connection-hint">
-                {t(
-                  state === 'error'
-                    ? 'foundation:connectionErrorHint'
-                    : 'foundation:connectionSuccessHint',
-                )}
-              </p>
-            )}
-            <Button
-              variant="outline"
-              disabled={connection.isFetching}
-              onClick={() => void connection.refetch()}
-            >
-              {t(connection.isFetching ? 'retrying' : 'retry')}
-            </Button>
-          </div>
-        </section>
-        <section className="scope-section" aria-labelledby="scope-heading">
-          <div className="section-heading">
-            <div>
-              <h2 id="scope-heading">{t('foundation:scopeTitle')}</h2>
-              <p>{t('foundation:scopeDescription')}</p>
-            </div>
-            <span className="section-kicker">{t('foundation:upcoming')}</span>
-          </div>
-          <div className="feature-grid">
-            {(['planning', 'allocation', 'history'] as const).map((feature, index) => (
-              <article className="feature-card" key={feature}>
-                <span className="feature-index" aria-hidden="true">
-                  {String(index + 1).padStart(2, '0')}
-                </span>
-                <h3>{t(`foundation:${feature}Title`)}</h3>
-                <p>{t(`foundation:${feature}Description`)}</p>
-              </article>
-            ))}
-          </div>
-          <p className="scope-note">{t('foundation:noFinancialData')}</p>
-        </section>
-      </main>
-      <footer className="site-footer">{t('footer')}</footer>
-    </div>
+          <span className="stage-badge">{t('upcoming')}</span>
+        </div>
+        <div className="feature-grid">
+          {(['accounts', 'income', 'commitments'] as const).map((item, index) => (
+            <article className="feature-card" key={item}>
+              <span className="feature-index" aria-hidden="true">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <h3>{t(`${item}Title`)}</h3>
+              <p>{t(`${item}Description`)}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+    </>
   );
 }

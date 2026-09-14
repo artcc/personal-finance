@@ -1,6 +1,6 @@
 # UI/UX Direction
 
-Status: proposed visual direction. The requirement for a polished UI/UX is confirmed. High-fidelity screens, implemented components, and measured accessibility results do not exist yet.
+Status: proposed financial visual direction; phase-3 access/private-shell components implemented. The responsive [visual review prototype](phase-3-preview.html) covers overview, allocation, annual commitments, and alternate states. Owner design approval, browser evidence for this change, and measured accessibility results remain pending.
 
 ## Design goal
 
@@ -155,7 +155,7 @@ Use shadcn/ui primitives where appropriate, customizing tokens and variants once
 
 ## Localization and copy
 
-Design documentation uses English meanings and semantic keys. Actual visible Spanish copy belongs only in frontend i18n resources when the frontend is scaffolded.
+Design documentation and the static review prototype use English meanings and illustrative labels. Implemented frontend copy belongs only in Spanish i18n resources, including registration, login, account/session management, navigation, and empty/error states.
 
 Examples of intended keys: `planning.availableBalance`, `planning.cashToAllocate`, `planning.status.closed`, `planning.shortfall`, `commitments.monthlyProvision`, `accounts.directAllocation`, and `errors.planVersionConflict`.
 

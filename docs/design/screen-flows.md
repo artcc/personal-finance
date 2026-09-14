@@ -7,6 +7,8 @@ Status: draft interaction design. Wireframes use English illustrative labels for
 | Route | Screen | Context |
 | --- | --- | --- |
 | `/login` | Authentication | No financial content before authentication |
+| `/register` | User registration | Independent private workspace; no default credentials |
+| `/settings/security` | Current account and sessions | User-scoped listing/revocation |
 | `/planning/:month` | Monthly overview | Selected `YYYY-MM`, current saved plan revision |
 | `/planning/:month/allocation` | Allocation | Same month/revision context |
 | `/planning/:month/history` | Revision history | View preserved snapshots |
@@ -19,13 +21,13 @@ Status: draft interaction design. Wireframes use English illustrative labels for
 | `/investments` | Investments | Introduced in phase 6 |
 | `/settings/data` | Data export | Introduced in phase 7 |
 
-Invalid months produce a localized invalid-route state; do not silently select a different month. The root route redirects to the configured current planning month after authentication.
+When monthly planning ships, invalid months must produce a localized invalid-route state rather than silently selecting another month, and the root can redirect to the current planning month. In phase 3, `/` is the private welcome screen; monthly financial routes remain design proposals.
 
 ## Flow 1 — First use
 
 ```text
-Server-side owner bootstrap
-  -> Log in
+Web registration
+  -> Create an independent account and session
   -> Monthly overview: no saved plan
   -> Configure receiving account / optional spaces
   -> Add income
@@ -35,7 +37,9 @@ Server-side owner bootstrap
   -> Inspect calculation and allocation
 ```
 
-Use a short, dismissible setup checklist with contextual links. Do not require every optional module to be configured before a first plan can be prepared. Returning from configuration preserves month context.
+The phase-3 shell currently shows a private welcome state and working session controls. Financial setup links become interactive as their modules ship; they do not pretend to create configuration in this phase. Registration/login preserve private account boundaries. Logout and expiry clear private query state; other tabs receive an access-change notification.
+
+The [phase-3 visual proposal](phase-3-preview.html) provides responsive financial designs with synthetic fixtures for owner review. Those prototype controls do not store data or execute financial operations.
 
 ## Flow 2 — Routine monthly planning
 

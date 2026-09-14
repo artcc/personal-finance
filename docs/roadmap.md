@@ -8,8 +8,9 @@ Phases describe deliverables, dependencies, and completion evidence. Documentati
 - Phase 1: architecture, initial specs, testing strategy, agent rules, and design direction drafted.
 - Owner review and policy decisions remain pending; see the [decision register](decisions.md).
 - With owner permission, the 47 local Markdown links were compared against the project file inventory on 2026-09-14; all target files exist. This checks file destinations only, not business-policy correctness, external URLs, or application behavior.
-- Phase 2: source/configuration implemented, dependencies installed without lifecycle scripts, source/configuration formatted with authorization, and local lint passed using the owner's existing Node 26.8.2. Compilation, type checks, database tests, browser tests, Docker builds, and CI execution remain unverified until GitHub Actions runs.
-- Phases 3–9: not started.
+- Phase 2: implementation complete; the owner reported GitHub Actions green. First release-image publication still needs its own evidence.
+- Phase 3: independent web registration/login, private sessions, access UI, responsive shell, tests, and financial design prototype implemented. Phase-3 CI and owner visual approval remain pending.
+- Phases 4–9: not started.
 
 ## Phase 0 — Product and financial model
 
@@ -42,9 +43,9 @@ Before implementing the shell, complete the authentication spec and produce a hi
 - Commitment editing, including an annual schedule.
 - Loading, empty, error, negative-availability, and closed-month states.
 
-Review the visual direction with the owner; document tokens and reusable component variants. Implement single-owner bootstrap, login/logout, session protection, navigation, accessible shell, forms, and localized errors. Capture screenshots of implemented states for comparison with the approved design.
+Review the visual direction with the owner; document tokens and reusable component variants. Implement web registration/login for independent users, protected sessions, per-user session management, server-side targeted password recovery, navigation, accessible shell, forms, and localized errors. Capture screenshots of implemented states and the synthetic financial design proposal. The owner explicitly replaced single-owner bootstrap with web registration during this phase.
 
-Exit gate: authenticated desktop/mobile shell and sign-in journey work; visual baseline is approved before financial screens are built.
+Exit gate: CI verifies registration/login, lifetime/revocation, Origin/CSRF, user isolation, and the desktop/mobile shell; the owner approves the financial visual baseline before those screens are implemented. See `docs/design/phase-3-preview.html` and the browser-evidence artifact.
 
 ## Phase 4 — Accounts, income, and commitments
 

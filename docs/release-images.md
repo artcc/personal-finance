@@ -1,6 +1,8 @@
 # Release Image Delivery
 
-Status: phase-2 workflow and Docker/Compose configuration implemented; first CI build and image publication remain unverified. Full host operations and backup/restore acceptance remain in phase 8.
+Status: phase-2 workflow and Docker/Compose configuration implemented; CI success reported by the owner, first image publication still unverified. Full host operations and backup/restore acceptance remain in phase 8.
+
+Phase-3 update: the owner reported phase-2 CI green. Access now requires `APP_ORIGIN` to match the public HTTPS origin; configure `TRUST_PROXY` only for known proxy IPs/CIDRs. The database migration adds independent registered users and sessions without discarding existing identity UUIDs. First release publication and host-specific operations still need separate verification.
 
 ## Trigger and flow
 

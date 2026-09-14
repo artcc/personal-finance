@@ -4,7 +4,7 @@ Status: confirmed product direction; detailed policy proposals are tracked in th
 
 ## Purpose and user
 
-Personal Finance is a private, self-hosted application for one owner. It replaces a monthly planning spreadsheet with a reliable, well-designed web application. A modular backend and frontend are required, even though there is no public commercial onboarding in the initial release.
+Personal Finance is a self-hosted application with web registration and independent user accounts. It replaces monthly planning spreadsheets with a reliable, well-designed web application. Each user can access only their own accounts, income, commitments, plans, financing, and investments. The repository remains private; application registration is available through the web interface.
 
 The owner already understands everyday spending and transfers a monthly budget to a dedicated account. The application must support this workflow without asking the owner to categorize individual purchases.
 
@@ -22,7 +22,7 @@ The owner already understands everyday spending and transfers a monthly budget t
 
 | Capability | Required behavior |
 | --- | --- |
-| Access | Single-owner authentication; no public registration; revocable sessions |
+| Access | Web registration and login; independent user accounts; revocable server-side sessions |
 | Monthly planning | Generate a month, inspect its calculation, apply explicit overrides, and preserve history |
 | Accounts and spaces | Configure destinations and view planned allocations and transfer instructions |
 | Income | Monthly net salary and professional income with explicit tax/commission components |
@@ -38,7 +38,7 @@ The owner already understands everyday spending and transfers a monthly budget t
 - Daily purchase tracking, receipt capture, merchant categorization, and bank transaction reconciliation.
 - Bank synchronization, automated money transfers, and brokerage execution.
 - Spreadsheet/data import and migration of the owner's existing records. The workbook is reference material only and is not required to run or develop the application.
-- Public sign-up, organizations, subscriptions, billing, and multi-tenant commercial features.
+- Organizations, shared financial workspaces, subscriptions, billing, and commercial administration features. Independent registered users are in scope; sharing data between them is not.
 - Automatic market prices, foreign-exchange calculations, and portfolio recommendations in the initial release.
 - Tax filing, payroll tax estimation, or automatic loan amortization without separately specified inputs and rules.
 - Invented historic transactions inferred from spreadsheet estimates.
@@ -56,6 +56,7 @@ Supporting screens expose source details without turning the overview into a spr
 ## Quality requirements
 
 - Exact, reproducible server-side financial calculations.
+- User-scoped authorization on every private record, relationship, and export. Another user's resource must not be readable, editable, or discoverable through identifiers.
 - Explicit calculation versions and source provenance for saved monthly plans.
 - Transactional plan generation and closing; concurrent edits must not silently overwrite changes.
 - Accessible forms, keyboard navigation, clear focus, and WCAG 2.2 AA as the UI target.

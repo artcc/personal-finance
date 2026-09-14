@@ -8,8 +8,10 @@ import {
 import { HttpErrorDto } from '../../shared/http-error.dto.js';
 import { LivenessDto, ReadinessDto } from './health.dto.js';
 import { HealthService } from './health.service.js';
+import { Public } from '../identity/http/access.js';
 
 @ApiTags('system')
+@Public()
 @Controller('health')
 export class HealthController {
   constructor(@Inject(HealthService) private readonly health: HealthService) {}

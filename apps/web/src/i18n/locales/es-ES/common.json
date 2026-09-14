@@ -5,5 +5,7 @@
   "retry": "Volver a comprobar",
   "retrying": "Comprobando…",
   "backHome": "Volver al inicio",
-  "footer": "Tu espacio personal para planificar con claridad."
+  "footer": "Tu espacio personal para planificar con claridad.",
+  "loading": "Preparando tu espacio…",
+  "connectionError": "No hemos podido conectar con el servidor. Vuelve a intentarlo."
 }

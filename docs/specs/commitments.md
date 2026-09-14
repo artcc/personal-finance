@@ -10,7 +10,7 @@ Represent recurring financial commitments without requiring everyday expense ent
 
 | Record | Fields |
 | --- | --- |
-| Commitment | `id`, `ownerId`, `name`, `kind`, `version`, optional specialized-source link |
+| Commitment | `id`, session-derived `userId`, `name`, `kind`, `version`, optional specialized-source link |
 | Revision | Revision ID, `effectiveFromMonth`, `startsOn`, optional `endsOn`, amount, currency, frequency, destination, payment-method metadata |
 | Due schedule | Monthly due day or explicit annual installment month/day/amount records |
 | Planning projection | Source/revision IDs, month, charge kind, exact monthly charge, due payments, destination |

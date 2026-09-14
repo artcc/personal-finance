@@ -1,14 +1,20 @@
 # Personal Finance
 
-A private, self-hosted application for monthly financial planning, account allocation, commitments, financing, and investments.
+A self-hosted application for monthly financial planning, account allocation, commitments, financing, and investments, with web registration and independent private user accounts.
 
 The application follows the owner's existing spreadsheet workflow: plan the month, reserve money for commitments, and allocate money to accounts. Everyday purchases are not recorded.
 
 ## Project status
 
-**Phase 2 — technical foundation implemented, CI validation pending.** The repository now contains the pnpm monorepo, API health endpoints, initial localized web page, generated-client pipeline, Prisma baseline, tests, Docker targets, Compose files, CI, and release-image publication workflow. Authentication and financial features start in subsequent phases.
+**Phase 3 — registration, authentication, and private shell implemented; CI and visual review pending.** Phase-2 CI success was reported by the owner. This change adds independent user registration/login, protected server-side sessions, per-user session management, localized access screens, and responsive navigation. Financial modules remain subsequent-phase work.
 
 The agreed technical direction is distinguished from proposed business policies throughout the documentation. See the [decision register](docs/decisions.md) before implementing rules that require owner confirmation.
+
+### Design review
+
+Open [the phase-3 visual proposal](docs/design/phase-3-preview.html) directly in a browser: it needs no Node process or compilation. It includes responsive monthly overview, allocation, annual commitment, and alternate states using clearly labeled synthetic data. Design labels are English documentation; the implemented application uses Spanish i18n resources. Financial designs remain subject to owner review before those screens are built.
+
+The implemented web routes are `/register`, `/login`, the private `/` workspace, and `/settings/security`. There are no default credentials. Registration creates independent accounts; email verification and email delivery are not yet implemented. Server-side password recovery is documented in the development guide.
 
 ## Product goals
 
@@ -83,6 +89,7 @@ All project-authored documentation, code, identifiers, comments, filenames, test
 ### Specifications and design
 
 - [Specification index](docs/specs/README.md)
+- [Registration, authentication, and sessions](docs/specs/authentication.md)
 - [Accounts and allocation](docs/specs/accounts.md)
 - [Income](docs/specs/income.md)
 - [Commitments and provisions](docs/specs/commitments.md)
@@ -90,7 +97,7 @@ All project-authored documentation, code, identifiers, comments, filenames, test
 - [UI/UX direction](docs/design/ui-ux.md)
 - [Screen flows and structural wireframes](docs/design/screen-flows.md)
 
-Host-specific deployment, backup/restore, export, authentication, financing, and investment specifications will be expanded before their corresponding implementation phases. Basic image delivery and Compose consumption are already documented; the full operational release gate remains in phase 8.
+Host-specific deployment, backup/restore, export, financing, and investment specifications will be expanded before their corresponding implementation phases. Authentication is specified in phase 3. Basic image delivery and Compose consumption are documented; the full operational release gate remains in phase 8.
 
 ## Repository
 

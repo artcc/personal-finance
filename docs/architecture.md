@@ -1,6 +1,6 @@
 # Architecture
 
-Status: phase-2 foundation implemented; runtime/CI verification pending. Detailed financial implementation proposals remain recorded in the ADRs.
+Status: phase-2 CI success reported by the owner; phase-3 access and private shell implemented with CI/visual review pending. Detailed financial implementation proposals remain recorded in the ADRs.
 
 ## System shape
 
@@ -90,7 +90,7 @@ Simple configuration CRUD can use straightforward application services. Complex 
 
 | Module | Owns | Public collaboration |
 | --- | --- | --- |
-| Identity | Owner identity, credentials, sessions | Authenticated owner context |
+| Identity | Registered users, credentials, sessions | Authenticated user context, public registration/login, user-scoped session management |
 | Accounts | Accounts, spaces, destination availability | Destination read models and reference checks |
 | Income | Effective-dated source definitions, monthly expected entries, tax breakdowns | Planning input projection |
 | Commitments | Recurrent obligations, revisions, due schedules, provision policies | Planning-charge and due-payment projections |
@@ -105,7 +105,7 @@ Cross-module domain imports are limited to truly shared primitives, such as `Mon
 
 ## Conceptual data relationships
 
-- One owner has accounts; each account can have spaces. A space cannot contain another space.
+- Multiple independent users can register. Each user has private accounts; each account can have spaces. A space cannot contain another space or reference another user's account.
 - Income sources and commitments have effective-dated revisions.
 - A commitment may have a non-monthly obligation with a separate installment schedule.
 - A monthly plan is identified by owner and planning month; it has revisions and a current revision pointer.
@@ -115,7 +115,7 @@ Cross-module domain imports are limited to truly shared primitives, such as `Mon
 - Financing and investment plans link to canonical planning sources. Actual investment operations are separate records.
 - Financial records are entered manually. Plan provenance points to application source records and revisions; no workbook references or import batches are required in the runtime schema.
 
-The phase-2 baseline creates only an empty `owners` table with a UUID identifier and a database-enforced singleton marker. No owner, credentials, sessions, or financial records are seeded. Prisma migrations own this schema; the singleton check supplements the unique constraint. Financial schema details and numeric precision limits remain feature deliverables.
+The phase-2 baseline created an empty `owners` table. Phase 3 preserves its rows/UUIDs, renames it to `users`, and removes singleton uniqueness so multiple accounts can exist. The old marker remains an ignored column rather than being destructively removed. New `credentials` and `sessions` tables hold authentication data; no default user or credentials are seeded. Financial schema details and numeric precision limits remain feature deliverables.
 
 ## Consistency and history
 
@@ -142,6 +142,10 @@ The phase-2 baseline creates only an empty `owners` table with a UUID identifier
 REST endpoints use `/api/v1`. Financial endpoints require an authenticated owner. Proposed error envelopes and wire money representations are described in ADRs 003 and 006.
 
 Use opaque server-side sessions and secure HttpOnly cookies, with explicit expiry/revocation, CSRF protection on state-changing requests, origin checks, and login rate limiting. Same-origin hosting does not remove CSRF requirements. Configure trusted proxies deliberately for secure-cookie and client-IP behavior.
+
+Phase 3 implements those access boundaries in the identity module. A default-deny global Nest guard authenticates private controllers and exposes the authenticated session to application use cases. The identity persistence adapter scopes session operations to that user. Credentials use Node scrypt; cookie parsing and per-IP access limits use the approved Fastify plugins. Registration/login and system health are explicitly public.
+
+All future financial queries, mutations, relationship checks, and exports must include the session-derived user identity. The guard establishes identity but does not replace object-level ownership checks. The web clears private query caches on logout, expiry, or identity change and synchronizes access changes across same-origin tabs using BroadcastChannel.
 
 Do not emit credentials, session tokens, full financial payloads, or data exports into operational logs. Include request IDs and stable error codes. Database access remains on the internal network.
 

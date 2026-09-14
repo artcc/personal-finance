@@ -10,11 +10,44 @@ datasource db {
   provider = "postgresql"
 }
 
-// Credentials and sessions are intentionally added in the authentication phase.
-model Owner {
-  id        String   @id @default(uuid()) @db.Uuid
-  singleton Boolean  @unique @default(true)
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+model User {
+  id              String      @id @default(uuid()) @db.Uuid
+  // Preserve the old column without exposing the obsolete singleton model.
+  legacySingleton Boolean     @default(true) @map("singleton") @ignore
+  createdAt       DateTime    @default(now()) @map("created_at") @db.Timestamptz(3)
+  credential      Credential?
 
-  @@map("owners")
+  @@map("users")
+}
+
+model Credential {
+  userId       String    @id @map("user_id") @db.Uuid
+  email        String    @unique @db.VarChar(254)
+  displayName  String    @map("display_name") @db.VarChar(80)
+  passwordHash String    @map("password_hash")
+  version      Int       @default(1)
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessions     Session[]
+
+  @@map("credentials")
+}
+
+model Session {
+  id                String     @id @default(uuid()) @db.Uuid
+  userId            String     @map("user_id") @db.Uuid
+  tokenHash         String     @unique @map("token_hash") @db.Char(64)
+  csrfToken         String     @map("csrf_token") @db.VarChar(43)
+  credentialVersion Int        @map("credential_version")
+  createdAt         DateTime   @map("created_at") @db.Timestamptz(3)
+  lastSeenAt        DateTime   @map("last_seen_at") @db.Timestamptz(3)
+  idleExpiresAt     DateTime   @map("idle_expires_at") @db.Timestamptz(3)
+  expiresAt         DateTime   @map("expires_at") @db.Timestamptz(3)
+  revokedAt         DateTime?  @map("revoked_at") @db.Timestamptz(3)
+  credential        Credential @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@index([userId, revokedAt])
+  @@index([expiresAt])
+  @@map("sessions")
 }

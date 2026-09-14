@@ -2,7 +2,7 @@
 
 ## Product boundaries
 
-Build a private, single-owner monthly financial planner. Read [the product definition](docs/product.md) and [architecture](docs/architecture.md) before implementing features. Everyday purchase tracking, data import, and bank synchronization are outside the initial scope. The owner enters data manually; export remains in scope.
+Build a self-hosted monthly financial planner with web registration and independent user accounts. Read [the product definition](docs/product.md) and [architecture](docs/architecture.md) before implementing features. Each user's financial data is private to that user. Everyday purchase tracking, data import, and bank synchronization are outside the initial scope. Users enter data manually; export remains in scope.
 
 ## Language
 
@@ -27,6 +27,7 @@ Build a private, single-owner monthly financial planner. Read [the product defin
 - Put use-case orchestration and transaction requirements in application services; implement external interfaces in infrastructure.
 - Keep HTTP controllers thin. Validate at boundaries and enforce domain invariants inside the domain.
 - Use narrow module interfaces. Do not import another module's persistence adapters or Prisma models into domain code.
+- Derive the current user from the authenticated server-side session. Scope financial reads, writes, exports, and relationship checks to that user; never trust a caller-supplied user ID to authorize access. Do not expose whether another user's resource exists.
 - Introduce ports where a real boundary needs isolation; avoid generic repositories or abstractions that add no domain value.
 - Generate the frontend API client from OpenAPI. Do not maintain duplicate handwritten response types or edit generated code manually.
 - Use TanStack Query for remote state and React Hook Form/Zod for form validation. Final calculations come from the API.

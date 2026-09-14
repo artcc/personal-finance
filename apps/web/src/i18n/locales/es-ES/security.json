@@ -1,0 +1,23 @@
+{
+  "eyebrow": "Mi cuenta",
+  "title": "Acceso y sesiones",
+  "description": "Consulta tu identidad y controla el acceso a tu espacio privado.",
+  "identityTitle": "Tu cuenta",
+  "name": "Nombre",
+  "email": "Correo electrónico",
+  "emailNotice": "El correo se utiliza para iniciar sesión. Todavía no verificamos su titularidad ni enviamos mensajes de recuperación.",
+  "sessionsTitle": "Sesiones activas",
+  "sessionsDescription": "Se muestran hasta las 50 sesiones activas más recientes de tu cuenta.",
+  "currentSession": "Esta sesión",
+  "otherSession": "Otra sesión",
+  "created": "Iniciada el {{date}}",
+  "lastSeen": "Última actividad: {{date}}",
+  "revoke": "Cerrar",
+  "revokeLabel": "Cerrar la sesión iniciada el {{date}}",
+  "logoutAll": "Cerrar todas las sesiones",
+  "actionError": "No se ha podido completar la acción. Comprueba la conexión y vuelve a intentarlo.",
+  "confirmTitle": "¿Cerrar todas tus sesiones?",
+  "confirmDescription": "Tendrás que volver a entrar en todos los dispositivos, incluido este. Las cuentas de otros usuarios no se verán afectadas.",
+  "cancel": "Cancelar",
+  "confirmAction": "Cerrar todas"
+}

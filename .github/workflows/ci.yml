@@ -101,6 +101,7 @@ jobs:
           trap 'docker rm -f foundation-smoke >/dev/null 2>&1 || true' EXIT
           docker run -d --name foundation-smoke \
             -e DATABASE_URL=postgresql://unused:unused@127.0.0.1:1/unused \
+            -e APP_ORIGIN=https://finance.example.test \
             "personal-finance-${TARGET}:ci"
           for attempt in {1..20}; do
             if [[ "$TARGET" == api ]]; then

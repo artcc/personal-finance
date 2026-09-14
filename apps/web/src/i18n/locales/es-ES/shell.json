@@ -1,0 +1,20 @@
+{
+  "navigation": "Navegación principal",
+  "openNavigation": "Abrir navegación",
+  "closeNavigation": "Cerrar navegación",
+  "workspace": "Mi espacio",
+  "overview": "Resumen",
+  "allocation": "Reparto",
+  "accounts": "Cuentas",
+  "income": "Ingresos",
+  "commitments": "Compromisos",
+  "financing": "Financiaciones",
+  "investments": "Inversiones",
+  "account": "Mi cuenta",
+  "security": "Acceso y sesiones",
+  "upcoming": "Próximamente",
+  "privateSpace": "Un espacio privado, solo para ti.",
+  "logout": "Cerrar sesión",
+  "logoutError": "No se ha podido cerrar la sesión. Comprueba la conexión y vuelve a intentarlo.",
+  "openProfile": "Ver la cuenta de {{name}}"
+}

@@ -4,7 +4,7 @@ Use these terms consistently in code, API contracts, specifications, and design.
 
 | Term | Meaning |
 | --- | --- |
-| Owner | The single authenticated person using this installation. |
+| Owner | The authenticated user who owns a financial record. The installation supports multiple independent users; ownership never implies shared access. |
 | Account | A bank account used as a destination or source of planned money allocation. It is not a synchronized bank ledger. |
 | Space | A budgeting subdivision of an account. A space has exactly one parent account. |
 | Income source | Configuration describing expected salary or professional income. |

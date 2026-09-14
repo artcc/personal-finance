@@ -1,6 +1,6 @@
 # ADR 005 — Single-Owner Authentication
 
-Status: proposed implementation of the single-owner access requirement. Date: 2026-09-14.
+Status: superseded by ADR 009 after the owner requested web registration and independent user accounts. Date: 2026-09-14. The following preserves the original proposal for historical context.
 
 ## Context
 

@@ -3,6 +3,7 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './apps/web/e2e',
   fullyParallel: true,
+  workers: 2,
   forbidOnly: Boolean(process.env['CI']),
   retries: process.env['CI'] ? 1 : 0,
   reporter: [['list'], ['html', { open: 'never' }]],
@@ -24,6 +25,7 @@ export default defineConfig({
         NODE_ENV: 'test',
         HOST: '127.0.0.1',
         PORT: '3000',
+        APP_ORIGIN: 'http://127.0.0.1:4173',
         DATABASE_URL:
           process.env['TEST_DATABASE_URL'] ?? 'postgresql://unused:unused@127.0.0.1:1/unused',
       },

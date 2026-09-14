@@ -12,7 +12,7 @@ Accounts owns destination configuration. Planning owns monthly allocation amount
 
 | Entity | Fields |
 | --- | --- |
-| Account | `id`, `ownerId`, `name`, optional `institution`, optional display-only `reference`, `currency`, `archivedFromMonth`, `version` |
+| Account | `id`, `userId`, `name`, optional `institution`, optional display-only `reference`, `currency`, `archivedFromMonth`, `version` |
 | Space | `id`, `accountId`, `name`, `archivedFromMonth`, `version` |
 | Destination reference | `kind` (`account` or `space`), `id` |
 | Monthly allocation | Owned by planning: destination snapshot, exact amount, purpose, linked source/plan-line references, version |
@@ -36,7 +36,7 @@ Account references are optional display metadata; no banking credentials or full
 
 ### Configure an account and spaces
 
-Create an account, then optional spaces. API validates ownership and currency in the application boundary. A space cannot point to another space or an account outside the authenticated owner's installation context.
+Create an account, then optional spaces. API validates ownership and currency in the application boundary. A space cannot point to another space or an account outside the authenticated user's workspace. Derive `userId` from the session; never authorize a resource by a user ID supplied in the request body.
 
 ### Rename or archive
 

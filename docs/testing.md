@@ -1,6 +1,6 @@
 # Testing Strategy
 
-Status: phase-2 foundation checks implemented; local lint passed, runtime/CI checks not yet executed. The broader financial test strategy remains planned for subsequent features.
+Status: phase-2 CI success reported by the owner. Phase-3 authentication, isolation, and browser tests are authored for CI and have not been run locally. The broader financial test strategy remains planned for subsequent features.
 
 ## Principles
 
@@ -53,7 +53,7 @@ Use a dedicated disposable test database, apply real migrations, and isolate fix
 
 ## First useful E2E journeys
 
-1. Bootstrap owner through the supported setup path; log in and log out.
+1. Register independent users through the web; log in and log out, including another open tab.
 2. Configure salary, accounts, monthly commitment, and annual obligation.
 3. Generate a month, expand its calculation, and view exact totals.
 4. Assign the everyday spending amount and reconcile all account destinations.
@@ -67,9 +67,9 @@ Review desktop and mobile screenshots for overview, allocation, and commitment e
 
 ## Implemented foundation checks and CI gates
 
-The current workflow runs code/configuration formatting, lint, builds, type checking, deterministic API-client generation, migrations, environment unit tests, health HTTP tests, real PostgreSQL singleton/rollback tests, and a small desktop/mobile browser set. Container jobs build and check startup without publishing on ordinary CI runs. The release workflow invokes these checks before publication. See `package.json` for script names and [the development guide](development.md) for ordering.
+The current workflow runs code/configuration formatting, lint, builds, type checking, deterministic API-client generation, migrations, environment/session-policy unit tests, health HTTP tests, real PostgreSQL account/session-isolation tests, and a small desktop/mobile browser set. Container jobs build and check startup without publishing on ordinary CI runs. The release workflow invokes these checks before publication. See `package.json` for script names and [the development guide](development.md) for ordering.
 
-Foundation tests cover only behavior that exists: environment rejection, live/ready separation, safe infrastructure errors, singleton-owner constraints, transaction rollback, localized API connection, mobile overflow, and retry feedback. They do not imply financial calculations or authentication have been implemented. The database suite requires an explicitly configured disposable database ending in `_test` and will not silently skip when configuration is missing.
+Tests cover environment rejection, live/ready separation, safe infrastructure errors, multiple independent accounts, transaction rollback, session lifetime, cookie flags, Origin/CSRF checks, login throttling, targeted recovery, and user-scoped session revocation. Browser tests cover registration, confirmation errors, login/retry, navigation, cross-tab logout, and private-route protection. Synthetic design screenshots are review artifacts rather than financial calculation tests. The database suite requires an explicitly configured disposable database ending in `_test` and will not silently skip when configuration is missing.
 
 Markdown is reviewed separately and excluded from the source/configuration formatting gate to avoid unrelated document rewrites. Pin supported tool versions and provide required test services. Coverage reports are diagnostic; no arbitrary coverage percentage substitutes for testing financial invariants in later phases.
 
