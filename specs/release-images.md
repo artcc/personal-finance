@@ -54,15 +54,15 @@ The API healthcheck distinguishes process liveness from database readiness. The 
 
 ## Consuming a release with Docker Compose
 
-On the deployment host, create an untracked `.env.production` from `.env.production.example`, set independent database credentials, and select a successfully published release tag. `DATABASE_URL` must use the internal `database` hostname and URL-encoded credentials where necessary; do not copy the local `127.0.0.1` development URL.
+On the deployment host, create an untracked `.env` from `.env.example`, set independent database credentials, and select a successfully published release tag. Use `docker-compose.yaml` for production; `.env-dev.example` and `docker-compose.dev.yaml` are for local development. `DATABASE_URL` must use the internal `database` hostname and URL-encoded credentials where necessary; do not copy the local `127.0.0.1` development URL.
 
 Authenticate the deployment host to GHCR using a read-only package credential through Docker's credential handling. Configure the registry in Portainer with equivalent pull access. Never put tokens into Compose files or commit them to Git.
 
 Once host authentication and environment are configured:
 
 ```sh
-docker compose --env-file .env.production pull
-docker compose --env-file .env.production up -d
+docker compose --env-file .env -f docker-compose.yaml pull
+docker compose --env-file .env -f docker-compose.yaml up -d
 ```
 
 The Compose dependency graph runs `prisma migrate deploy` as a one-shot service before the API. Confirm migration success before accepting an update. The database has no published host port in this configuration. The web port is bound to loopback by default for a reverse proxy on the same host; adapt networking explicitly if the existing reverse proxy runs in another container/network.

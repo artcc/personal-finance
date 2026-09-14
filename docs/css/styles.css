@@ -20,7 +20,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root[data-theme='auto'] {
+  :root {
     color-scheme: dark;
     --canvas: #101b1d;
     --surface: #17272a;
@@ -38,10 +38,10 @@
     --shadow: 0 24px 70px -28px #00000090, 0 3px 14px #00000020;
   }
 
-  :root[data-theme='auto'] .github-mark-light {
+  :root .github-mark-light {
     display: none;
   }
-  :root[data-theme='auto'] .github-mark-dark {
+  :root .github-mark-dark {
     display: block;
   }
 }
@@ -165,24 +165,6 @@ a {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-.theme-control {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  color: var(--muted);
-}
-.theme-control svg {
-  flex: none;
-}
-.theme-control select {
-  min-height: 44px;
-  border: 0;
-  background: var(--canvas);
-  color: var(--ink);
-  padding: 8px 4px;
-  font-size: 12px;
-  cursor: pointer;
 }
 .github-link {
   display: inline-flex;
@@ -692,12 +674,6 @@ a {
   }
   .header-actions {
     gap: 6px;
-  }
-  .theme-control {
-    gap: 3px;
-  }
-  .theme-control > svg {
-    display: none;
   }
   .github-link {
     min-width: 44px;

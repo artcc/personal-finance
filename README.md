@@ -1,117 +1,229 @@
-# Personal Finance
+<p align="center">
+  <img src="docs/assets/favicon.svg" alt="Personal Finance" width="80" height="80" />
+</p>
 
-An MIT-licensed, self-hosted application for monthly financial planning, account allocation, commitments, financing, and investments, with web registration and independent private user accounts.
+<h1 align="center">Personal Finance</h1>
 
-The application follows the owner's existing spreadsheet workflow: plan the month, reserve money for commitments, and allocate money to accounts. Everyday purchases are not recorded.
+<p align="center">
+  <strong>Your month. A little clearer.</strong><br />
+  An open-source, self-hosted monthly financial planner.
+</p>
 
-## Project status
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-0f766e?style=flat-square" alt="License: MIT" /></a>
+  <img src="https://img.shields.io/badge/TypeScript-Strict-3178c6?style=flat-square&amp;logo=typescript&amp;logoColor=white" alt="Strict TypeScript" />
+  <img src="https://img.shields.io/badge/Deploy-Docker_Compose-2496ed?style=flat-square&amp;logo=docker&amp;logoColor=white" alt="Deploy with Docker Compose" />
+  <img src="https://img.shields.io/badge/Interface-Spanish-0f766e?style=flat-square" alt="Interface: Spanish" />
+</p>
 
-**Financial JSON portability implemented; CI verification pending.** The owner reported phase-6 CI green. The current change adds private JSON export and compatible, validated import into an empty financial workspace. FIFO, investment commissions, cost basis, and automatic realized-profit calculation remain excluded. Deployment/infrastructure is managed by each operator; no backup tool or public-site publication is added here.
+<p align="center">
+  <a href="#features"><strong>Features</strong></a>
+  &nbsp;&middot;&nbsp;
+  <a href="#getting-started"><strong>Getting started</strong></a>
+  &nbsp;&middot;&nbsp;
+  <a href="#documentation"><strong>Documentation</strong></a>
+  &nbsp;&middot;&nbsp;
+  <a href="https://github.com/artcc/personal-finance/issues"><strong>Feedback</strong></a>
+</p>
 
-The agreed technical direction is distinguished from proposed business policies throughout the documentation. See the [decision register](specs/decisions.md) before implementing rules that require owner confirmation.
+Personal Finance brings your income, commitments, accounts, financing, and investments into one monthly view. Understand what is available, decide where it should go, and keep a clear record of your plans over time.
 
-The English project website is implemented in [`docs/index.html`](docs/index.html), with separate CSS/JavaScript and Light/Automatic themes. Authorized, scoped Prettier and ESLint checks passed; browser review remains pending. GitHub Pages publication and repository visibility have not been changed by this work.
+Run it on your own server with Docker Compose. Each registered user has an independent financial workspace, and compatible JSON export/import lets you move your financial records between installations.
 
-### Design review
+## Highlights
 
-Open [the phase-3 visual proposal](specs/design/phase-3-preview.html) directly in a browser: it needs no Node process or compilation. It includes responsive monthly overview, allocation, annual commitment, and alternate states using clearly labeled synthetic data. Design labels are English documentation; the implemented application uses Spanish i18n resources. The owner has approved this visual direction for financial screen implementation.
-
-The implemented web routes include access, monthly planning, accounts, income, commitments, `/financing`, `/investments`, and `/settings/data`. There are no default credentials. Registration creates independent accounts; email verification and email delivery are not yet implemented. Financial JSON import excludes authentication state and never merges or overwrites existing workspace data.
-
-## Product goals
-
-- Prepare a monthly plan and understand the available amount.
-- Manage income, recurring commitments, annual provisions, financing, and investment plans.
-- Allocate money between accounts and spaces without double-counting spending.
-- Preserve monthly history when future plans change.
-- Provide a polished, accessible, responsive interface.
-- Remain straightforward to develop, test, deploy, and restore.
-
-## Technical direction
-
-| Area | Choice |
+| | |
 | --- | --- |
-| Architecture | Modular monolith in a pnpm monorepo; separate web and API applications |
-| Language | Strict TypeScript |
-| Web | React, Vite, React Router, TanStack Query |
-| Forms and UI | React Hook Form, Zod, Tailwind CSS, shadcn/ui |
-| API | NestJS with Fastify, REST, OpenAPI, generated API client |
-| Persistence | PostgreSQL, Prisma, versioned SQL migrations |
-| Internationalization | i18next, react-i18next, Intl; initial locale es-ES |
-| Quality | ESLint, Prettier, type checking, Vitest, HTTP integration tests, Playwright |
-| Delivery | GitHub Actions, private GHCR images, Docker Compose, Portainer |
+| **The monthly picture** | Plan income, recurring costs, and annual provisions together. |
+| **A purpose for every amount** | Allocate expected cash across accounts and spaces, including your everyday spending budget. |
+| **History that stays intact** | Preserve closed months when future income or commitments change. |
+| **Your own workspace** | Separate user accounts with private financial records and session-based access. |
+| **Self-hosted and open source** | Deploy in your own environment and explore the code under the MIT license. |
 
-Dependencies are pinned to approved stable versions and recorded in `pnpm-lock.yaml`. The policy is the newest stable compatible release, excluding alpha, beta, and release candidates. CI/images use Node 26.8.2 and pnpm 12.4.1. TypeScript remains at 5.9.3 because the selected OpenAPI generator and ESLint parser do not yet jointly support TypeScript 7; see ADR 002.
+## Features
 
-## Local workflow
+### Monthly planning
 
-The owner's workflow keeps compilation and tests in CI. Use the existing Node installation; the helper below downloads only pnpm into the project cache and does not install or switch Node globally.
+- Prepare a monthly plan from your income and commitments.
+- See expected cash, planned availability, and allocation amounts separately.
+- Review calculations, make explicit adjustments, and identify shortfalls.
+- Close a month to preserve its snapshot; reopen it with a reason and a new revision.
+- Browse saved monthly history and charts.
+
+### Accounts, income, and commitments
+
+- Organize accounts and spaces as destinations for planned allocations.
+- Set up recurring or one-month income, including net salary and professional income.
+- Record professional-income tax and commission components.
+- Manage fixed costs, subscriptions, installment schedules, and annual provisions.
+- Change future inputs while preserving the source details used by earlier plans.
+
+### Financing and investments
+
+- Keep financing details, payment schedules, and reported debt figures together.
+- Link financing payments and investment contribution plans to monthly commitments.
+- Record actual investment contributions, purchases, sales, and unit movements.
+- Enter manual valuations and explicitly reported opening positions.
+
+### Access and data portability
+
+- Register and sign in through the web interface.
+- Keep each user's accounts, plans, and financial records private to that user.
+- Manage active sessions.
+- Export financial records as application JSON.
+- Preview and import a compatible file into an empty workspace, with relationship validation and atomic insertion.
+- Use a responsive Spanish interface with locale-aware EUR formatting.
+
+Personal Finance focuses on monthly planning. Financial records are entered manually or imported from a compatible application export; it does not synchronize bank accounts or track individual everyday purchases. Investment movements and valuations are recorded explicitly, without automatic market prices or realized-profit calculations.
+
+## A simple monthly routine
+
+1. **Set up your workspace.** Add accounts, income, recurring commitments, and annual obligations.
+2. **Prepare the month.** Review what you expect to receive and what you need to provide for.
+3. **Allocate your money.** Give each amount a destination in your accounts and spaces.
+4. **Close and keep the record.** Save the month's plan and return to its history whenever you need it.
+
+Allocations are planning instructions. They do not execute bank transfers or mark payments and investments as completed.
+
+## Getting started
+
+### Requirements
+
+- A server with Docker Engine and Docker Compose.
+- A release image tag for both the API and web containers.
+- An HTTPS origin and a reverse proxy forwarding to the web container.
+- Pull access to the project's GitHub Container Registry images.
+
+### Deploy with Docker Compose
+
+1. **Get the project and prepare your environment file:**
+
+   ```sh
+   git clone https://github.com/artcc/personal-finance.git
+   cd personal-finance
+   cp .env.example .env
+   ```
+
+2. **Edit `.env` for your installation:**
+
+   | Variable | Purpose |
+   | --- | --- |
+   | `IMAGE_TAG` | The same published version tag for the API and web images. |
+   | `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` | Your database credentials and database name. |
+   | `DATABASE_URL` | PostgreSQL connection URL using the internal `database` hostname and matching credentials. URL-encode credentials when needed. |
+   | `APP_ORIGIN` | The exact public HTTPS origin of your application. |
+   | `TRUST_PROXY` | Trusted proxy IPs/CIDRs for your deployment; defaults to `false`. |
+   | `PLANNING_TIME_ZONE` | Calendar context for planning; defaults to `Europe/Madrid`. |
+   | `WEB_PORT` | Local web port; defaults to `8080`. |
+
+   Keep the environment file private. If the registry packages require authentication, sign in to `ghcr.io` with a credential that has package read access.
+
+3. **Pull the images and start the application:**
+
+   ```sh
+   docker compose --env-file .env -f docker-compose.yaml pull
+   docker compose --env-file .env -f docker-compose.yaml up -d
+   ```
+
+   Compose starts PostgreSQL, applies migrations through a one-shot service, and starts the API and web containers. Database data is stored in a persistent Docker volume.
+
+4. **Connect your reverse proxy and register.** The web service binds to `127.0.0.1:8080` by default. Forward your configured HTTPS origin to that port, then open the application and create your account. For a containerized reverse proxy, adapt the Compose networking to your setup.
+
+See the [Docker Compose and image delivery guide](specs/release-images.md) for registry access, image tags, migrations, and Portainer usage.
+
+### Container images
+
+| Component | Image |
+| --- | --- |
+| API | `ghcr.io/artcc/personal-finance-api` |
+| Web | `ghcr.io/artcc/personal-finance-web` |
+
+The release workflow builds images for **`linux/amd64`** and **`linux/arm64`**, tagged by release version and commit SHA. Configure an explicit version through `IMAGE_TAG`; the workflow does not publish a mutable `latest` tag.
+
+## Technologies
+
+| Technology | Purpose |
+| --- | --- |
+| TypeScript | Strictly typed application code |
+| React, Vite, React Router | Web interface and navigation |
+| TanStack Query | Remote state and cache management |
+| React Hook Form, Zod | Forms and input validation |
+| Tailwind CSS | Interface styling |
+| NestJS, Fastify | Modular REST API |
+| PostgreSQL, Prisma | Persistence and versioned database migrations |
+| OpenAPI | API contract and generated TypeScript client |
+| i18next, Intl | Spanish translations and locale-aware presentation |
+| Vitest, Playwright | Unit, integration, and browser testing |
+| Docker Compose, GitHub Actions | Self-hosted deployment and delivery workflows |
+
+## Architecture
+
+The project is a **modular monolith in a pnpm monorepo**, with separate web and API applications. Financial rules live in the API domain layer, independent of the framework and database. Application services orchestrate use cases and transactions; infrastructure handles persistence and external boundaries.
+
+Money uses exact integer cents and decimal arithmetic. The web consumes a generated OpenAPI client, while financial calculations remain authoritative on the server.
+
+```text
+apps/api/             API, domain rules, persistence, and migrations
+apps/web/             React application and Spanish translations
+packages/api-client/  Generated API client package
+infra/docker/         Container build and web-server configuration
+specs/                Engineering documentation and feature specifications
+docs/                 Static English project website
+```
+
+See the [architecture guide](specs/architecture.md) for module boundaries, data relationships, and transaction design.
+
+## Development
+
+The workspace uses **Node.js 26.8.2** and **pnpm 12.4.1**. Dependencies are pinned in the manifests and lockfile.
+
+Local development uses `.env-dev.example` and `docker-compose.dev.yaml`; production uses `.env.example` and `docker-compose.yaml`.
+
+For source installation and linting, the project-local helper keeps package-manager caches inside the repository:
 
 ```sh
 node scripts/pnpm-local.mjs install --ignore-scripts
 node scripts/pnpm-local.mjs lint
 ```
 
-Installation scripts are deliberately disabled for this local lint-only workflow. Generated Prisma/API-client files and compiled applications will not exist after this installation. They are generated during CI/container builds. Formatting, if authorized, is available through `node scripts/pnpm-local.mjs format`.
+This installs dependencies without running lifecycle scripts. Prisma and API-client artifacts are generated by the build pipeline. See the [development guide](specs/development.md) for the database setup, generation order, development server, and available build/test commands.
 
-See [development and CI commands](specs/development.md) for the full build/test graph and [release image delivery](specs/release-images.md) for Docker/Portainer consumption.
-
-## Release images
-
-Publishing a stable GitHub release with a tag such as `v0.1.0` triggers `.github/workflows/release-images.yml`. After the exact release commit passes CI, the workflow publishes:
-
-- `ghcr.io/artcc/personal-finance-api:v0.1.0`
-- `ghcr.io/artcc/personal-finance-web:v0.1.0`
-
-Both images support `linux/amd64` and `linux/arm64`. Publication does not deploy the server. Wait for the entire publication workflow to succeed before using the release in Compose/Portainer. No release or images have been published as part of scaffolding.
-
-## Language policy
-
-All project-authored documentation, code, identifiers, comments, filenames, test descriptions, commit messages, and API error codes are English. The initial frontend translation resources contain Spanish copy. Translation keys remain English. User-entered names retain their original language.
+Code and documentation are written in English. Application text lives in Spanish i18n resources with English semantic keys; user-entered names retain their original language.
 
 ## Documentation
 
-Engineering documentation lives in `specs/`. The `docs/` path contains the static project website, ready for a separately authorized GitHub Pages setup. Open `docs/index.html` directly in a browser; no build or server is needed. See [website design and behavior](specs/design/project-website.md).
+| Guide | Contents |
+| --- | --- |
+| [Changelog](CHANGELOG.md) | Notable changes by version |
+| [Product overview](specs/product.md) | Purpose, capabilities, and financial workflow |
+| [Feature specifications](specs/specs/README.md) | Accounts, income, commitments, planning, financing, and investments |
+| [JSON portability](specs/specs/data-portability.md) | Export format, import behavior, and compatibility rules |
+| [Architecture](specs/architecture.md) | Modules, layers, persistence, and consistency |
+| [Development](specs/development.md) | Local setup, scripts, generation, and CI |
+| [Docker deployment](specs/release-images.md) | Image delivery, Compose configuration, and migrations |
+| [UI/UX direction](specs/design/ui-ux.md) | Design language, interaction, and accessibility |
 
-### Product and domain
+The standalone project website lives in [`docs/`](docs/). Open `docs/index.html` directly in a browser to view it; its HTML, CSS, JavaScript, and assets require no build step.
 
-- [Product definition](specs/product.md)
-- [Roadmap and delivery gates](specs/roadmap.md)
-- [Decision register](specs/decisions.md)
-- [Domain glossary](specs/domain/glossary.md)
-- [Spreadsheet mapping and reference figures](specs/domain/spreadsheet-mapping.md)
+## Contributing
 
-### Engineering
+Contributions are welcome. Use [GitHub Issues](https://github.com/artcc/personal-finance/issues) to report a bug or discuss a feature, and open a pull request for focused changes.
 
-- [Architecture](specs/architecture.md)
-- [Architecture decision records](specs/adr/README.md)
-- [Testing strategy](specs/testing.md)
-- [Development and CI commands](specs/development.md)
-- [Release image delivery](specs/release-images.md)
-- [Agent instructions](AGENTS.md)
-
-### Specifications and design
-
-- [Specification index](specs/specs/README.md)
-- [Registration, authentication, and sessions](specs/specs/authentication.md)
-- [Accounts and allocation](specs/specs/accounts.md)
-- [Income](specs/specs/income.md)
-- [Commitments and provisions](specs/specs/commitments.md)
-- [Monthly planning](specs/specs/monthly-planning.md)
-- [Financing](specs/specs/financing.md)
-- [Investment movements](specs/specs/investments.md)
-- [JSON export/import](specs/specs/data-portability.md)
-- [UI/UX direction](specs/design/ui-ux.md)
-- [Screen flows and structural wireframes](specs/design/screen-flows.md)
-
-Host-specific deployment, backup/restore, export, financing, and investment specifications will be expanded before their corresponding implementation phases. Authentication is specified in phase 3. Basic image delivery and Compose consumption are documented; the full operational release gate remains in phase 8.
-
-## Repository
-
-[artcc/personal-finance](https://github.com/artcc/personal-finance)
-
-The workbook was used only to document the existing workflow and is not required for development. Data is entered manually or imported from a compatible financial JSON export of this application. Spreadsheet import remains excluded; the documented historical reference analysis is still available.
+Before working on the code, read the [project guidelines](AGENTS.md), [architecture](specs/architecture.md), and the relevant [feature specification](specs/specs/README.md). Keep financial calculations exact, preserve user isolation and historical records, and include meaningful tests for changes to financial behavior. Please use synthetic data when sharing examples or reproductions.
 
 ## License
 
-[MIT](LICENSE) — Copyright (c) 2026 Arturo Carretero Calvo.
+Licensed under the [MIT License](LICENSE).
+
+Copyright © 2026 Arturo Carretero Calvo.
+
+## Author
+
+**Arturo Carretero Calvo**
+
+- [GitHub](https://github.com/artcc)
+- [Website](https://www.arturocarreterocalvo.com)
+
+<p align="center">
+  <strong>Your plan. Your data. Your server.</strong>
+</p>

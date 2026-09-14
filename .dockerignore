@@ -8,7 +8,9 @@
 **/test-results
 .env
 .env.*
+.env-*
 !**/.env.example
+!**/.env-dev.example
 *.xlsx
 *.numbers
 data

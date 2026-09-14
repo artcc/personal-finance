@@ -70,7 +70,7 @@ Supporting screens expose source details without turning the overview into a spr
 
 The project is authored in English. Frontend copy is stored in Spanish translation resources, initially `es-ES`. Locale formatting and EUR currency are independent settings. User-entered content is not translated automatically.
 
-The standalone project website under `docs/` is English, with Light and Automatic themes. It presents implemented capabilities and links to the repository; it does not connect to the financial API. See [website design and behavior](design/project-website.md).
+The standalone project website under `docs/` is English and always follows the system's light/dark appearance, without a theme selector. It presents implemented capabilities and links to the repository; it does not connect to the financial API. See [website design and behavior](design/project-website.md).
 
 ## Success criteria
 

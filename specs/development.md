@@ -68,7 +68,7 @@ Changing an API response requires regenerating the schema/client and rebuilding 
 
 ## Environment and database
 
-`.env.example` documents local development values. API startup reads typed environment configuration; the database URL must use a PostgreSQL protocol. Startup fails without it, while `/api/v1/health/live` does not query the database. `/api/v1/health/ready` performs a bounded database check and returns 503 with `DATABASE_UNAVAILABLE` on failure.
+`.env-dev.example` documents local development values; `.env.example` is the production template for `docker-compose.yaml`. API startup reads typed environment configuration; the database URL must use a PostgreSQL protocol. Startup fails without it, while `/api/v1/health/live` does not query the database. `/api/v1/health/ready` performs a bounded database check and returns 503 with `DATABASE_UNAVAILABLE` on failure.
 
 The baseline created an empty `owners` table. The phase-3 migration preserves those rows as `users`, removes singleton uniqueness, and adds `credentials` and `sessions`. Web registration creates a user and credential atomically; there are no default credentials. Do not edit or remove the old migration to achieve this change.
 
@@ -77,12 +77,12 @@ The baseline created an empty `owners` table. The phase-3 migration preserves th
 For a separately authorized development environment with Docker:
 
 ```sh
-docker compose --env-file .env -f compose.dev.yaml up -d
+docker compose --env-file .env -f docker-compose.dev.yaml up -d
 pnpm db:migrate
 pnpm dev
 ```
 
-Prepare `.env` from the example first. Development PostgreSQL is bound only to `127.0.0.1:5432`. PostgreSQL 18 uses a volume mounted at `/var/lib/postgresql`. The CI database is independently provisioned and disposable; do not reuse the development volume for integration tests.
+Prepare `.env` from `.env-dev.example` first. Development PostgreSQL is bound only to `127.0.0.1:5432`. PostgreSQL 18 uses a volume mounted at `/var/lib/postgresql`. The CI database is independently provisioned and disposable; do not reuse the development volume for integration tests.
 
 ## Foundation endpoints and web
 
@@ -129,7 +129,7 @@ The equivalent commands in the API container are `node dist/modules/identity/cli
 
 ## Visual review without a build
 
-The project website is `docs/index.html`, with styles in `docs/css/styles.css`, theme behavior in `docs/js/theme.js`, and local SVG assets. Open the HTML directly in a browser. Automatic mode follows the system appearance; Light overrides it. A stored preference is used when browser storage is available. No API, compilation, or local server is needed. Authorized, scoped Prettier and ESLint checks passed; browser verification remains pending. See [website design and behavior](design/project-website.md).
+The project website is `docs/index.html`, with styles in `docs/css/styles.css`, browser theme-color synchronization in `docs/js/theme.js`, and local SVG assets. Open the HTML directly in a browser. The palette always follows the system appearance through CSS; there is no theme selector or stored preference. No API, compilation, or local server is needed. Authorized, scoped Prettier and ESLint checks passed for the original implementation; the automatic-only update has not been rechecked. See [website design and behavior](design/project-website.md).
 
 Open `specs/design/phase-3-preview.html` in a browser directly. It has no external assets, API requests, or storage. Use the screen, viewport, and state controls to review synthetic financial layouts. English labels belong to design documentation; production-facing Spanish copy remains in i18n resources. CI captures desktop/mobile screenshots of access screens, the private shell, and this prototype as browser-evidence artifacts.
 

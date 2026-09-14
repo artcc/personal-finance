@@ -34,7 +34,7 @@ Build the web/API applications, generated API client, development PostgreSQL, Pr
 
 Add GitHub Actions checks for lint, code/configuration format, types, contract generation, tests, application builds, and container startup. Include multi-stage API/web Docker targets and a stable-release workflow (`release: published`) that runs the checks against the exact release commit and then publishes private versioned GHCR images for `linux/amd64` and `linux/arm64`. Provide initial Compose consumption instructions. Publication does not automatically deploy the host.
 
-Implemented files include `.github/workflows/ci.yml`, `.github/workflows/release-images.yml`, `infra/docker/Dockerfile`, `compose.dev.yaml`, and `compose.yaml`. See the development and release-image guides for actual commands. Do not claim their CI/runtime checks have passed without a successful run.
+Implemented files include `.github/workflows/ci.yml`, `.github/workflows/release-images.yml`, `infra/docker/Dockerfile`, `docker-compose.dev.yaml`, and `docker-compose.yaml`. See the development and release-image guides for actual commands. Do not claim their CI/runtime checks have passed without a successful run.
 
 Exit gate: CI demonstrates application builds, PostgreSQL connectivity/migrations, the foundation tests, and container startup; release publication is verified with an explicitly authorized GitHub release. Local lint alone does not satisfy the phase's runtime acceptance gate.
 

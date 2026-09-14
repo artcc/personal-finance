@@ -55,6 +55,8 @@ Scope update (2026-09-14): D-10's spreadsheet-import proposal remains withdrawn,
 
 Subsequent website request (2026-09-14): the owner requested an English static project website in `docs/`, with separate HTML/CSS/JavaScript, a hero, top navigation, repository link, official black/white GitHub marks, and Light/Automatic themes. The project is intended to be open source under its existing MIT license. Creating the site does not authorize changing repository/package visibility or publishing GitHub Pages or a release. See [website design and behavior](design/project-website.md).
 
+Website theme update (2026-09-14): the owner removed the theme selector and chose automatic system appearance only. This supersedes the manual Light option; the website no longer reads or saves a theme preference.
+
 ## Engineering and design follow-ups
 
 | ID | Item | Current direction | Needed before |

@@ -77,6 +77,7 @@ Keep engineering specifications, ADRs, and design references under `specs/`. Res
 - Do not initialize unrelated projects, overwrite owner files, discard changes, or run destructive Git commands.
 - Ask before destructive or difficult-to-reverse operations.
 - Do not commit, amend, push, create pull requests, or publish releases without an explicit request.
+- Maintain `CHANGELOG.md` with concise English release entries using Keep a Changelog categories, version numbers, and ISO dates; record future version changes there.
 - Before any authorized commit, inspect status, diff, and recent history; stage only intended files and exclude secrets and unintended source data.
 - Do not fix unrelated pre-existing problems or perform opportunistic refactors.
 - Do not delegate to subagents unless explicitly requested.

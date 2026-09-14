@@ -67,9 +67,10 @@ specs/
 docs/                  # Static project website; GitHub Pages publication pending
 infra/docker/
 .github/workflows/
-compose.yaml
-compose.dev.yaml
-.env.example
+docker-compose.yaml
+docker-compose.dev.yaml
+.env.example           # Production template
+.env-dev.example       # Local development template
 ```
 
 This tree describes the target business-module layout. The phase-2 implementation contains the API system/health module and shared configuration/database infrastructure, the web foundation page, and the API-client package. Future business-module directories are created when implemented. Shared tooling currently lives at the root instead of an empty tooling package.
