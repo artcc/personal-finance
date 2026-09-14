@@ -35,10 +35,11 @@ async function closeAllSessions(page: Page) {
     .click();
   const response = await responsePromise;
   expect(response.status(), 'The server must confirm logout before the UI redirects').toBe(204);
-  await response.finished();
-  expect(await page.context().cookies()).not.toContainEqual(
-    expect.objectContaining({ name: 'pf_session' }),
-  );
+  const hasCookie = async () => {
+    const cookies = await page.context().cookies();
+    return cookies.some((cookie) => cookie.name === 'pf_session');
+  };
+  await expect.poll(hasCookie, { message: 'Session cookie must be removed' }).toBe(false);
   await expect(page).toHaveURL('/login');
 }
 
