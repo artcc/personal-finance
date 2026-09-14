@@ -1,0 +1,39 @@
+# Dependencies and local package cache
+node_modules/
+.pnpm-store/
+
+# Build output and tool caches
+dist/
+build/
+.vite/
+.cache/
+*.tsbuildinfo
+.eslintcache
+
+# Test output
+coverage/
+playwright-report/
+test-results/
+blob-report/
+
+# Environment values; keep example templates versionable
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Runtime logs
+*.log
+
+# Local runtime data, backups, and exports at the repository root
+/data/
+/backups/
+/exports/
+
+# Owner reference workbooks at the repository root
+/*.xlsx
+/*.numbers
+
+# macOS metadata
+.DS_Store
+._*
