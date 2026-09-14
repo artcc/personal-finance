@@ -10,6 +10,10 @@
         color: #172b32;
         background: #e9edef;
         font-synthesis: none;
+        --chart-costs: #526e87;
+        --chart-provisions: #ad8437;
+        --chart-investment: #80739c;
+        --chart-available: #0f766e;
       }
       * {
         box-sizing: border-box;
@@ -136,6 +140,7 @@
         background: #e8f5f2;
         color: #115e59;
         font-weight: 650;
+        box-shadow: inset 3px 0 #0f766e;
       }
       .sidebar-note {
         margin-top: auto;
@@ -254,6 +259,7 @@
         justify-content: space-between;
         align-items: center;
         gap: 20px;
+        background-image: radial-gradient(ellipse at top right, #ffffff80, transparent 65%);
       }
       .hero-label {
         color: #315b50;
@@ -287,6 +293,7 @@
         background: white;
         border: 1px solid #dce4e7;
         border-radius: 12px;
+        box-shadow: 0 3px 14px #172b3203;
       }
       .metric p {
         font-size: 11px;
@@ -315,6 +322,381 @@
         font-size: 15px;
         letter-spacing: -0.02em;
         margin: 0 0 6px;
+      }
+      .insights-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.45fr) minmax(240px, 1fr);
+        gap: 20px;
+        margin-bottom: 24px;
+      }
+      .insights-grid .panel {
+        margin: 0;
+        min-width: 0;
+      }
+      figure {
+        margin: 0;
+      }
+      .chart-heading {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .chart-heading p {
+        font-size: 12px;
+        line-height: 1.5;
+        color: #52656d;
+      }
+      .chart-badge {
+        padding: 5px 8px;
+        border-radius: 8px;
+        background: #edf2f3;
+        color: #52656d;
+        font-size: 11px;
+        white-space: nowrap;
+      }
+      .trend-selection {
+        display: flex;
+        gap: 12px;
+        align-items: baseline;
+        flex-wrap: wrap;
+        margin-top: 24px;
+        min-height: 36px;
+      }
+      .trend-selection strong {
+        font-size: 28px;
+        font-weight: 650;
+        letter-spacing: -0.035em;
+        font-variant-numeric: tabular-nums;
+      }
+      .trend-selection span {
+        color: #52656d;
+        font-size: 12px;
+      }
+      .trend-drawing {
+        position: relative;
+      }
+      .trend-plot {
+        display: block;
+        width: 100%;
+        height: auto;
+        overflow: visible;
+      }
+      .trend-axis {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        color: #52656d;
+        font-size: 11px;
+      }
+      .trend-axis span {
+        position: absolute;
+        left: 0;
+        transform: translateY(-50%);
+      }
+      .trend-axis span:nth-child(1) {
+        top: 14.81%;
+      }
+      .trend-axis span:nth-child(2) {
+        top: 44.44%;
+      }
+      .trend-axis span:nth-child(3) {
+        top: 74.07%;
+      }
+      .trend-axis span:nth-child(4) {
+        top: 88.89%;
+      }
+      .chart-grid {
+        stroke: #e6ecef;
+        stroke-width: 1;
+      }
+      .zero-line {
+        stroke: #adbdc4;
+        stroke-width: 1;
+      }
+      .trend-history {
+        fill: none;
+        stroke: #0f766e;
+        stroke-width: 3;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .trend-current {
+        fill: none;
+        stroke: #0f766e;
+        stroke-width: 3;
+        stroke-dasharray: 6 5;
+        stroke-linecap: round;
+      }
+      .trend-point {
+        fill: white;
+        stroke: #0f766e;
+        stroke-width: 2;
+      }
+      .selected-point {
+        fill: #0f766e;
+        stroke: white;
+        stroke-width: 3;
+      }
+      .month-selector {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 4px;
+      }
+      .month-selector button {
+        min-height: 44px;
+        padding: 8px 2px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        font-size: 12px;
+        background: transparent;
+        color: #52656d;
+      }
+      .month-selector button[aria-pressed='true'] {
+        background: #e8f5f2;
+        border-color: #c5dfd5;
+        color: #115e59;
+        font-weight: 650;
+      }
+      .chart-key {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+        margin-top: 16px;
+        font-size: 11px;
+        color: #52656d;
+      }
+      .chart-key span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .line-key {
+        width: 20px;
+        border-top: 2px solid #0f766e;
+      }
+      .line-key--draft {
+        border-top-style: dashed;
+      }
+      .chart-values {
+        margin-top: 16px;
+        font-size: 12px;
+        color: #52656d;
+      }
+      .chart-values summary {
+        min-height: 44px;
+        cursor: pointer;
+        color: #115e59;
+      }
+      .chart-values table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+      }
+      .chart-values th,
+      .chart-values td {
+        padding: 8px 0;
+        text-align: left;
+        border-bottom: 1px solid #edf2f3;
+      }
+      .chart-values th:last-child,
+      .chart-values td:last-child {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+      .budget-ring {
+        position: relative;
+        width: 172px;
+        height: 172px;
+        margin: 24px auto 20px;
+      }
+      .budget-ring svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg);
+      }
+      .ring-center {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+      .ring-center strong {
+        font-size: 23px;
+        font-weight: 650;
+        letter-spacing: -0.025em;
+      }
+      .ring-center span {
+        margin-top: 6px;
+        font-size: 11px;
+        color: #52656d;
+      }
+      .budget-legend {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .budget-legend li {
+        display: grid;
+        grid-template-columns: 9px minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        padding: 10px 0;
+        border-bottom: 1px solid #edf2f3;
+      }
+      .budget-legend li:last-child {
+        border: 0;
+      }
+      .swatch {
+        width: 8px;
+        height: 8px;
+        border-radius: 3px;
+        background: var(--chart-costs);
+      }
+      .swatch--provisions {
+        background: var(--chart-provisions);
+      }
+      .swatch--investment {
+        background: var(--chart-investment);
+      }
+      .swatch--available {
+        background: var(--chart-available);
+      }
+      .budget-legend strong {
+        font-size: 12px;
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+      }
+      .budget-legend small {
+        display: block;
+        text-align: right;
+        font-size: 11px;
+        font-weight: 400;
+        color: #52656d;
+        margin-top: 2px;
+      }
+      .shortfall-chart {
+        padding-top: 28px;
+      }
+      .shortfall-chart .comparison-track {
+        margin: 12px 0 24px;
+      }
+      .shortfall-callout {
+        padding: 16px;
+        border: 1px solid #ecc1b7;
+        background: #fff0ec;
+        border-radius: 10px;
+        margin-top: 28px;
+      }
+      .shortfall-callout strong {
+        color: #a12a20;
+        font-size: 22px;
+      }
+      .shortfall-callout p {
+        color: #7b372e;
+        font-size: 12px;
+        margin-top: 8px;
+        line-height: 1.6;
+      }
+      .comparison-track {
+        height: 10px;
+        border-radius: 6px;
+        overflow: hidden;
+        background: #edf2f3;
+      }
+      .comparison-track span {
+        display: block;
+        height: 100%;
+        border-radius: 6px;
+        background: #0f766e;
+      }
+      .comparison-track .bar--costs {
+        background: var(--chart-costs);
+      }
+      .comparison-track .bar--spending {
+        background: var(--chart-investment);
+      }
+      .comparison-track .bar--shortfall {
+        background: #b42318;
+      }
+      .allocation-chart {
+        margin-bottom: 24px;
+      }
+      .allocation-chart figcaption p {
+        margin: 6px 0 24px;
+      }
+      .allocation-chart-row {
+        display: grid;
+        grid-template-columns: 126px minmax(0, 1fr) 94px;
+        gap: 16px;
+        align-items: center;
+        font-size: 12px;
+        margin-top: 20px;
+      }
+      .allocation-chart-row strong {
+        text-align: right;
+        font-size: 12px;
+        font-variant-numeric: tabular-nums;
+      }
+      .allocation-chart-row small {
+        font-weight: 400;
+        color: #52656d;
+      }
+      .chart-note {
+        font-size: 11px;
+        line-height: 1.6;
+        color: #52656d;
+        margin-top: 16px;
+      }
+      .chart-empty {
+        min-height: 340px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 14px;
+        text-align: center;
+        padding: 24px;
+      }
+      .chart-empty h4 {
+        font-size: 16px;
+        letter-spacing: -0.02em;
+        margin: 0;
+      }
+      .chart-empty p {
+        max-width: 290px;
+        font-size: 13px;
+        line-height: 1.7;
+        color: #52656d;
+      }
+      .chart-empty span {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: #edf2f3;
+        color: #52656d;
+        display: grid;
+        place-items: center;
+        font-size: 24px;
+      }
+      [data-state='shortfall'] .trend-current {
+        stroke: #b42318;
+      }
+      [data-state='shortfall'] #current-point {
+        stroke: #b42318;
+      }
+      [data-state='closed'] .trend-current {
+        stroke-dasharray: none;
+      }
+      [data-state='closed'] #current-line-key {
+        border-top-style: solid;
+      }
+      [data-state='shortfall'] #current-line-key {
+        border-color: #b42318;
       }
       .row {
         display: flex;
@@ -524,6 +906,9 @@
         background: linear-gradient(110deg, white, #edf2f3, white);
       }
       @container (max-width: 900px) {
+        .insights-grid {
+          grid-template-columns: minmax(0, 1.35fr) minmax(230px, 1fr);
+        }
         .mock-app {
           grid-template-columns: 1fr;
         }
@@ -539,6 +924,33 @@
         }
       }
       @container (max-width: 600px) {
+        .insights-grid {
+          grid-template-columns: 1fr;
+        }
+        .trend-axis {
+          font-size: 11px;
+        }
+        .chart-heading {
+          gap: 8px;
+        }
+        .chart-heading h3 {
+          font-size: 15px;
+        }
+        .chart-badge {
+          font-size: 11px;
+        }
+        .allocation-chart-row {
+          grid-template-columns: minmax(0, 1fr) auto;
+          gap: 10px;
+        }
+        .allocation-chart-row .comparison-track {
+          grid-row: 2;
+          grid-column: 1 / -1;
+        }
+        .allocation-chart-row strong {
+          grid-column: 2;
+          grid-row: 1;
+        }
         .mock-app {
           border-radius: 14px;
           min-height: 1100px;
@@ -642,6 +1054,7 @@
           <option value="ready">Draft</option>
           <option value="shortfall">Shortfall</option>
           <option value="closed">Closed</option>
+          <option value="no-history">No history</option>
           <option value="empty">Empty</option>
           <option value="loading">Loading</option>
           <option value="error">Error</option>
@@ -692,7 +1105,7 @@
                         After costs, provisions, and planned investment.
                       </p>
                     </div>
-                    <span class="hero-link">View the calculation ↗</span>
+                    <a class="hero-link" href="#budget-heading">View the breakdown ↗</a>
                   </div>
                   <div class="metrics">
                     <div class="metric">
@@ -711,6 +1124,288 @@
                       <p>Planned investment</p>
                       <strong>€200.00</strong>
                     </div>
+                  </div>
+                  <div class="insights-grid">
+                    <figure class="panel" aria-labelledby="trend-heading">
+                      <figcaption class="chart-heading">
+                        <div>
+                          <h3 id="trend-heading">Room to breathe, over time.</h3>
+                          <p id="trend-period">May–Oct 2026 · 5 closed months + current draft</p>
+                        </div>
+                        <span class="chart-badge" id="trend-badge">Example history</span>
+                      </figcaption>
+                      <div id="trend-data">
+                        <div
+                          class="trend-selection"
+                          role="status"
+                          aria-live="polite"
+                          aria-atomic="true"
+                        >
+                          <strong id="trend-amount">€900.00</strong
+                          ><span id="trend-selection-label">October · Draft</span>
+                        </div>
+                        <div class="trend-drawing">
+                          <div class="trend-axis" aria-hidden="true">
+                            <span>€1,000</span><span>€500</span><span>€0</span
+                            ><span id="negative-tick" hidden>−€250</span>
+                          </div>
+                          <svg
+                            class="trend-plot"
+                            viewBox="0 0 560 270"
+                            role="img"
+                            aria-labelledby="trend-title trend-description"
+                          >
+                            <title id="trend-title">
+                              Planned availability, May to October 2026
+                            </title>
+                            <desc id="trend-description">
+                              Synthetic monthly values: May 640 euros, June 720, July 680, August
+                              810, September 760, October draft 900. The current draft uses a dashed
+                              line. Exact values are also available in the table below.
+                            </desc>
+                            <rect
+                              id="selection-band"
+                              x="501"
+                              y="20"
+                              width="30"
+                              height="220"
+                              rx="10"
+                              fill="#e8f5f2"
+                            />
+                            <path class="chart-grid" d="M56 40H530 M56 120H530 M56 240H530" />
+                            <path class="zero-line" d="M56 200H530" />
+                            <path
+                              class="trend-history"
+                              d="M56 97.6 L148 84.8 L240 91.2 L332 70.4 L424 78.4"
+                            />
+                            <path
+                              class="trend-current"
+                              id="current-segment"
+                              d="M424 78.4 L516 56"
+                            />
+                            <g class="trend-point">
+                              <circle cx="56" cy="97.6" r="4" />
+                              <circle cx="148" cy="84.8" r="4" />
+                              <circle cx="240" cy="91.2" r="4" />
+                              <circle cx="332" cy="70.4" r="4" />
+                              <circle cx="424" cy="78.4" r="4" />
+                              <circle id="current-point" cx="516" cy="56" r="5" />
+                            </g>
+                            <circle
+                              id="selected-point"
+                              class="selected-point"
+                              cx="516"
+                              cy="56"
+                              r="7"
+                            />
+                          </svg>
+                        </div>
+                        <div
+                          class="month-selector"
+                          aria-label="Select a month in the example trend"
+                        >
+                          <button data-month-index="0" aria-pressed="false" aria-label="May 2026">
+                            May</button
+                          ><button data-month-index="1" aria-pressed="false" aria-label="June 2026">
+                            Jun</button
+                          ><button data-month-index="2" aria-pressed="false" aria-label="July 2026">
+                            Jul</button
+                          ><button
+                            data-month-index="3"
+                            aria-pressed="false"
+                            aria-label="August 2026"
+                          >
+                            Aug</button
+                          ><button
+                            data-month-index="4"
+                            aria-pressed="false"
+                            aria-label="September 2026"
+                          >
+                            Sep</button
+                          ><button
+                            data-month-index="5"
+                            aria-pressed="true"
+                            aria-label="October 2026"
+                          >
+                            Oct
+                          </button>
+                        </div>
+                        <div class="chart-key">
+                          <span><i class="line-key" aria-hidden="true"></i>Closed snapshots</span
+                          ><span
+                            ><i
+                              class="line-key line-key--draft"
+                              id="current-line-key"
+                              aria-hidden="true"
+                            ></i
+                            ><span id="current-key-label">Current draft</span></span
+                          >
+                        </div>
+                        <details class="chart-values">
+                          <summary>Read the exact values</summary>
+                          <table>
+                            <caption>
+                              Illustrative planned availability · EUR
+                            </caption>
+                            <thead>
+                              <tr>
+                                <th scope="col">Month</th>
+                                <th scope="col">State</th>
+                                <th scope="col">Available</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <th scope="row">May 2026</th>
+                                <td>Closed</td>
+                                <td>€640.00</td>
+                              </tr>
+                              <tr>
+                                <th scope="row">June 2026</th>
+                                <td>Closed</td>
+                                <td>€720.00</td>
+                              </tr>
+                              <tr>
+                                <th scope="row">July 2026</th>
+                                <td>Closed</td>
+                                <td>€680.00</td>
+                              </tr>
+                              <tr>
+                                <th scope="row">August 2026</th>
+                                <td>Closed</td>
+                                <td>€810.00</td>
+                              </tr>
+                              <tr>
+                                <th scope="row">September 2026</th>
+                                <td>Closed</td>
+                                <td>€760.00</td>
+                              </tr>
+                              <tr>
+                                <th scope="row">October 2026</th>
+                                <td id="trend-table-state">Draft</td>
+                                <td id="trend-table-value">€900.00</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </details>
+                      </div>
+                      <div id="trend-empty" class="chart-empty" hidden>
+                        <span aria-hidden="true">⋯</span>
+                        <h4>Your trend starts here.</h4>
+                        <p>
+                          Once you have at least two comparable saved months, their values can be
+                          compared here. Missing history is never replaced with zeroes.
+                        </p>
+                      </div>
+                    </figure>
+                    <figure class="panel" aria-labelledby="budget-heading">
+                      <figcaption class="chart-heading">
+                        <div>
+                          <h3 id="budget-heading">The shape of your month.</h3>
+                          <p id="budget-subtitle">How €2,000 of spendable income is planned</p>
+                        </div>
+                      </figcaption>
+                      <div id="positive-budget">
+                        <div class="budget-ring">
+                          <svg
+                            viewBox="0 0 160 160"
+                            fill="none"
+                            role="img"
+                            aria-labelledby="budget-title budget-description"
+                          >
+                            <title id="budget-title">Planned income breakdown</title>
+                            <desc id="budget-description">
+                              Monthly costs 800 euros, 40 percent; annual provisions 100 euros, 5
+                              percent; investment 200 euros, 10 percent; availability 900 euros, 45
+                              percent. All values are synthetic and sum to the 2000-euro income
+                              basis.
+                            </desc>
+                            <circle
+                              cx="80"
+                              cy="80"
+                              r="58"
+                              stroke="var(--chart-costs)"
+                              stroke-width="14"
+                              pathLength="100"
+                              stroke-dasharray="40 60"
+                            />
+                            <circle
+                              cx="80"
+                              cy="80"
+                              r="58"
+                              stroke="var(--chart-provisions)"
+                              stroke-width="14"
+                              pathLength="100"
+                              stroke-dasharray="5 95"
+                              stroke-dashoffset="-40"
+                            />
+                            <circle
+                              cx="80"
+                              cy="80"
+                              r="58"
+                              stroke="var(--chart-investment)"
+                              stroke-width="14"
+                              pathLength="100"
+                              stroke-dasharray="10 90"
+                              stroke-dashoffset="-45"
+                            />
+                            <circle
+                              cx="80"
+                              cy="80"
+                              r="58"
+                              stroke="var(--chart-available)"
+                              stroke-width="14"
+                              pathLength="100"
+                              stroke-dasharray="45 55"
+                              stroke-dashoffset="-55"
+                            />
+                          </svg>
+                          <div class="ring-center" aria-hidden="true">
+                            <strong>€2,000</strong><span>Spendable income</span>
+                          </div>
+                        </div>
+                        <ul class="budget-legend" aria-label="Exact budget breakdown">
+                          <li>
+                            <span class="swatch" aria-hidden="true"></span><span>Monthly costs</span
+                            ><strong>€800.00<small>40%</small></strong>
+                          </li>
+                          <li>
+                            <span class="swatch swatch--provisions" aria-hidden="true"></span
+                            ><span>Annual provisions</span><strong>€100.00<small>5%</small></strong>
+                          </li>
+                          <li>
+                            <span class="swatch swatch--investment" aria-hidden="true"></span
+                            ><span>Planned investment</span
+                            ><strong>€200.00<small>10%</small></strong>
+                          </li>
+                          <li>
+                            <span class="swatch swatch--available" aria-hidden="true"></span
+                            ><span>Available</span><strong>€900.00<small>45%</small></strong>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="shortfall-chart" id="negative-budget" hidden>
+                        <p class="row"><span>Spendable income</span><strong>€1,000.00</strong></p>
+                        <div class="comparison-track" aria-hidden="true">
+                          <span style="width: 83.333333%"></span>
+                        </div>
+                        <p class="row"><span>Planning charges</span><strong>€1,200.00</strong></p>
+                        <div class="comparison-track" aria-hidden="true">
+                          <span class="bar--shortfall" style="width: 100%"></span>
+                        </div>
+                        <div class="shortfall-callout">
+                          <strong>€200.00 shortfall</strong>
+                          <p>
+                            Costs €900 + provisions €100 + investment €200 exceed spendable income.
+                            There is no positive amount available to distribute.
+                          </p>
+                        </div>
+                        <p class="chart-note">
+                          Bars share a €1,200 scale. A negative remainder is not represented as a
+                          pie slice.
+                        </p>
+                      </div>
+                    </figure>
                   </div>
                   <div class="columns">
                     <div>
@@ -787,6 +1482,38 @@
                   <div><small>Expected cash</small><strong>€2,000.00</strong></div>
                   <div><small>Unallocated cash</small><strong>€0.00</strong></div>
                 </div>
+                <figure class="panel allocation-chart" aria-labelledby="allocation-chart-title">
+                  <figcaption>
+                    <h3 id="allocation-chart-title">Your cash, across accounts.</h3>
+                    <p class="muted">An at-a-glance view of the reviewed allocation</p>
+                  </figcaption>
+                  <div class="allocation-chart-row">
+                    <span>Main account</span>
+                    <div class="comparison-track" aria-hidden="true">
+                      <span style="width: 30%"></span>
+                    </div>
+                    <strong>€600.00 <small>· 30%</small></strong>
+                  </div>
+                  <div class="allocation-chart-row">
+                    <span>Payment account</span>
+                    <div class="comparison-track" aria-hidden="true">
+                      <span class="bar--costs" style="width: 40%"></span>
+                    </div>
+                    <strong>€800.00 <small>· 40%</small></strong>
+                  </div>
+                  <div class="allocation-chart-row">
+                    <span>Everyday spending</span>
+                    <div class="comparison-track" aria-hidden="true">
+                      <span class="bar--spending" style="width: 30%"></span>
+                    </div>
+                    <strong>€600.00 <small>· 30%</small></strong>
+                  </div>
+                  <p class="chart-note">
+                    All bars share the €2,000 expected-cash basis. Account totals include their
+                    spaces once. This editor example includes the €300 residual assignment; the
+                    overview illustrates the earlier draft.
+                  </p>
+                </figure>
                 <section class="panel">
                   <div class="account-heading">
                     <div>
@@ -937,6 +1664,80 @@
     <script>
       const stage = document.getElementById('stage');
       const state = document.getElementById('state');
+      // Fixed design fixtures and drawing coordinates, not application calculations.
+      const trendMonths = [
+        { name: 'May', amount: '€640.00', x: 56, y: 97.6 },
+        { name: 'June', amount: '€720.00', x: 148, y: 84.8 },
+        { name: 'July', amount: '€680.00', x: 240, y: 91.2 },
+        { name: 'August', amount: '€810.00', x: 332, y: 70.4 },
+        { name: 'September', amount: '€760.00', x: 424, y: 78.4 },
+        { name: 'October', amount: '€900.00', x: 516, y: 56 },
+      ];
+      let selectedMonth = 5;
+      const selectMonth = (index) => {
+        selectedMonth = index;
+        const point = trendMonths[index];
+        const negative = index === 5 && state.value === 'shortfall';
+        document.getElementById('trend-amount').textContent = point.amount;
+        document.getElementById('trend-amount').style.color = negative ? '#a12a20' : '#172b32';
+        document.getElementById('trend-selection-label').textContent =
+          `${point.name} · ${index === 5 && state.value !== 'closed' ? 'Draft' : 'Closed'}`;
+        const marker = document.getElementById('selected-point');
+        marker.setAttribute('cx', point.x);
+        marker.setAttribute('cy', point.y);
+        marker.style.fill = negative ? '#b42318' : '#0f766e';
+        const band = document.getElementById('selection-band');
+        band.setAttribute('x', point.x - 15);
+        band.setAttribute('fill', negative ? '#fff0ec' : '#e8f5f2');
+        document
+          .querySelectorAll('[data-month-index]')
+          .forEach((button) =>
+            button.setAttribute(
+              'aria-pressed',
+              String(Number(button.dataset.monthIndex) === index),
+            ),
+          );
+      };
+      document
+        .querySelectorAll('[data-month-index]')
+        .forEach((button) =>
+          button.addEventListener('click', () => selectMonth(Number(button.dataset.monthIndex))),
+        );
+      const updateCharts = (value) => {
+        const negative = value === 'shortfall';
+        const closed = value === 'closed';
+        const noHistory = value === 'no-history';
+        document.getElementById('trend-data').hidden = noHistory;
+        document.getElementById('trend-empty').hidden = !noHistory;
+        document.getElementById('trend-badge').textContent = noHistory
+          ? 'No history'
+          : 'Example history';
+        trendMonths[5].amount = negative ? '−€200.00' : '€900.00';
+        trendMonths[5].y = negative ? 232 : 56;
+        document
+          .getElementById('current-segment')
+          .setAttribute('d', `M424 78.4 L516 ${trendMonths[5].y}`);
+        document.getElementById('current-point').setAttribute('cy', trendMonths[5].y);
+        document.getElementById('negative-tick').hidden = !negative;
+        document.getElementById('trend-period').textContent = noHistory
+          ? 'Current month only · no comparable history'
+          : closed
+            ? 'May–Oct 2026 · 6 closed snapshots'
+            : 'May–Oct 2026 · 5 closed months + current draft';
+        document.getElementById('current-key-label').textContent = closed
+          ? 'Selected closed month'
+          : 'Current draft';
+        document.getElementById('trend-table-state').textContent = closed ? 'Closed' : 'Draft';
+        document.getElementById('trend-table-value').textContent = trendMonths[5].amount;
+        document.getElementById('trend-description').textContent =
+          `Synthetic monthly values: May 640 euros, June 720, July 680, August 810, September 760, October ${negative ? 'minus 200' : '900'}. October is ${closed ? 'closed and drawn with a solid line' : 'a draft and drawn with a dashed line'}. Exact values are also available in the table below.`;
+        document.getElementById('positive-budget').hidden = negative;
+        document.getElementById('negative-budget').hidden = !negative;
+        document.getElementById('budget-subtitle').textContent = negative
+          ? 'Funding gap · the same zero-based scale'
+          : 'How €2,000 of spendable income is planned';
+        selectMonth(selectedMonth);
+      };
       const showView = (view) => {
         document.querySelectorAll('.screen').forEach((element) => {
           element.hidden = element.id !== view;
@@ -964,6 +1765,7 @@
       state.addEventListener('change', () => {
         const value = state.value;
         document.querySelector('.mock-app').dataset.state = value;
+        updateCharts(value);
         document.getElementById('plan-status').textContent =
           value === 'closed' ? 'Closed · Read only' : 'Draft';
         document.getElementById('review-action').textContent =

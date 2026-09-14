@@ -94,6 +94,33 @@ On desktop, use a persistent sidebar and a contextual page header. On mobile, us
 - Secondary column: allocation progress, unallocated cash, and next step.
 - A historical comparison appears only when meaningful saved comparable months exist. Reopened revisions of one month must not be treated as separate months.
 
+### Financial charts
+
+Charts are part of the intended visual direction, with a clear question, a stated data basis, and readable numbers. The review prototype now demonstrates a trend, a budget composition ring, and account-allocation bars. It uses synthetic fixtures only; no chart library or production financial-chart implementation has been added.
+
+| Location | Chart | Question answered | Required data |
+| --- | --- | --- | --- |
+| Monthly overview | Availability line across up to 6 comparable months | How has my planning margin changed? | Saved monthly snapshots, at most one selected revision per month; distinguish the current draft from closed months |
+| Monthly overview | Compact composition ring with labeled amounts and percentages | How is this month's spendable income divided? | Nonnegative costs, provisions, planned investment, and availability that reconcile to a strictly positive income basis |
+| Negative-availability overview | Two horizontal bars sharing a zero-based scale | By how much do planning charges exceed income? | Exact income, charges, and shortfall; never force a negative remainder into a ring |
+| Account allocation | Horizontal bars with exact values and shares | Where is expected cash assigned? | Exclusive account-group totals, counting spaces once, and the expected-cash denominator |
+| Investments, phase 6 | Contributions and dated valuations, separately identified | What did I contribute, and what is its recorded value? | Actual contributions and dated valuations; no balances inferred from a plan or elapsed time |
+
+Presentation rules:
+
+- Keep planned availability as the main answer. Use one trend and one compact breakdown in the overview; avoid adding a chart to every metric card.
+- Use a restrained slate/ochre/lilac/teal palette with explicit legends. Status meaning also uses text and signs, not color alone.
+- Label the period, EUR units, income basis, and draft/closed state. Plot straight segments through saved observations; do not smooth sparse data into invented intermediate values.
+- Use a dashed segment and explicit label for the current draft. A closed month uses a solid segment. Do not mix multiple revisions as separate historical months.
+- Missing history stays missing. Do not fabricate a sparkline, bridge missing months as if values were known, or substitute zero for unavailable data. The prototype's `No history` state keeps the current budget visible while replacing only the historical chart with guidance. A zero-income month should show its actual amounts without a composition ring or division by zero.
+- Compare bars on the same zero-based scale. When availability is negative, display the funding comparison and shortfall, not a pie with misleading proportions.
+- Separate planning composition from cash allocation: transferring a planned amount does not become another charge, and a space is not added again after its parent account total.
+- Provide exact values in readable text and, for trends, a keyboard-accessible data table. SVG titles/descriptions supplement these values. Selection must work by keyboard and touch, not just hover.
+- On mobile, stack chart panels, retain meaningful labels, and put account amounts above their bars. Avoid horizontally scrolling chart legends.
+- In production, final amounts come from the API. Chart geometry is presentation; it must not become a second financial calculation engine.
+
+Suggested i18n keys for implementation: `charts.availabilityTrend`, `charts.budgetComposition`, `charts.cashAllocation`, `charts.currentDraft`, `charts.closedSnapshot`, `charts.exactValues`, and `charts.insufficientHistory`. Any future chart dependency needs separate approval.
+
 ### Allocation
 
 - Start with expected cash, tax reserve, and allocation status.
@@ -129,6 +156,7 @@ On desktop, use a persistent sidebar and a contextual page header. On mobile, us
 | Feedback banner | Error, conflict, shortfall, informational; actionable text |
 | Empty state | Context-specific explanation and one useful action |
 | Calculation breakdown | Reconciled income/charges with links to source details |
+| Financial chart panel | Period/basis caption, semantic legend, exact values, keyboard/touch selection, accessible table, empty/error state |
 
 Use shadcn/ui primitives where appropriate, customizing tokens and variants once. Business components compose those primitives; avoid copying class lists across screens.
 

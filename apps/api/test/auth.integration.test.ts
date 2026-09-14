@@ -153,12 +153,10 @@ describe('Registration and private session boundaries', () => {
       ).statusCode,
     ).toBe(401);
     const expired = await signIn(first.session.user.email);
-    await running.app
-      .get(DatabaseService)
-      .client.session.update({
-        where: { id: expired.session.sessionId },
-        data: { idleExpiresAt: new Date(0) },
-      });
+    await running.app.get(DatabaseService).client.session.update({
+      where: { id: expired.session.sessionId },
+      data: { idleExpiresAt: new Date(0) },
+    });
     expect(
       (
         await running.app.inject({
