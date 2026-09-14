@@ -7,7 +7,7 @@ An **accepted direction** reflects the previously accepted architecture/technolo
 | [001](001-modular-monolith.md) | Modular monolith and boundaries | Accepted direction |
 | [002](002-technology-stack.md) | Technology stack and monorepo | Accepted direction; phase-2 versions selected |
 | [003](003-money-and-dates.md) | Exact money, decimals, dates, and rounding | Exact arithmetic accepted; policy details proposed |
-| [004](004-monthly-history.md) | Saved monthly history and revisions | Historical preservation accepted; lifecycle proposed |
+| [004](004-monthly-history.md) | Saved monthly history and revisions | Historical preservation and D-05/D-11 lifecycle policies accepted |
 | [005](005-authentication.md) | Single-owner authentication | Superseded by ADR 009 |
 | [006](006-api-contract.md) | REST/OpenAPI and generated client | Accepted direction; wire details proposed |
 | [007](007-internationalization.md) | English project and localized frontend | Accepted |

@@ -4,6 +4,8 @@ Status: phase-2 CI success reported by the owner; access, the approved visual di
 
 Phase-4 update: accounts/spaces, recurring and one-month income, commitments, exact calculators, immutable source revisions, and financial audit events are implemented. The owner approved the visual direction and phase-4 financial policies. Current functional verification remains pending in CI; the phase-3 logout observer fix is included in this work.
 
+Phase-5 update: the owner reported phase-4 CI green. Monthly planning is implemented with its own domain calculator, a small transaction-scoped persistence port, application lifecycle orchestration, and HTTP DTOs. It reuses the phase-4 financial write lock and source calculators without introducing another runtime service. Source projections are read on the same database transaction; domain code imports no ORM types. Current phase-5 CI evidence is still pending.
+
 ## System shape
 
 ```text
@@ -115,6 +117,7 @@ Cross-module domain imports are limited to truly shared primitives, such as `Mon
 - Plan lines retain source ID, source revision, snapshotted label, dates, exact amount, kind, and calculation version.
 - Allocation lines identify a destination and purpose, with references to funded plan lines where applicable.
 - Closed revisions and audit events are immutable records.
+- A database trigger prevents updates to closed monthly-plan revisions. Plan-level versions remain monotonic across reopenings; snapshots retain their own revision/version metadata.
 - Financing and investment plans link to canonical planning sources. Actual investment operations are separate records.
 - Financial records are entered manually. Plan provenance points to application source records and revisions; no workbook references or import batches are required in the runtime schema.
 

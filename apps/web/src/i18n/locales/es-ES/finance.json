@@ -48,6 +48,14 @@
     "installmentTotal": "La suma de los plazos debe coincidir exactamente con el importe anual.",
     "invalidReceipt": "Las deducciones producen un cobro negativo. Revisa los datos del ingreso.",
     "invalidInput": "Revisa los datos del formulario y vuelve a intentarlo.",
-    "unexpected": "No hemos podido completar la solicitud. Conserva tus cambios y vuelve a intentarlo."
+    "unexpected": "No hemos podido completar la solicitud. Conserva tus cambios y vuelve a intentarlo.",
+    "planReadOnly": "Esta versión del mes es de solo lectura. Vuelve a la versión actual o reabre el mes para corregirlo.",
+    "planConflict": "El plan ha cambiado desde que abriste esta vista. Recarga y revisa la versión actual antes de repetir la acción.",
+    "planRefreshConflict": "La configuración o las referencias han cambiado. Repite la revisión de actualización y resuelve los ajustes o destinos indicados.",
+    "invalidPlanSource": "Hay una configuración o un destino que no es válido para este mes. Revisa tus ingresos, compromisos y cuentas.",
+    "invalidAllocationDestination": "Algún destino no está disponible para este mes. Revisa el reparto y, si hace falta, actualiza las fuentes del plan.",
+    "invalidPlanInput": "Revisa los importes, los vínculos de financiación y el destino del remanente. Solo puede haber un remanente automático.",
+    "allocationMismatch": "El reparto debe cuadrar exactamente con el cobro esperado antes de cerrar el mes.",
+    "acknowledgeShortfall": "Confirma expresamente el déficit o los compromisos pendientes de financiar antes de cerrar este mes."
   }
 }

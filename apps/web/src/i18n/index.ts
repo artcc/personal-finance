@@ -10,6 +10,7 @@ import security from './locales/es-ES/security.json';
 import finance from './locales/es-ES/finance.json';
 import accounts from './locales/es-ES/accounts.json';
 import sources from './locales/es-ES/sources.json';
+import planning from './locales/es-ES/planning.json';
 
 await i18n.use(initReactI18next).init({
   lng: 'es-ES',
@@ -27,6 +28,7 @@ await i18n.use(initReactI18next).init({
     'finance',
     'accounts',
     'sources',
+    'planning',
   ],
   resources: {
     'es-ES': {
@@ -40,6 +42,7 @@ await i18n.use(initReactI18next).init({
       finance,
       accounts,
       sources,
+      planning,
     },
   },
   interpolation: { escapeValue: false },

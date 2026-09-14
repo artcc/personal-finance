@@ -13,6 +13,7 @@ export function DestinationPicker({
   onAccount,
   onSpace,
   error,
+  onLabel,
 }: {
   userId: string;
   accountId: string;
@@ -20,6 +21,7 @@ export function DestinationPicker({
   onAccount: (id: string) => void;
   onSpace: (id: string) => void;
   error?: string | undefined;
+  onLabel?: ((label: string) => void) | undefined;
 }) {
   const { t } = useTranslation('finance');
   const [search, setSearch] = useState('');
@@ -65,6 +67,10 @@ export function DestinationPicker({
           onChange={(event) => {
             onAccount(event.target.value);
             onSpace('');
+            onLabel?.(
+              accounts.data?.items.find((item) => item.id === event.target.value)?.name ??
+                t('currentDestination'),
+            );
           }}
         >
           <option value="">{t(accounts.isPending ? 'loading' : 'chooseAccount')}</option>
@@ -85,7 +91,14 @@ export function DestinationPicker({
           className="form-input"
           disabled={!accountId || spaces.isPending}
           value={spaceId}
-          onChange={(event) => onSpace(event.target.value)}
+          onChange={(event) => {
+            onSpace(event.target.value);
+            const account =
+              accounts.data?.items.find((item) => item.id === accountId)?.name ??
+              t('currentDestination');
+            const space = spaces.data?.items.find((item) => item.id === event.target.value)?.name;
+            onLabel?.(space ? `${account} / ${space}` : account);
+          }}
         >
           <option value="">{t('directAccount')}</option>
           {spaces.data?.items.map((item) => (

@@ -92,7 +92,13 @@ Prepare `.env` from the example first. Development PostgreSQL is bound only to `
 - API readiness: `http://127.0.0.1:3000/api/v1/health/ready`.
 - Development-only OpenAPI JSON: `http://127.0.0.1:3000/api/openapi.json`.
 
-Vite proxies `/api` to the API so the browser uses one origin. `/register` and `/login` are public access screens. `/`, `/settings/security`, `/accounts`, `/income`, and `/commitments` require a valid session. Configuration screens use the generated client and backend previews; monthly plan generation/allocation and dashboard charts remain phase 5.
+Vite proxies `/api` to the API so the browser uses one origin. `/register` and `/login` are public access screens. `/`, `/settings/security`, `/accounts`, `/income`, `/commitments`, and the planning routes require a valid session. `/` opens the current planning month; `/planning/:month`, `/planning/:month/allocation`, and `/planning/:month/history` preserve explicit month context. `/allocation` opens the current month's allocation view.
+
+Phase 5 adds the `20260914030000_monthly_planning` migration, including closed-revision protection. It reuses the existing generate/build/migrate pipeline; no additional local service or dependency is required. The generated API client incorporates the planning endpoints during CI/container builds.
+
+`pnpm test:unit` now includes monthly financial invariants, and `pnpm test:db` includes planning lifecycle, idempotency, ownership, immutable history, and stale-refresh cases. The browser suite includes preparation, allocation, closing, reopening, and a historical view after source changes. These checks are configured for CI, not authorized for automatic local execution.
+
+Phase-5 local evidence: owner-authorized Prettier formatting, `format:check`, and ESLint completed successfully with the existing Node installation. No dependency was added. No local generation, build, type check, migration, unit/integration/browser test, or container execution was performed; CI must still verify the new behavior.
 
 `PLANNING_TIME_ZONE` supplies the default calendar context (initially `Europe/Madrid`); `/api/v1/financial-context` returns the current planning month, calendar date, and currency to authenticated clients. Phase-4 migration adds accounts/spaces, income/commitment source revisions, installments, and financial audit events. Money uses BIGINT cents and exact NUMERIC rate/quantity columns. Do not edit old migrations or run these migrations locally without authorization.
 

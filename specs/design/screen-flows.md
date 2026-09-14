@@ -21,7 +21,7 @@ Status: draft interaction design. Wireframes use English illustrative labels for
 | `/investments` | Investments | Introduced in phase 6 |
 | `/settings/data` | Data export | Introduced in phase 7 |
 
-When monthly planning ships, invalid months must produce a localized invalid-route state rather than silently selecting another month, and the root can redirect to the current planning month. In phase 3, `/` is the private welcome screen; monthly financial routes remain design proposals.
+Phase 5 implements the monthly overview at `/` for the current month, plus explicit `/planning/:month`, `/planning/:month/allocation`, and `/planning/:month/history` routes. Invalid months produce a localized invalid-route state rather than selecting a different month. Closing is offered from the overview after cash allocation reconciles; allocation edits must be saved or explicitly discarded before ordinary navigation.
 
 ## Flow 1 — First use
 

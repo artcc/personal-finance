@@ -24,6 +24,16 @@ export function FinanceError({ error }: { error: unknown }) {
     INSTALLMENT_TOTAL_MISMATCH: 'installmentTotal',
     INVALID_RECEIPT_AMOUNT: 'invalidReceipt',
     INVALID_FINANCIAL_INPUT: 'invalidInput',
+    PLAN_NOT_FOUND: 'notFound',
+    PLAN_LINE_NOT_FOUND: 'notFound',
+    PLAN_READ_ONLY: 'planReadOnly',
+    PLAN_VERSION_CONFLICT: 'planConflict',
+    PLAN_REFRESH_CONFLICT: 'planRefreshConflict',
+    INVALID_PLANNING_SOURCE: 'invalidPlanSource',
+    INVALID_ALLOCATION_DESTINATION: 'invalidAllocationDestination',
+    INVALID_PLAN_INPUT: 'invalidPlanInput',
+    ALLOCATION_MISMATCH: 'allocationMismatch',
+    SHORTFALL_ACKNOWLEDGEMENT_REQUIRED: 'acknowledgeShortfall',
   };
   return (
     <p role="alert" className="feedback-banner feedback-banner--error">

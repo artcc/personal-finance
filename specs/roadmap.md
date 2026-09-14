@@ -9,9 +9,9 @@ Phases describe deliverables, dependencies, and completion evidence. Documentati
 - Owner review and policy decisions remain pending; see the [decision register](decisions.md).
 - With owner permission, the 47 local Markdown links were compared against the project file inventory on 2026-09-14; all target files exist. This checks file destinations only, not business-policy correctness, external URLs, or application behavior.
 - Phase 2: implementation complete; the owner reported GitHub Actions green. First release-image publication still needs its own evidence.
-- Phase 3: access implemented and visual direction approved. CI exposed a logout observer problem; the corrective cache transition and regression tests are included, with functional confirmation still pending.
-- Phase 4: account/space, income, commitment, exact-calculation, revision, and audit implementations are present with CI tests. Financial policies were explicitly confirmed before implementation. Runtime/CI verification remains pending.
-- Phases 5–9: not started.
+- Phases 3–4: access and financial configuration implemented; the owner reported CI green after the logout corrections. The visual direction and phase-4 financial policies are approved.
+- Phase 5: monthly generation, snapshots, overrides, allocation, close/reopen, history, and saved-data charts implemented. D-05/D-06/D-11 are approved; current functional verification remains pending in CI.
+- Phases 6–9: not started.
 
 ## Phase 0 — Product and financial model
 
@@ -61,6 +61,8 @@ Exit gate: representative recurring inputs can be configured; relevant D-01–D-
 Implement month generation, saved inputs/results, overrides, allocation instructions, close/reopen lifecycle, and history. Planned investment lines and financing commitments must be supportable before the dedicated phase-6 management screens exist; use explicit classified planning sources rather than fake executed transactions.
 
 Tests cover duplicate generation, concurrent updates, history preservation, exact totals, allocation conservation, and the core end-to-end journey.
+
+The implementation keeps the regular flow to prepare → review → allocate → close. Advanced adjustments and refresh/conflict decisions are contextual dialogs. It adds no runtime services or packages. Local work remains limited to owner-approved format/lint checks; runtime acceptance is a CI gate.
 
 Exit gate: the owner can configure inputs, prepare a representative month, inspect availability, allocate money, and close the month. This is the first usable product milestone.
 

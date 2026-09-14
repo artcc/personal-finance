@@ -13,6 +13,9 @@ export function AppShell() {
   const drawer = useRef<HTMLDialogElement>(null);
   const main = useRef<HTMLElement>(null);
   const { pathname } = useLocation();
+  const planningMonth = /^\/planning\/(\d{4}-\d{2})(?:\/|$)/.exec(pathname)?.[1];
+  const overviewPath = planningMonth ? `/planning/${planningMonth}` : '/';
+  const allocationPath = planningMonth ? `/planning/${planningMonth}/allocation` : '/allocation';
   useEffect(() => {
     main.current?.focus();
   }, [pathname, session.data?.user.id]);
@@ -26,9 +29,13 @@ export function AppShell() {
       <LinkBrand />
       <nav aria-label={t('navigation')} className="app-navigation">
         <p className="nav-section-label">{t('workspace')}</p>
-        <NavLink to="/" end onClick={() => drawer.current?.close()}>
+        <NavLink to={overviewPath} end onClick={() => drawer.current?.close()}>
           <span aria-hidden="true">▦</span>
           {t('overview')}
+        </NavLink>
+        <NavLink to={allocationPath} onClick={() => drawer.current?.close()}>
+          <span aria-hidden="true">⇄</span>
+          {t('allocation')}
         </NavLink>
         {(['accounts', 'income', 'commitments'] as const).map((item) => (
           <NavLink key={item} to={`/${item}`} onClick={() => drawer.current?.close()}>
@@ -36,7 +43,7 @@ export function AppShell() {
             {t(item)}
           </NavLink>
         ))}
-        {(['allocation', 'financing', 'investments'] as const).map((item) => (
+        {(['financing', 'investments'] as const).map((item) => (
           <span className="nav-future" key={item}>
             <span aria-hidden="true">◦</span>
             {t(item)}

@@ -18,9 +18,17 @@ This register separates confirmed requirements from proposals requiring owner ap
 
 ## Business policies to confirm
 
-Phase-4 resolution (2026-09-14): the owner explicitly approved D-01, D-02, D-03, D-04, D-07, D-09, D-12, and D-13 in the phase-4 clarification. Their recorded defaults below are now approved implementation policies. D-05, D-06, D-08, and D-11 remain proposed for later phases.
+Phase-4 resolution (2026-09-14): the owner explicitly approved D-01, D-02, D-03, D-04, D-07, D-09, D-12, and D-13 in the phase-4 clarification. Their recorded defaults below are approved implementation policies.
 
-| ID | Decision | Proposed default | Needed before |
+Phase-5 resolution (2026-09-14): the owner explicitly selected the recommended options for D-05, D-06, and D-11:
+
+- **D-05:** reopening requires a reason and creates a new editable revision. The original closed revision remains available; corrections never overwrite it.
+- **D-06:** everyday spending is an allocation, not an additional planning charge. With EUR 2,000 income and EUR 1,100 commitments, planned availability remains EUR 900; allocating EUR 600 to everyday spending leaves EUR 300 of that availability still to assign. The UI must label these amounts distinctly.
+- **D-11:** an underfunded plan may close only after explicit shortfall acknowledgement and exact reconciliation of allocations to expected cash. With EUR 1,000 net salary and EUR 1,200 planning charges, the EUR 200 shortfall remains visible even if the EUR 1,000 cash allocation reconciles. Closing neither invents funding nor confirms payment execution.
+
+These decisions authorize the corresponding phase-5 policies, not a claim that they are implemented or validated. D-08 remains proposed for phase-6 investment cost basis.
+
+| ID | Decision | Recorded policy (approved except D-08) | Applies to |
 | --- | --- | --- | --- |
 | D-01 | Monthly provision rounding | Allocate each obligation's annual cents across 12 months; floor share plus one cent for the first remainder months in a January–December cycle | Provision engine and acceptance fixtures |
 | D-02 | Joining a provision cycle mid-year | Begin future monthly provisions without automatically catching up; require an explicit opening reserve or additional contribution if reserve sufficiency is shown | Provision UI |
@@ -35,7 +43,7 @@ Phase-4 resolution (2026-09-14): the owner explicitly approved D-01, D-02, D-03,
 | D-12 | Tax and commission precision | Round each computed component half away from zero to cents; commission based on pre-tax base; support this deducted-commission scenario first | Professional income API |
 | D-13 | Missing calendar due day | Clamp a day-31 schedule and February 29 annual schedules to the last valid day of the relevant month; do not shift weekends/holidays | Payment schedule generation |
 
-Specs reference these IDs. Implementers must not resolve the remaining proposals silently. Phase-4 calculations may implement the explicitly approved policies above; later-phase policies still require confirmation.
+Specs reference these IDs. Implementers may use the explicitly approved phase-4 and phase-5 policies above. Unresolved investment choices and any additional financial policies still require confirmation.
 
 ## Withdrawn decisions
 

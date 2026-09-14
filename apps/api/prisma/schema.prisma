@@ -20,6 +20,7 @@ model User {
   incomeSources   IncomeSource[]
   commitments     CommitmentSource[]
   financialEvents FinancialEvent[]
+  monthlyPlans    MonthlyPlan[]
 
   @@map("users")
 }
@@ -197,4 +198,43 @@ model FinancialEvent {
   user       User @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@index([userId, entityType, entityId])
   @@map("financial_events")
+}
+
+model MonthlyPlan {
+  id              String @id @default(uuid()) @db.Uuid
+  userId          String @map("user_id") @db.Uuid
+  month           String @db.Char(7)
+  currentRevision Int @default(1) @map("current_revision")
+  version         Int @default(1)
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  user            User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  revisions       MonthlyPlanRevision[]
+  @@unique([userId, month])
+  @@unique([id, userId])
+  @@map("monthly_plans")
+}
+
+model MonthlyPlanRevision {
+  id                 String @id @default(uuid()) @db.Uuid
+  planId             String @map("plan_id") @db.Uuid
+  userId             String @map("user_id") @db.Uuid
+  number             Int
+  version            Int
+  state              String @db.VarChar(8)
+  snapshot           Json
+  summary            Json
+  expectedCashCents  BigInt @map("expected_cash_cents")
+  taxReserveCents    BigInt @map("tax_reserve_cents")
+  chargesCents       BigInt @map("charges_cents")
+  availabilityCents  BigInt @map("availability_cents")
+  allocatedCashCents BigInt @map("allocated_cash_cents")
+  fundingGapCents    BigInt @map("funding_gap_cents")
+  reopenReason      String? @map("reopen_reason") @db.VarChar(500)
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+  closedAt          DateTime? @map("closed_at") @db.Timestamptz(3)
+  plan              MonthlyPlan @relation(fields: [planId, userId], references: [id, userId], onDelete: Cascade)
+  @@unique([planId, number])
+  @@index([userId, planId])
+  @@map("monthly_plan_revisions")
 }

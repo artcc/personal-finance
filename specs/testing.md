@@ -77,6 +77,8 @@ Phase-4 coverage adds exact tax/hourly calculations, annual cent conservation, i
 
 Browser workers use distinct test-only client addresses behind the explicitly trusted loopback CI proxy. This prevents separate browser clients and retries from sharing one artificial rate-limit bucket. Production limiter settings are unchanged, and the dedicated API test still verifies the normal rate-limit response.
 
+Phase-5 tests add availability/allocation conservation, exact VAT separation, explicit deficit acknowledgement, override compatibility, duplicate remainder rejection, concurrent generation/closing, monotonic versions across reopening, closed-row database protection, and rejection of stale refresh previews. A real browser journey prepares a month from configured sources, allocates everyday spending plus a remainder, closes it, changes the source configuration, and checks the preserved historical version after reopening. No phase-5 runtime test result is claimed until CI runs.
+
 Markdown is reviewed separately and excluded from the source/configuration formatting gate to avoid unrelated document rewrites. Pin supported tool versions and provide required test services. Coverage reports are diagnostic; no arbitrary coverage percentage substitutes for testing financial invariants in later phases.
 
 The owner requested no local compilation or tests and no replacement Node installation. Dependencies were installed with scripts disabled; only authorized lint/format operations run locally. A successful lint result does not establish build, migration, browser, container, or CI success.

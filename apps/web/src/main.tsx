@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ErrorPage } from './app/error-page';
-import { FoundationPage } from './features/foundation/foundation-page';
+import { PlanningPage } from './features/planning/planning-page';
 import { AppShell } from './app/app-shell';
 import { AccessPage } from './features/auth/access-page';
 import { SecurityPage } from './features/auth/security-page';
@@ -28,7 +28,11 @@ const router = createBrowserRouter([
     element: <AppShell />,
     errorElement: <ErrorPage />,
     children: [
-      { index: true, element: <FoundationPage /> },
+      { index: true, element: <PlanningPage /> },
+      { path: 'planning/:month', element: <PlanningPage /> },
+      { path: 'planning/:month/allocation', element: <PlanningPage view="allocation" /> },
+      { path: 'planning/:month/history', element: <PlanningPage view="history" /> },
+      { path: 'allocation', element: <PlanningPage view="allocation" /> },
       { path: 'accounts', element: <AccountsPage /> },
       { path: 'income', element: <SourcesPage key="income" kind="income" /> },
       { path: 'commitments', element: <SourcesPage key="commitments" kind="commitments" /> },

@@ -1,6 +1,20 @@
 # Monthly Planning and Allocation
 
-Status: draft. Delivery: phase 5. D-01–D-06, D-09, and D-11 affect the central financial behavior.
+Status: phase-5 implementation present; functional verification pending in CI. D-05/D-06/D-11 and the underlying phase-4 policies were explicitly approved before implementation.
+
+## Implemented scope
+
+- One planning module reuses the existing per-user financial transaction lock and exact-money primitives. No new dependency, queue, cache service, or event-sourcing framework is introduced.
+- `monthly_plans` identifies a user/month and holds a monotonically increasing version. `monthly_plan_revisions` preserves snapshots, exact summary JSON, indexed BIGINT totals, lifecycle timestamps, and reopening reasons. A database trigger rejects in-place updates of closed revisions.
+- Source inputs, selected revision IDs, labels, amounts, due schedules, and destination descriptions are copied into the snapshot. Historical reads use that snapshot and its stored summary, never current source configuration.
+- All mutations and audit events share a transaction. Versions do not reset on reopening, preventing a stale request for an earlier revision from matching a new draft accidentally.
+- Initial suggested allocations fund each planning charge and tax reserve at its source destination. They are editable instructions, not executed transfers. Everyday and remaining-availability assignments are explicit additions.
+- At most one allocation can receive the automatic remainder. When fixed allocations exceed cash, its computed amount is zero and the negative unallocated cash remains visible; no negative transfer is saved.
+- Funding gaps include insufficient assignments to commitments or tax reserves. Closing requires exact cash reconciliation and explicit acknowledgement when availability is negative or required funding remains uncovered.
+- Overrides adjust one monthly charge or explicitly replace an income's expected cash/reserve pair. Original inputs and breakdowns remain available; overrides do not silently recalculate invoice taxes or scheduled due payments.
+- Refresh previews compare semantic source data rather than JSON key order. Applying a preview rechecks the source fingerprint and plan version. Missing/incompatible overrides require explicit discard IDs; invalid allocation links/destinations require correction or explicit restoration of suggested allocations.
+- The initial technical bounds are 500 eligible source lines and 500 allocation rows. Bulk allocation requests have a 512 KiB body limit. History pages contain 20 revisions; trends select at most six saved months and never fill missing months with zeroes.
+- The web provides overview, allocation, and history views. Unsaved allocation edits block ordinary navigation with a discard choice; authentication expiry may still leave the private area immediately. Graphs use server-calculated saved figures, with exact textual values and no invented history.
 
 ## Purpose
 
@@ -34,6 +48,8 @@ Financing payments and shared contributions are included in monthly costs, not s
 
 Planned availability is not a current account balance. Allocating it to everyday spending does not change it. Show how that availability is assigned separately from the calculation of the available amount.
 
+Under approved D-06, EUR 2,000 income less EUR 1,100 planning charges leaves EUR 900 available after commitments. Allocating EUR 600 of that amount to everyday spending leaves EUR 300 of availability still to assign. Display all three meanings clearly; do not relabel the EUR 300 as the original planned availability or deduct the EUR 600 as another charge. This remaining-availability figure is distinct from total unallocated cash, which also depends on the allocations funding commitments and any tax reserve.
+
 ## Generation
 
 1. Validate the planning month and authenticated owner.
@@ -63,7 +79,7 @@ Generation does not record receipts, bank transfers, investment executions, or r
 3. Distinguish funded commitments, tax reserve, everyday spending, and remaining money.
 4. Allow at most one automatic residual destination: `expectedCash - fixedAllocations`. If negative, flag over-allocation; do not silently save a negative transfer.
 5. Drafts can be incomplete; show unallocated or overallocated cash explicitly.
-6. Closing requires exact cash allocation reconciliation under proposed D-11. An account group must not count both a rollup and its components.
+6. Closing requires exact cash allocation reconciliation under approved D-11. An account group must not count both a rollup and its components.
 7. A negative-availability plan can be underfunded even when expected cash has been fully allocated. Explain funding gaps; do not invent borrowing or negative account transfers to conceal them.
 8. Under D-11, closing an underfunded plan requires explicit acknowledgement. Full funding of all planning charges is not implied by allocation reconciliation.
 9. Never mark an instruction as bank-executed solely because the plan was closed.
@@ -80,26 +96,29 @@ Generation does not record receipts, bank transfers, investment executions, or r
 
 All mutating lifecycle steps are transactional. Two simultaneous close requests must not create two close events or lose an edit. No implicit month closing at midnight or month rollover.
 
-## Proposed HTTP surface
+## HTTP surface
 
 | Method / path | Purpose |
 | --- | --- |
 | `POST /api/v1/monthly-plans` | Generate or return existing plan for a month |
 | `GET /api/v1/monthly-plans?month=YYYY-MM` | Read current saved revision |
+| `GET /api/v1/monthly-plans/trend?month=YYYY-MM` | Read up to six current saved monthly revisions for a trend |
 | `GET /api/v1/monthly-plans/{id}/revisions` | List saved revision history |
 | `GET /api/v1/monthly-plans/{id}/revisions/{revision}` | Read a historical snapshot |
 | `POST /api/v1/monthly-plans/{id}/refresh-preview` | Compare current sources with a draft |
 | `POST /api/v1/monthly-plans/{id}/refresh` | Apply the reviewed refresh with version/input checks |
 | `PUT /api/v1/monthly-plans/{id}/overrides/{lineId}` | Set an explicit monthly override |
+| `DELETE /api/v1/monthly-plans/{id}/overrides/{lineId}` | Restore the original monthly value using an expected version and reason |
 | `PUT /api/v1/monthly-plans/{id}/allocations` | Replace the reviewed exclusive allocation set atomically |
+| `POST /api/v1/monthly-plans/{id}/allocations/suggest` | Explicitly replace the draft distribution with its source-derived suggestion |
 | `POST /api/v1/monthly-plans/{id}/close` | Close with expected version and required acknowledgement |
 | `POST /api/v1/monthly-plans/{id}/reopen` | Create a new draft revision with reason |
 
-Removing an override is an explicit restoration to its source-calculated amount; specify its HTTP operation when implementing the override editor. Every read/update refers unambiguously to the current or requested revision.
+Removing an override explicitly restores its snapshotted source amount, with a reason and expected version. Generation returns HTTP 200 for both a new draft and an existing plan; repeated generation never replaces manual changes. Mutations return the saved current plan. Every read/update refers unambiguously to the current or requested revision.
 
 ## Errors
 
-`INVALID_PLANNING_MONTH`, `PLAN_NOT_FOUND`, `PLAN_READ_ONLY`, `PLAN_VERSION_CONFLICT`, `PLAN_REFRESH_CONFLICT`, `INVALID_PLANNING_SOURCE`, `INVALID_ALLOCATION_DESTINATION`, `ALLOCATION_MISMATCH`, `NEGATIVE_ALLOCATION`, `SHORTFALL_ACKNOWLEDGEMENT_REQUIRED`, `REOPEN_REASON_REQUIRED`.
+`PLAN_NOT_FOUND`, `PLAN_LINE_NOT_FOUND`, `PLAN_READ_ONLY`, `PLAN_VERSION_CONFLICT`, `PLAN_REFRESH_CONFLICT`, `INVALID_PLANNING_SOURCE`, `INVALID_ALLOCATION_DESTINATION`, `INVALID_PLAN_INPUT`, `ALLOCATION_MISMATCH`, `SHORTFALL_ACKNOWLEDGEMENT_REQUIRED`, plus the shared date/money validation codes. Invalid or missing reasons are rejected as `INVALID_PLAN_INPUT`.
 
 ## UI behavior
 
@@ -138,6 +157,6 @@ Income EUR 1,000.00 and charges EUR 1,200.00 produce a EUR 200.00 shortfall. All
 - Reopening creates a new editable revision, while the prior closed snapshot remains accessible.
 - A failed snapshot write leaves no half-created plan or unmatched lifecycle event.
 
-## Open decisions
+## Decision status
 
-Resolve D-05/D-06/D-11 before final lifecycle and allocation implementation. Source policy decisions are inherited from income and commitments. The workbook's cached monthly total is not an approved month-specific fixture until its effective dates and cent policy are agreed.
+D-05/D-06/D-11 are approved: preserve the original closed version on reopening, treat everyday spending as an allocation, and permit closing a deficit only with explicit acknowledgement and reconciled cash allocations. Source policies are inherited from the approved income and commitment rules. These choices do not establish that any code or test has passed. Historical workbook figures remain reference evidence rather than automatic month-specific acceptance fixtures.

@@ -92,11 +92,11 @@ Only stable codes and safe field metadata reach the UI; all messages are localiz
 
 - **Space conservation:** EUR 100 allocated directly to an account and EUR 30 to its bills space produce an account group total of EUR 130, not EUR 160.
 - **Shared-cost funding:** A EUR 280 monthly obligation and EUR 280 allocation reduce planned availability by EUR 280 in total.
-- **Everyday spending:** With planned availability of EUR 600, allocating EUR 450 to everyday spending leaves availability at EUR 600; its allocation presentation shows EUR 150 of that available amount remaining to assign, subject to D-06.
+- **Everyday spending:** With planned availability of EUR 600, allocating EUR 450 to everyday spending leaves availability at EUR 600; its allocation presentation shows EUR 150 of that available amount remaining to assign, under approved D-06.
 - **Archive history:** A destination renamed or archived for October still appears with its September snapshot in the closed September plan.
 - **Invalid future reference:** Archiving a destination used by an October commitment either includes a reviewed replacement or fails without partial changes.
 - **Stale update:** Two edits from the same version cannot both overwrite the account successfully.
 
 ## Open decisions
 
-D-06 defines the everyday-spending allocation policy. D-11 defines close behavior for an underfunded plan. Required display field lengths and pagination bounds must be specified in the implementation contract.
+D-06 and D-11 are approved for phase 5: everyday spending is an allocation without a duplicate charge, and closing an underfunded plan requires explicit acknowledgement and reconciled expected cash. Their implementation belongs to monthly planning; phase-4 destination field lengths and pagination bounds are recorded above.

@@ -4,6 +4,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 import { IdentityError } from '../modules/identity/domain/identity-error.js';
 import type { IdentityErrorCode } from '../modules/identity/domain/identity-error.js';
 import { FinancialError } from './domain/financial-error.js';
+import { PlanError } from '../modules/planning/domain/plan.js';
 
 const identityStatus: Record<IdentityErrorCode, number> = {
   INVALID_CREDENTIALS: 401,
@@ -21,24 +22,34 @@ export class HttpErrorFilter implements ExceptionFilter {
     const request = http.getRequest<FastifyRequest>();
     const reply = http.getResponse<FastifyReply>();
     const status =
-      exception instanceof FinancialError
+      exception instanceof PlanError
         ? exception.code.endsWith('_NOT_FOUND')
           ? 404
-          : [
-                'VERSION_CONFLICT',
-                'ARCHIVE_PREVIEW_CONFLICT',
-                'DESTINATION_IN_USE',
-                'RESOURCE_ARCHIVED',
-              ].includes(exception.code)
+          : ['PLAN_READ_ONLY', 'PLAN_VERSION_CONFLICT', 'PLAN_REFRESH_CONFLICT'].includes(
+                exception.code,
+              )
             ? 409
             : 422
-        : exception instanceof IdentityError
-          ? identityStatus[exception.code]
-          : exception instanceof HttpException
-            ? exception.getStatus()
-            : 500;
+        : exception instanceof FinancialError
+          ? exception.code.endsWith('_NOT_FOUND')
+            ? 404
+            : [
+                  'VERSION_CONFLICT',
+                  'ARCHIVE_PREVIEW_CONFLICT',
+                  'DESTINATION_IN_USE',
+                  'RESOURCE_ARCHIVED',
+                ].includes(exception.code)
+              ? 409
+              : 422
+          : exception instanceof IdentityError
+            ? identityStatus[exception.code]
+            : exception instanceof HttpException
+              ? exception.getStatus()
+              : 500;
     const response =
-      exception instanceof IdentityError || exception instanceof FinancialError
+      exception instanceof IdentityError ||
+      exception instanceof FinancialError ||
+      exception instanceof PlanError
         ? { code: exception.code }
         : exception instanceof HttpException
           ? exception.getResponse()

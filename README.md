@@ -6,7 +6,7 @@ The application follows the owner's existing spreadsheet workflow: plan the mont
 
 ## Project status
 
-**Phase 4 — financial configuration implemented; CI verification pending.** Accounts/spaces, recurring and one-month income, commitments, exact previews, immutable source revisions, and audit events are implemented. The owner approved the visual direction and phase-4 financial rules. The phase-3 logout cache correction and regression tests are included; functional confirmation still depends on CI.
+**Phase 5 — monthly planning implemented; CI verification pending.** The owner reported phase-4 CI green and approved the monthly close/reopen, everyday-allocation, and shortfall policies. Monthly generation, saved snapshots, adjustments, account allocation, historical revisions, and charts based on saved data are now implemented. Current phase-5 runtime results are not yet verified.
 
 The agreed technical direction is distinguished from proposed business policies throughout the documentation. See the [decision register](specs/decisions.md) before implementing rules that require owner confirmation.
 
@@ -14,7 +14,7 @@ The agreed technical direction is distinguished from proposed business policies 
 
 Open [the phase-3 visual proposal](specs/design/phase-3-preview.html) directly in a browser: it needs no Node process or compilation. It includes responsive monthly overview, allocation, annual commitment, and alternate states using clearly labeled synthetic data. Design labels are English documentation; the implemented application uses Spanish i18n resources. The owner has approved this visual direction for financial screen implementation.
 
-The implemented web routes are `/register`, `/login`, the private `/` workspace, `/settings/security`, `/accounts`, `/income`, and `/commitments`. There are no default credentials. Registration creates independent accounts; email verification and email delivery are not yet implemented. Server-side password recovery is documented in the development guide. Complete monthly plans, account allocation, and dashboard charts are the next phase.
+The implemented web routes are `/register`, `/login`, the private monthly overview at `/`, `/planning/:month`, `/planning/:month/allocation`, `/planning/:month/history`, `/settings/security`, `/accounts`, `/income`, and `/commitments`. There are no default credentials. Registration creates independent accounts; email verification and email delivery are not yet implemented. Server-side password recovery is documented in the development guide. Specialized financing and investment records are the next phase.
 
 ## Product goals
 
