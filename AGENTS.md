@@ -2,14 +2,17 @@
 
 ## Product boundaries
 
-Build a self-hosted monthly financial planner with web registration and independent user accounts. Read [the product definition](specs/product.md) and [architecture](specs/architecture.md) before implementing features. Each user's financial data is private to that user. Everyday purchase tracking, data import, and bank synchronization are outside the initial scope. Users enter data manually; export remains in scope.
+Build a self-hosted monthly financial planner with web registration and independent user accounts. Read [the product definition](specs/product.md) and [architecture](specs/architecture.md) before implementing features. Each user's financial data is private to that user. Everyday purchase tracking, spreadsheet import, and bank synchronization are outside the scope. Manual entry and compatible application JSON export/import are supported. Import must validate models and relationships, remap identifiers to the authenticated user, and commit atomically without overwriting an existing financial workspace.
 
-Keep engineering specifications, ADRs, and design references under `specs/`. Reserve `docs/` for the static website to be built and published with GitHub Pages in the final phase.
+Deployment is performed by each operator through Docker Compose and their own environment file. Do not access or configure an operator's server. Automatic backups and Restic remain outside the current task. After JSON data portability, the owner requested the static open-source project website; actual publication and repository visibility changes require explicit authorization.
+
+Keep engineering specifications, ADRs, and design references under `specs/`. Reserve `docs/` for the static project website, with separate `css/`, `js/`, and local assets. GitHub Pages delivery is a separate publication step.
 
 ## Language
 
 - Author code, identifiers, comments, filenames, documentation, test names, API codes, and commit messages in English.
 - Put initial frontend-facing copy in Spanish i18n resources with English semantic keys. Use `es-ES` initially.
+- The standalone project website under `docs/` uses English HTML copy, as requested by the owner; application components retain the Spanish i18n rule.
 - Do not hardcode visible copy, accessibility labels, validation messages, or toast text in components.
 - Preserve user-entered names and original reference labels in their original language.
 - Project language rules govern repository content; follow the owner's preferred language for conversation.

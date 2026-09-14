@@ -118,4 +118,4 @@ Account references, due days, end dates, and installment dates are embedded in d
 - Do not invent contribution dates, sale records, current bank balances, or missing payment splits.
 - Do not interpret spreadsheet formulas as executable application code.
 - Separate cached-reference comparisons from approved-rule acceptance fixtures.
-- No import preview, commit, mapping engine, or duplicate-import handling is planned. Removing the workbook does not remove a development prerequisite.
+- No spreadsheet import or mapping engine is planned. The later application JSON portability feature is independent of this workbook; removing it does not remove a development prerequisite.

@@ -63,6 +63,11 @@
     "futureRecord": "Los movimientos realizados y los importes informados no pueden tener una fecha futura. Usa el plan para las previsiones.",
     "invalidMovement": "Revisa el tipo, las unidades y el importe del movimiento.",
     "insufficientUnits": "La operación dejaría una venta sin unidades suficientes en su fecha. Revisa las cantidades y el orden de los registros.",
-    "invalidOpening": "Solo puede haber una apertura activa y debe preceder a los demás movimientos. Revisa su fecha o corrige la apertura existente."
+    "invalidOpening": "Solo puede haber una apertura activa y debe preceder a los demás movimientos. Revisa su fecha o corrige la apertura existente.",
+    "invalidDataFile": "El archivo no cumple el formato o contiene datos o relaciones incoherentes. No se ha importado nada.",
+    "incompatibleDataFile": "Este JSON no corresponde a una versión compatible del formato de la aplicación.",
+    "dataFileTooLarge": "El archivo supera el límite de tamaño o de registros admitidos. No se ha importado nada.",
+    "importNotEmpty": "La cuenta ya contiene datos financieros. La importación no los mezcla ni los sobrescribe.",
+    "importChanged": "El archivo ha cambiado después de revisarlo. Repite la revisión antes de importar."
   }
 }

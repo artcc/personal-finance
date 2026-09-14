@@ -11,8 +11,10 @@ Phases describe deliverables, dependencies, and completion evidence. Documentati
 - Phase 2: implementation complete; the owner reported GitHub Actions green. First release-image publication still needs its own evidence.
 - Phases 3–4: access and financial configuration implemented; the owner reported CI green after the logout corrections. The visual direction and phase-4 financial policies are approved.
 - Phase 5: monthly planning implemented; the owner reported CI green.
-- Phase 6: financing and simplified investment movements implemented, with tests authored for CI. FIFO, investment commissions, and automatic realized profit were explicitly excluded. Current runtime verification remains pending.
-- Phases 7–9: not started.
+- Phase 6: implemented; the owner reported CI green. FIFO, investment commissions, and automatic realized profit remain excluded.
+- Current phase 7 scope: JSON export/import only. Implementation and regression tests are present, with current runtime verification pending in CI.
+- Phase 8: operator responsibility; no server configuration or backup tooling added.
+- Phase 9 website subset: subsequently requested by the owner and implemented under `docs/`. Authorized, scoped website format/lint checks passed; browser review remains pending. Publication, repository visibility, and release acceptance have not been performed.
 
 ## Phase 0 — Product and financial model
 
@@ -75,15 +77,17 @@ The owner resolved D-08 by choosing movement recording without automatic realize
 
 Exit gate: the spreadsheet's financing and investment areas have working counterparts with meaningful tests.
 
-## Phase 7 — Export and manual-data acceptance
+## Phase 7 — Compatible JSON portability
 
-Specify and implement a documented machine-readable export. Review the manual-entry journey for the owner's accounts, income, commitments, financing, and investments. Do not implement data import; the original workbook is not required for this phase.
+Provide private export and import of the application's versioned financial JSON. Validate models, monetary values, snapshots, and references; remap identities and import atomically into an empty destination. Do not add CSV/Excel import, merging, overwriting, Restic, or backup services. The original workbook is not required.
 
 Use manually entered representative scenarios and approved financial fixtures to assess the complete workflow. The documented spreadsheet arithmetic is optional historical context, not a required dataset or an exact-result migration target.
 
-Exit gate: representative data can be entered manually and exported accurately; a representative month reconciles under the approved rules with explainable results.
+Exit gate: CI demonstrates a private, exact export/import round trip, including historical plans, user isolation, rejection of incompatible files, and rollback of partial writes.
 
 ## Phase 8 — Deployment and operation
+
+Current owner direction: each operator deploys with Docker Compose and their own environment file. Do not access their server or add backup tooling. The original operational outline below is retained as historical/future context, not an active implementation request.
 
 Use the images, release workflow, and initial Compose files from phase 2. Complete host-specific HTTPS/trusted-proxy integration, operational health/logging policy, migration/update procedures, automated backups, and recovery instructions.
 
@@ -93,9 +97,11 @@ Exit gate: deploy an identified version and demonstrate an approved backup resto
 
 ## Phase 9 — Acceptance and first release
 
+The owner subsequently requested the English static website, superseding the earlier “JSON only for now” limit for this deliverable. The site is implemented under `docs/`; verification and publication remain pending. The broader release gate below is not complete.
+
 Review spec acceptance criteria, desktop/mobile journeys, accessibility, locale behavior, owner data, operational documentation, and outstanding defects. Run the agreed release checks and publish release notes when authorized.
 
-Create the project's static website under `docs/` and configure its GitHub Pages delivery at this final stage. Engineering specifications, decisions, and design references remain under `specs/`; publish only the intended website content, not the engineering/reference directory.
+The project's static website uses separate HTML, CSS, JavaScript, and local assets under `docs/`. See [website design and behavior](design/project-website.md). Configure GitHub Pages delivery when authorized. Engineering specifications, decisions, and design references remain under `specs/`; publish only the intended website content, not the engineering/reference directory.
 
 Exit gate: owner acceptance, successful agreed checks, reviewed deployment/recovery instructions, and a recorded backlog for later improvements.
 

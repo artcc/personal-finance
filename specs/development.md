@@ -104,6 +104,14 @@ Phase 6 adds the `20260914040000_financing_and_investments` migration and `/fina
 
 Phase-6 local evidence: authorized Prettier formatting, `format:check`, and ESLint completed successfully using the existing Node installation. No local generation, build, type check, migration, browser/unit/integration test, or container execution was performed. New functional behavior remains pending verification in CI.
 
+The current scope is financial JSON export/import at `/settings/data`, with `GET /api/v1/data/export`, `POST /api/v1/data/import-preview`, and `POST /api/v1/data/import`. It adds no dependencies or schema migration. The API validates the application's version-1 models and relationships and inserts remapped financial records atomically into an empty user workspace. The normal CI unit/database/browser scripts include portability regressions.
+
+Deployment is performed by each operator with Docker Compose and their own environment file. No agent server access, Restic dependency, backup service, or public-site publication is part of this task. After the JSON-portability request, the owner also requested a static English project website; its implementation does not publish it.
+
+JSON-portability local evidence: owner-authorized Prettier formatting, `format:check`, and ESLint completed successfully. No dependency or database migration was added, and no local generation, build, type check, database/browser test, or container execution was performed. CI must verify the new export/import behavior.
+
+The import preview and confirmation operate only on the current user's compatible financial JSON. Files are not retained on the server. An existing workspace is rejected instead of overwritten; the original user's IDs are remapped before insertion. The current feature does not introduce backup services, server access, CSV support, or website publication.
+
 `PLANNING_TIME_ZONE` supplies the default calendar context (initially `Europe/Madrid`); `/api/v1/financial-context` returns the current planning month, calendar date, and currency to authenticated clients. Phase-4 migration adds accounts/spaces, income/commitment source revisions, installments, and financial audit events. Money uses BIGINT cents and exact NUMERIC rate/quantity columns. Do not edit old migrations or run these migrations locally without authorization.
 
 ## Operator-only access recovery
@@ -120,6 +128,8 @@ The password-reset command prompts for a hidden password and confirmation in a t
 The equivalent commands in the API container are `node dist/modules/identity/cli.js reset-password <email>` and `node dist/modules/identity/cli.js prune-sessions`. Registration is performed through the web, not a bootstrap command. Email delivery/verification and self-service email recovery are not implemented.
 
 ## Visual review without a build
+
+The project website is `docs/index.html`, with styles in `docs/css/styles.css`, theme behavior in `docs/js/theme.js`, and local SVG assets. Open the HTML directly in a browser. Automatic mode follows the system appearance; Light overrides it. A stored preference is used when browser storage is available. No API, compilation, or local server is needed. Authorized, scoped Prettier and ESLint checks passed; browser verification remains pending. See [website design and behavior](design/project-website.md).
 
 Open `specs/design/phase-3-preview.html` in a browser directly. It has no external assets, API requests, or storage. Use the screen, viewport, and state controls to review synthetic financial layouts. English labels belong to design documentation; production-facing Spanish copy remains in i18n resources. CI captures desktop/mobile screenshots of access screens, the private shell, and this prototype as browser-evidence artifacts.
 

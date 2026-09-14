@@ -6,6 +6,7 @@ import type { IdentityErrorCode } from '../modules/identity/domain/identity-erro
 import { FinancialError } from './domain/financial-error.js';
 import { PlanError } from '../modules/planning/domain/plan.js';
 import { InvestmentError } from '../modules/investments/domain/movements.js';
+import { DataFileError } from '../modules/data-portability/application/document.js';
 
 const identityStatus: Record<IdentityErrorCode, number> = {
   INVALID_CREDENTIALS: 401,
@@ -23,39 +24,46 @@ export class HttpErrorFilter implements ExceptionFilter {
     const request = http.getRequest<FastifyRequest>();
     const reply = http.getResponse<FastifyReply>();
     const status =
-      exception instanceof InvestmentError
-        ? 422
-        : exception instanceof PlanError
-          ? exception.code.endsWith('_NOT_FOUND')
-            ? 404
-            : ['PLAN_READ_ONLY', 'PLAN_VERSION_CONFLICT', 'PLAN_REFRESH_CONFLICT'].includes(
-                  exception.code,
-                )
-              ? 409
-              : 422
-          : exception instanceof FinancialError
+      exception instanceof DataFileError
+        ? exception.code === 'DATA_FILE_TOO_LARGE'
+          ? 413
+          : ['IMPORT_REQUIRES_EMPTY_WORKSPACE', 'IMPORT_PREVIEW_CHANGED'].includes(exception.code)
+            ? 409
+            : 422
+        : exception instanceof InvestmentError
+          ? 422
+          : exception instanceof PlanError
             ? exception.code.endsWith('_NOT_FOUND')
               ? 404
-              : [
-                    'VERSION_CONFLICT',
-                    'ARCHIVE_PREVIEW_CONFLICT',
-                    'DESTINATION_IN_USE',
-                    'RESOURCE_ARCHIVED',
-                    'PLANNING_SOURCE_LINKED',
-                    'LINKED_SOURCE_KIND_MISMATCH',
-                  ].includes(exception.code)
+              : ['PLAN_READ_ONLY', 'PLAN_VERSION_CONFLICT', 'PLAN_REFRESH_CONFLICT'].includes(
+                    exception.code,
+                  )
                 ? 409
                 : 422
-            : exception instanceof IdentityError
-              ? identityStatus[exception.code]
-              : exception instanceof HttpException
-                ? exception.getStatus()
-                : 500;
+            : exception instanceof FinancialError
+              ? exception.code.endsWith('_NOT_FOUND')
+                ? 404
+                : [
+                      'VERSION_CONFLICT',
+                      'ARCHIVE_PREVIEW_CONFLICT',
+                      'DESTINATION_IN_USE',
+                      'RESOURCE_ARCHIVED',
+                      'PLANNING_SOURCE_LINKED',
+                      'LINKED_SOURCE_KIND_MISMATCH',
+                    ].includes(exception.code)
+                  ? 409
+                  : 422
+              : exception instanceof IdentityError
+                ? identityStatus[exception.code]
+                : exception instanceof HttpException
+                  ? exception.getStatus()
+                  : 500;
     const response =
       exception instanceof IdentityError ||
       exception instanceof FinancialError ||
       exception instanceof PlanError ||
-      exception instanceof InvestmentError
+      exception instanceof InvestmentError ||
+      exception instanceof DataFileError
         ? { code: exception.code }
         : exception instanceof HttpException
           ? exception.getResponse()

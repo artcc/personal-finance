@@ -13,6 +13,7 @@ import { AppShell } from './app/app-shell';
 import { AccessPage } from './features/auth/access-page';
 import { SecurityPage } from './features/auth/security-page';
 import { AccountsPage } from './features/accounts/accounts-page';
+import { DataPage } from './features/data/data-page';
 import { SourcesPage } from './features/finance/sources-page';
 import { queryClient } from './app/query-client';
 import i18n from './i18n';
@@ -42,6 +43,7 @@ const router = createBrowserRouter([
       { path: 'income', element: <SourcesPage key="income" kind="income" /> },
       { path: 'commitments', element: <SourcesPage key="commitments" kind="commitments" /> },
       { path: 'settings/security', element: <SecurityPage /> },
+      { path: 'settings/data', element: <DataPage /> },
       { path: 'financing', element: <AssetsPage key="financing" kind="financing" /> },
       { path: 'financing/:id', element: <FinancingReportsPage /> },
       { path: 'investments', element: <AssetsPage key="investments" kind="investments" /> },

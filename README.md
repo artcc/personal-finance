@@ -1,20 +1,22 @@
 # Personal Finance
 
-A self-hosted application for monthly financial planning, account allocation, commitments, financing, and investments, with web registration and independent private user accounts.
+An MIT-licensed, self-hosted application for monthly financial planning, account allocation, commitments, financing, and investments, with web registration and independent private user accounts.
 
 The application follows the owner's existing spreadsheet workflow: plan the month, reserve money for commitments, and allocate money to accounts. Everyday purchases are not recorded.
 
 ## Project status
 
-**Phase 6 — financing and simplified investments implemented; CI verification pending.** The owner reported phase-5 CI green. Financing now records payment links and explicit debt; investments record contributions, purchases/sales, quantities, and manual valuations. FIFO, investment commissions, cost basis, and automatic realized-profit calculation are excluded by owner decision.
+**Financial JSON portability implemented; CI verification pending.** The owner reported phase-6 CI green. The current change adds private JSON export and compatible, validated import into an empty financial workspace. FIFO, investment commissions, cost basis, and automatic realized-profit calculation remain excluded. Deployment/infrastructure is managed by each operator; no backup tool or public-site publication is added here.
 
 The agreed technical direction is distinguished from proposed business policies throughout the documentation. See the [decision register](specs/decisions.md) before implementing rules that require owner confirmation.
+
+The English project website is implemented in [`docs/index.html`](docs/index.html), with separate CSS/JavaScript and Light/Automatic themes. Authorized, scoped Prettier and ESLint checks passed; browser review remains pending. GitHub Pages publication and repository visibility have not been changed by this work.
 
 ### Design review
 
 Open [the phase-3 visual proposal](specs/design/phase-3-preview.html) directly in a browser: it needs no Node process or compilation. It includes responsive monthly overview, allocation, annual commitment, and alternate states using clearly labeled synthetic data. Design labels are English documentation; the implemented application uses Spanish i18n resources. The owner has approved this visual direction for financial screen implementation.
 
-The implemented web routes include access, monthly planning, accounts, income, commitments, `/financing`, and `/investments`, with detail/history screens for the latter two. There are no default credentials. Registration creates independent accounts; email verification and email delivery are not yet implemented. Server-side password recovery is documented in the development guide. Export and manual-data acceptance are the next phase.
+The implemented web routes include access, monthly planning, accounts, income, commitments, `/financing`, `/investments`, and `/settings/data`. There are no default credentials. Registration creates independent accounts; email verification and email delivery are not yet implemented. Financial JSON import excludes authentication state and never merges or overwrites existing workspace data.
 
 ## Product goals
 
@@ -69,7 +71,7 @@ All project-authored documentation, code, identifiers, comments, filenames, test
 
 ## Documentation
 
-Engineering documentation lives in `specs/`. The `docs/` path is reserved for the future static project website and its GitHub Pages deployment.
+Engineering documentation lives in `specs/`. The `docs/` path contains the static project website, ready for a separately authorized GitHub Pages setup. Open `docs/index.html` directly in a browser; no build or server is needed. See [website design and behavior](specs/design/project-website.md).
 
 ### Product and domain
 
@@ -98,6 +100,7 @@ Engineering documentation lives in `specs/`. The `docs/` path is reserved for th
 - [Monthly planning](specs/specs/monthly-planning.md)
 - [Financing](specs/specs/financing.md)
 - [Investment movements](specs/specs/investments.md)
+- [JSON export/import](specs/specs/data-portability.md)
 - [UI/UX direction](specs/design/ui-ux.md)
 - [Screen flows and structural wireframes](specs/design/screen-flows.md)
 
@@ -107,7 +110,7 @@ Host-specific deployment, backup/restore, export, financing, and investment spec
 
 [artcc/personal-finance](https://github.com/artcc/personal-finance)
 
-The workbook was used only to document the existing workflow. The owner will enter data manually; data import is outside the product scope. The original workbook is not required for development and can be removed from the project. The documented reference analysis remains available.
+The workbook was used only to document the existing workflow and is not required for development. Data is entered manually or imported from a compatible financial JSON export of this application. Spreadsheet import remains excluded; the documented historical reference analysis is still available.
 
 ## License
 

@@ -54,6 +54,10 @@ export function AppShell() {
           <span aria-hidden="true">◇</span>
           {t('security')}
         </NavLink>
+        <NavLink to="/settings/data" onClick={() => drawer.current?.close()}>
+          <span aria-hidden="true">⇅</span>
+          {t('data')}
+        </NavLink>
       </nav>
       <div className="sidebar-footer">
         <p>{t('privateSpace')}</p>

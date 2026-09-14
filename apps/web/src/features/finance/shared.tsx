@@ -44,6 +44,11 @@ export function FinanceError({ error }: { error: unknown }) {
     INVALID_INVESTMENT_INPUT: 'invalidMovement',
     INSUFFICIENT_UNITS: 'insufficientUnits',
     INVALID_OPENING_RECORD: 'invalidOpening',
+    INVALID_DATA_FILE: 'invalidDataFile',
+    INCOMPATIBLE_DATA_FILE: 'incompatibleDataFile',
+    DATA_FILE_TOO_LARGE: 'dataFileTooLarge',
+    IMPORT_REQUIRES_EMPTY_WORKSPACE: 'importNotEmpty',
+    IMPORT_PREVIEW_CHANGED: 'importChanged',
   };
   return (
     <p role="alert" className="feedback-banner feedback-banner--error">

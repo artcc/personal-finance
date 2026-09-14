@@ -6,7 +6,7 @@ This register separates confirmed requirements from proposals requiring owner ap
 
 - Self-hosted application with web registration/login and multiple independent users. The owner explicitly replaced the single-owner restriction during phase 3; every user's financial data remains isolated.
 - Monthly planning rather than everyday purchase tracking.
-- Manual data entry; no data import. Export and operational backups remain in scope. The workbook is optional historical reference, not an implementation dependency.
+- Manual entry plus compatible application JSON export/import. Spreadsheet import remains excluded. Import validates the models and references and does not overwrite an existing financial workspace. The workbook remains optional historical reference.
 - Modular monolith, pnpm monorepo, and the TypeScript/React/NestJS/PostgreSQL stack described in the architecture.
 - Tests, lint, type checks, clear specifications, agent instructions, README, and MIT licensing.
 - Docker, Docker Compose, and Portainer deployment direction.
@@ -49,14 +49,18 @@ Specs reference these IDs. Implementers may use the explicitly approved phase-4/
 
 ## Withdrawn decisions
 
-- **D-10 — Import opening values:** withdrawn on 2026-09-14 after the owner explicitly excluded data import. Do not build import previews, mappings, batches, or commit workflows. Manually reported financing/investment opening amounts still require explicit values and as-of dates in their feature specifications; do not infer execution history.
+- **D-10 — Spreadsheet opening values:** withdrawn on 2026-09-14 after the owner excluded spreadsheet migration. Do not build spreadsheet import or mapping workflows. Manually reported financing/investment opening amounts still require explicit values and as-of dates; do not infer execution history. The subsequently approved application JSON import is a separate feature.
+
+Scope update (2026-09-14): D-10's spreadsheet-import proposal remains withdrawn, but the owner subsequently requested application JSON export/import when models are compatible. That replaces the broader prohibition on all import. The owner also explicitly excluded backup tooling and server deployment work from the current task; no Restic dependency was approved or added. At that point, the implementation request was limited to JSON portability.
+
+Subsequent website request (2026-09-14): the owner requested an English static project website in `docs/`, with separate HTML/CSS/JavaScript, a hero, top navigation, repository link, official black/white GitHub marks, and Light/Automatic themes. The project is intended to be open source under its existing MIT license. Creating the site does not authorize changing repository/package visibility or publishing GitHub Pages or a release. See [website design and behavior](design/project-website.md).
 
 ## Engineering and design follow-ups
 
 | ID | Item | Current direction | Needed before |
 | --- | --- | --- | --- |
-| E-03 | Host infrastructure | Confirm domain, reverse proxy, trusted proxy configuration, persistent volumes, and Portainer deployment workflow | Production deployment |
-| E-04 | Recovery objectives | Agree backup retention, recovery-point target, recovery-time target, encryption, and off-host destination | Backup automation |
+| E-03 | Host infrastructure | Chosen and operated independently by each person through Docker Compose and their environment file; no agent access/configuration | Operator responsibility |
+| E-04 | Backup infrastructure | Outside the current repository task; no backup service or dependency is added | Operator responsibility |
 
 ## How to record a resolution
 

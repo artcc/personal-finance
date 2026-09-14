@@ -64,7 +64,7 @@ specs/
   design/
   domain/
   specs/
-docs/                  # Future static GitHub Pages website
+docs/                  # Static project website; GitHub Pages publication pending
 infra/docker/
 .github/workflows/
 compose.yaml
@@ -104,7 +104,7 @@ Simple configuration CRUD can use straightforward application services. Complex 
 | Planning | Saved monthly plan revisions, overrides, allocation lines, lifecycle events | Monthly summaries and allocation instructions |
 | Financing | Agreement metadata, reported debt, financing-to-commitment linkage | Atomically creates/links one monthly commitment; payment changes use the existing commitment flow |
 | Investments | Instrument metadata, actual movements, manual valuations, optional plan linkage | Maintains at most one classified contribution source; actual movements never create planning charges |
-| Data portability | Export formats and serialization | Reads consistent data through supported application interfaces |
+| Data portability | Versioned financial JSON export/import | Consistent user-scoped reads; model/reference validation and atomic identity-remapped import |
 
 Phase 5 can use explicitly classified financing and investment planning sources before specialized phase-6 screens exist. Later linking must preserve source identity and uniqueness instead of creating another charge.
 
@@ -168,7 +168,8 @@ Do not emit credentials, session tokens, full financial payloads, or data export
 - GitHub Actions runs the implemented checks on pushes to `main` and pull requests. A reusable CI entry point lets stable GitHub release publication check the exact release commit before publishing API/web images to private GHCR packages.
 - Phase 2 provides version and full-commit image tags, OCI source/revision metadata, amd64/arm64 publication, and digest summaries. It does not automatically update Portainer or create releases. See [release image delivery](release-images.md).
 - Compose defines readiness, durable database storage, and configuration without committed secrets.
-- Backups and a demonstrated restore procedure are release deliverables.
+- Each operator manages their own backup and server-recovery infrastructure outside this task.
+- Scope update: compatible JSON financial portability is followed by the owner's request for an English static project website in `docs/`. It uses standalone HTML/CSS/JavaScript and local assets, with no application API dependency. Backup infrastructure and actual host deployment remain operator responsibilities; website publication requires separate authorization.
 - Detailed host integration and recovery objectives remain E-03/E-04 decisions.
 
 Generated OpenAPI JSON, client declarations, and Prisma source are reproducible build artifacts rather than hand-authored or committed files. The build regenerates them in dependency order, type-checks consumers, and CI checks regeneration determinism. The generated-client package copies its schema declarations into its compiled output. There is no duplicate handwritten response model.

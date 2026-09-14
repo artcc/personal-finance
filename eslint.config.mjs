@@ -30,6 +30,10 @@ export default tseslint.config(
     },
   },
   {
+    files: ['docs/js/**/*.js'],
+    languageOptions: { globals: globals.browser },
+  },
+  {
     files: ['apps/web/src/**/*.{ts,tsx}'],
     languageOptions: { globals: globals.browser },
     plugins: { 'react-hooks': reactHooks, 'react-refresh': reactRefresh },

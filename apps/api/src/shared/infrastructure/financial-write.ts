@@ -15,6 +15,7 @@ export async function financialWrite<T>(
   database: DatabaseService,
   userId: string,
   operation: (transaction: FinancialTransaction) => Promise<T>,
+  timeout = 10_000,
 ): Promise<T> {
   return database.client.$transaction(
     async (transaction) => {
@@ -24,7 +25,7 @@ export async function financialWrite<T>(
       if (users.length !== 1) throw new FinancialError('DESTINATION_NOT_FOUND');
       return operation(transaction);
     },
-    { maxWait: 10_000, timeout: 10_000 },
+    { maxWait: 10_000, timeout },
   );
 }
 

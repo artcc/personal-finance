@@ -13,6 +13,7 @@ Status: initial specifications drafted for phases 4 and 5. These are implementat
 | [Monthly planning](monthly-planning.md) | Plan generation, overrides, allocation, close/reopen, historical views | Income and commitment projections |
 | [Financing](financing.md) | Financing metadata, linked payment, reported debt | One canonical financing commitment |
 | [Investments](investments.md) | Contributions, unit movements, manual valuations | Optional linked contribution commitment; no cost basis or fees |
+| [JSON portability](data-portability.md) | Private export and compatible, validated import | Versioned financial file schema and empty destination workspace |
 
 Each specification contains its scope, conceptual data, rules, use cases, proposed HTTP surface, errors, UI states, acceptance examples, and outstanding decisions. API schemas are generated only after implementation; the endpoint sketches below are design input, not deployed endpoints.
 
@@ -29,4 +30,4 @@ Each specification contains its scope, conceptual data, rules, use cases, propos
 
 ## Subsequent specifications
 
-Authentication, configuration, and monthly planning are implemented. Phase 6 adds financing and simplified investment movements, with current runtime checks pending in CI. Export is completed before phase 7; data import is excluded and data entry is manual. Deployment and backup/restore procedures are completed before phase 8.
+Authentication, configuration, planning, financing, and simplified investment movements are implemented. The current phase adds compatible JSON export/import. Spreadsheet import, backup services, and operator-server actions remain excluded. The subsequently requested static website is implemented under `docs/`, with verification and publication pending; see [website design and behavior](../design/project-website.md).

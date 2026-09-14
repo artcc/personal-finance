@@ -10,6 +10,7 @@ import { CommitmentsModule } from './modules/commitments/commitments.module.js';
 import { PlanningModule } from './modules/planning/planning.module.js';
 import { FinancingModule } from './modules/financing/financing.module.js';
 import { InvestmentsModule } from './modules/investments/investments.module.js';
+import { DataPortabilityModule } from './modules/data-portability/data-portability.module.js';
 import { FinancialContextController } from './shared/http/financial-context.controller.js';
 import type { Environment } from './shared/environment.js';
 
@@ -27,6 +28,7 @@ export class AppModule {
         PlanningModule,
         FinancingModule,
         InvestmentsModule,
+        DataPortabilityModule,
       ],
       controllers: [HealthController, FinancialContextController],
       providers: [HealthService],
