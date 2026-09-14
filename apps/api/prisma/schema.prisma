@@ -21,6 +21,8 @@ model User {
   commitments     CommitmentSource[]
   financialEvents FinancialEvent[]
   monthlyPlans    MonthlyPlan[]
+  financings      Financing[]
+  investments     Investment[]
 
   @@map("users")
 }
@@ -147,6 +149,8 @@ model CommitmentSource {
   version           Int @default(1)
   user              User @relation(fields: [userId], references: [id], onDelete: Cascade)
   revisions         CommitmentRevision[]
+  financing         Financing?
+  investment        Investment?
   @@unique([id, userId])
   @@index([userId, id])
   @@map("commitment_sources")
@@ -237,4 +241,90 @@ model MonthlyPlanRevision {
   @@unique([planId, number])
   @@index([userId, planId])
   @@map("monthly_plan_revisions")
+}
+
+model Financing {
+  id               String @id @default(uuid()) @db.Uuid
+  userId           String @map("user_id") @db.Uuid
+  planningSourceId String @unique @map("planning_source_id") @db.Uuid
+  name             String @db.VarChar(120)
+  lender           String? @db.VarChar(120)
+  originalPrincipalCents BigInt? @map("original_principal_cents")
+  version          Int @default(1)
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  user             User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planningSource   CommitmentSource @relation(fields: [planningSourceId, userId], references: [id, userId], onDelete: Restrict)
+  balances         FinancingBalance[]
+  @@unique([id, userId])
+  @@index([userId, name, id])
+  @@map("financings")
+}
+
+model FinancingBalance {
+  id          String @id @default(uuid()) @db.Uuid
+  financingId String @map("financing_id") @db.Uuid
+  userId      String @map("user_id") @db.Uuid
+  sequence    Int
+  asOf        DateTime @map("as_of") @db.Date
+  amountCents BigInt @map("amount_cents")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  financing   Financing @relation(fields: [financingId, userId], references: [id, userId], onDelete: Cascade)
+  @@unique([financingId, sequence])
+  @@index([userId, financingId, asOf])
+  @@map("financing_balances")
+}
+
+model Investment {
+  id               String @id @default(uuid()) @db.Uuid
+  userId           String @map("user_id") @db.Uuid
+  planningSourceId String? @unique @map("planning_source_id") @db.Uuid
+  name             String @db.VarChar(120)
+  platform         String? @db.VarChar(120)
+  ticker           String? @db.VarChar(30)
+  kind             String @db.VarChar(16)
+  mode             String @db.VarChar(16)
+  version          Int @default(1)
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  user             User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  planningSource   CommitmentSource? @relation(fields: [planningSourceId, userId], references: [id, userId], onDelete: Restrict)
+  entries          InvestmentEntry[]
+  valuations       InvestmentValuation[]
+  @@unique([id, userId])
+  @@index([userId, name, id])
+  @@map("investments")
+}
+
+model InvestmentEntry {
+  id           String @id @default(uuid()) @db.Uuid
+  investmentId String @map("investment_id") @db.Uuid
+  userId       String @map("user_id") @db.Uuid
+  sequence     Int
+  orderSequence Int @map("order_sequence")
+  date         DateTime @db.Date
+  kind         String @db.VarChar(16)
+  quantity     Decimal? @db.Decimal(20, 8)
+  amountCents  BigInt? @map("amount_cents")
+  note         String? @db.VarChar(500)
+  replacesId   String? @map("replaces_id") @db.Uuid
+  voidedAt     DateTime? @map("voided_at") @db.Timestamptz(3)
+  voidReason   String? @map("void_reason") @db.VarChar(500)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  investment   Investment @relation(fields: [investmentId, userId], references: [id, userId], onDelete: Cascade)
+  @@unique([investmentId, sequence])
+  @@index([userId, investmentId, date, sequence])
+  @@map("investment_entries")
+}
+
+model InvestmentValuation {
+  id           String @id @default(uuid()) @db.Uuid
+  investmentId String @map("investment_id") @db.Uuid
+  userId       String @map("user_id") @db.Uuid
+  sequence     Int
+  asOf         DateTime @map("as_of") @db.Date
+  amountCents  BigInt @map("amount_cents")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  investment   Investment @relation(fields: [investmentId, userId], references: [id, userId], onDelete: Cascade)
+  @@unique([investmentId, sequence])
+  @@index([userId, investmentId, asOf])
+  @@map("investment_valuations")
 }

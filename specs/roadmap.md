@@ -10,8 +10,9 @@ Phases describe deliverables, dependencies, and completion evidence. Documentati
 - With owner permission, the 47 local Markdown links were compared against the project file inventory on 2026-09-14; all target files exist. This checks file destinations only, not business-policy correctness, external URLs, or application behavior.
 - Phase 2: implementation complete; the owner reported GitHub Actions green. First release-image publication still needs its own evidence.
 - Phases 3–4: access and financial configuration implemented; the owner reported CI green after the logout corrections. The visual direction and phase-4 financial policies are approved.
-- Phase 5: monthly generation, snapshots, overrides, allocation, close/reopen, history, and saved-data charts implemented. D-05/D-06/D-11 are approved; current functional verification remains pending in CI.
-- Phases 6–9: not started.
+- Phase 5: monthly planning implemented; the owner reported CI green.
+- Phase 6: financing and simplified investment movements implemented, with tests authored for CI. FIFO, investment commissions, and automatic realized profit were explicitly excluded. Current runtime verification remains pending.
+- Phases 7–9: not started.
 
 ## Phase 0 — Product and financial model
 
@@ -68,9 +69,9 @@ Exit gate: the owner can configure inputs, prepare a representative month, inspe
 
 ## Phase 6 — Financing and investments
 
-Complete financing and investment specs before coding them. Add financing metadata and reported debt, contribution plans, actual contributions, purchases/sales, fee handling, and manual valuations. Link specialized records to their existing planning sources so obligations appear exactly once.
+Add financing metadata and reported debt, optional contribution plans, actual contributions, purchases/sales, and manual valuations. Link specialized records to existing planning sources or create that single source atomically. Keep the interface direct and worksheet-like; no investment commission or cost-basis workflow is included.
 
-Resolve cost basis and manually reported opening-value rules before implementing realized results or recording opening positions.
+The owner resolved D-08 by choosing movement recording without automatic realized-profit calculation. Explicit opening records preserve known units/capital without inventing historical purchases; unknown opening capital remains identified as partial information.
 
 Exit gate: the spreadsheet's financing and investment areas have working counterparts with meaningful tests.
 

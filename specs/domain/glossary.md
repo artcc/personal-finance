@@ -33,8 +33,9 @@ Use these terms consistently in code, API contracts, specifications, and design.
 | Snapshot | Persisted calculation inputs, source labels, amounts, and results used to preserve a historical plan. |
 | Carry-forward | A reserve amount transferred from one month's planning state to another; policy is not yet agreed. |
 | Reported debt | A balance entered by the owner with an as-of date; explicitly distinguished from original principal or the sum of future installments. |
-| Cost basis | Acquisition cost assigned to holdings or sold units using an explicitly chosen method. |
-| Realized result | Net sale proceeds less the cost basis of units actually sold. |
+| Cost basis | Acquisition cost assigned to holdings or sold units using a chosen method. Explicitly outside the simplified investment scope. |
+| Realized result | Sale proceeds less the cost basis of units sold. Not calculated by this release. |
+| Net recorded cash flow | Recorded investment inflows less outflows, including known opening capital. Not cost basis, realized profit, or market value. |
 | Valuation | An estimated position value at a specific date; independent of realized results. |
 
 ## Naming safeguards

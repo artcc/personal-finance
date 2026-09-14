@@ -44,11 +44,10 @@ export function AppShell() {
           </NavLink>
         ))}
         {(['financing', 'investments'] as const).map((item) => (
-          <span className="nav-future" key={item}>
+          <NavLink to={`/${item}`} onClick={() => drawer.current?.close()} key={item}>
             <span aria-hidden="true">◦</span>
             {t(item)}
-            <span className="sr-only">{t('upcoming')}</span>
-          </span>
+          </NavLink>
         ))}
         <p className="nav-section-label nav-section-label--secondary">{t('account')}</p>
         <NavLink to="/settings/security" onClick={() => drawer.current?.close()}>

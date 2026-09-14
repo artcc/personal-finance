@@ -11,6 +11,8 @@ Status: initial specifications drafted for phases 4 and 5. These are implementat
 | [Income](income.md) | Net salary, professional income, cash/tax/spendable projections | Exact money, tax policy, effective revisions |
 | [Commitments](commitments.md) | Recurring charges, provisions, installments, funding classification | Rounding, calendar policy, accounts |
 | [Monthly planning](monthly-planning.md) | Plan generation, overrides, allocation, close/reopen, historical views | Income and commitment projections |
+| [Financing](financing.md) | Financing metadata, linked payment, reported debt | One canonical financing commitment |
+| [Investments](investments.md) | Contributions, unit movements, manual valuations | Optional linked contribution commitment; no cost basis or fees |
 
 Each specification contains its scope, conceptual data, rules, use cases, proposed HTTP surface, errors, UI states, acceptance examples, and outstanding decisions. API schemas are generated only after implementation; the endpoint sketches below are design input, not deployed endpoints.
 
@@ -27,4 +29,4 @@ Each specification contains its scope, conceptual data, rules, use cases, propos
 
 ## Subsequent specifications
 
-Authentication is documented and implemented in phase 3, pending CI evidence. Financing and investments are completed before phase 6. Export is completed before phase 7; data import is excluded and data entry is manual. Deployment and backup/restore procedures are completed before phase 8. Their boundaries already appear in the product definition and architecture, but detailed acceptance contracts are not claimed to exist yet.
+Authentication, configuration, and monthly planning are implemented. Phase 6 adds financing and simplified investment movements, with current runtime checks pending in CI. Export is completed before phase 7; data import is excluded and data entry is manual. Deployment and backup/restore procedures are completed before phase 8.

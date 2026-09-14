@@ -6,6 +6,8 @@ Phase-4 update: accounts/spaces, recurring and one-month income, commitments, ex
 
 Phase-5 update: the owner reported phase-4 CI green. Monthly planning is implemented with its own domain calculator, a small transaction-scoped persistence port, application lifecycle orchestration, and HTTP DTOs. It reuses the phase-4 financial write lock and source calculators without introducing another runtime service. Source projections are read on the same database transaction; domain code imports no ORM types. Current phase-5 CI evidence is still pending.
 
+Phase-6 update: the owner reported phase-5 CI green. Financing and investment modules add direct records, dated debt/valuation reports, and actual movements. They reuse the existing exact-money/quantity primitives and per-user write lock. A narrow transaction-bound planning-link helper creates or associates the canonical commitment on the same connection, preventing duplicate planning charges or partially created links. Linked categories remain protected by the commitments module. No cost-basis engine or investment commission model is introduced.
+
 ## System shape
 
 ```text
@@ -100,8 +102,8 @@ Simple configuration CRUD can use straightforward application services. Complex 
 | Income | Effective-dated source definitions, monthly expected entries, tax breakdowns | Planning input projection |
 | Commitments | Recurrent obligations, revisions, due schedules, provision policies | Planning-charge and due-payment projections |
 | Planning | Saved monthly plan revisions, overrides, allocation lines, lifecycle events | Monthly summaries and allocation instructions |
-| Financing | Agreement metadata, reported debt, financing-to-commitment linkage | Creates/updates one linked commitment through its application interface |
-| Investments | Products, platforms, actual operations, valuations, investment-plan linkage | Maintains one classified planning source per contribution plan |
+| Financing | Agreement metadata, reported debt, financing-to-commitment linkage | Atomically creates/links one monthly commitment; payment changes use the existing commitment flow |
+| Investments | Instrument metadata, actual movements, manual valuations, optional plan linkage | Maintains at most one classified contribution source; actual movements never create planning charges |
 | Data portability | Export formats and serialization | Reads consistent data through supported application interfaces |
 
 Phase 5 can use explicitly classified financing and investment planning sources before specialized phase-6 screens exist. Later linking must preserve source identity and uniqueness instead of creating another charge.

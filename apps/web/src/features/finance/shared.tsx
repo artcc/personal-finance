@@ -34,6 +34,16 @@ export function FinanceError({ error }: { error: unknown }) {
     INVALID_PLAN_INPUT: 'invalidPlanInput',
     ALLOCATION_MISMATCH: 'allocationMismatch',
     SHORTFALL_ACKNOWLEDGEMENT_REQUIRED: 'acknowledgeShortfall',
+    FINANCING_NOT_FOUND: 'notFound',
+    INVESTMENT_NOT_FOUND: 'notFound',
+    INVESTMENT_ENTRY_NOT_FOUND: 'notFound',
+    INVALID_PLANNING_LINK: 'invalidPlanningLink',
+    PLANNING_SOURCE_LINKED: 'sourceLinked',
+    LINKED_SOURCE_KIND_MISMATCH: 'linkedSourceKind',
+    FUTURE_RECORD_DATE: 'futureRecord',
+    INVALID_INVESTMENT_INPUT: 'invalidMovement',
+    INSUFFICIENT_UNITS: 'insufficientUnits',
+    INVALID_OPENING_RECORD: 'invalidOpening',
   };
   return (
     <p role="alert" className="feedback-banner feedback-banner--error">

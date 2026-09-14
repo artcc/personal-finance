@@ -4,6 +4,11 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ErrorPage } from './app/error-page';
 import { PlanningPage } from './features/planning/planning-page';
+import { AssetsPage } from './features/assets/assets-page';
+import {
+  InvestmentMovementsPage,
+  FinancingReportsPage,
+} from './features/assets/investment-movements';
 import { AppShell } from './app/app-shell';
 import { AccessPage } from './features/auth/access-page';
 import { SecurityPage } from './features/auth/security-page';
@@ -37,6 +42,10 @@ const router = createBrowserRouter([
       { path: 'income', element: <SourcesPage key="income" kind="income" /> },
       { path: 'commitments', element: <SourcesPage key="commitments" kind="commitments" /> },
       { path: 'settings/security', element: <SecurityPage /> },
+      { path: 'financing', element: <AssetsPage key="financing" kind="financing" /> },
+      { path: 'financing/:id', element: <FinancingReportsPage /> },
+      { path: 'investments', element: <AssetsPage key="investments" kind="investments" /> },
+      { path: 'investments/:id', element: <InvestmentMovementsPage /> },
     ],
   },
 ]);

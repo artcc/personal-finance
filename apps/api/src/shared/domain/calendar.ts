@@ -21,6 +21,11 @@ export function validDate(value: string): string {
     throw new FinancialError('INVALID_EFFECTIVE_PERIOD');
   return value;
 }
+export function reportedDate(value: string, today: string): string {
+  validDate(value);
+  if (value > today) throw new FinancialError('FUTURE_RECORD_DATE');
+  return value;
+}
 
 export function dueDate(month: string, day: number): string {
   if (!Number.isInteger(day) || day < 1 || day > 31)

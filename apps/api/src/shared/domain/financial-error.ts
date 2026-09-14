@@ -15,7 +15,14 @@ export type FinancialErrorCode =
   | 'DESTINATION_IN_USE'
   | 'VERSION_CONFLICT'
   | 'ARCHIVE_PREVIEW_CONFLICT'
-  | 'RESOURCE_ARCHIVED';
+  | 'RESOURCE_ARCHIVED'
+  | 'FINANCING_NOT_FOUND'
+  | 'INVESTMENT_NOT_FOUND'
+  | 'INVESTMENT_ENTRY_NOT_FOUND'
+  | 'INVALID_PLANNING_LINK'
+  | 'PLANNING_SOURCE_LINKED'
+  | 'LINKED_SOURCE_KIND_MISMATCH'
+  | 'FUTURE_RECORD_DATE';
 
 export class FinancialError extends Error {
   constructor(readonly code: FinancialErrorCode) {

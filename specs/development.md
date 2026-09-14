@@ -100,6 +100,10 @@ Phase 5 adds the `20260914030000_monthly_planning` migration, including closed-r
 
 Phase-5 local evidence: owner-authorized Prettier formatting, `format:check`, and ESLint completed successfully with the existing Node installation. No dependency was added. No local generation, build, type check, migration, unit/integration/browser test, or container execution was performed; CI must still verify the new behavior.
 
+Phase 6 adds the `20260914040000_financing_and_investments` migration and `/financing`, `/financing/:id`, `/investments`, and `/investments/:id` web routes. API source links are created/reused atomically, while actual records remain independent from planning snapshots. The unit and database scripts include investment movement and asset integration coverage. No new dependencies, runtime services, or local build/test requirements were introduced; generation and migrations remain CI/container operations.
+
+Phase-6 local evidence: authorized Prettier formatting, `format:check`, and ESLint completed successfully using the existing Node installation. No local generation, build, type check, migration, browser/unit/integration test, or container execution was performed. New functional behavior remains pending verification in CI.
+
 `PLANNING_TIME_ZONE` supplies the default calendar context (initially `Europe/Madrid`); `/api/v1/financial-context` returns the current planning month, calendar date, and currency to authenticated clients. Phase-4 migration adds accounts/spaces, income/commitment source revisions, installments, and financial audit events. Money uses BIGINT cents and exact NUMERIC rate/quantity columns. Do not edit old migrations or run these migrations locally without authorization.
 
 ## Operator-only access recovery

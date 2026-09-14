@@ -22,7 +22,11 @@ import type {
   CommitmentsStore,
 } from '../application/commitments.port.js';
 
-type StoredSource = CommitmentSource & { revisions: CommitmentRevision[] };
+type StoredSource = CommitmentSource & {
+  revisions: CommitmentRevision[];
+  financing?: { id: string } | null;
+  investment?: { id: string } | null;
+};
 const revisionOrder = [{ effectiveFromMonth: 'desc' }, { version: 'desc' }] as const;
 function revisionRecord(revision: CommitmentRevision): CommitmentRevisionRecord {
   if (revision.calculationVersion !== 'commitment-v1')
@@ -42,6 +46,7 @@ function sourceRecord(source: StoredSource, month: string, latest = false): Comm
   const revision = revisionRecord(selected);
   return {
     id: source.id,
+    managedKind: source.financing ? 'financing' : source.investment ? 'investment' : null,
     version: source.version,
     archivedFromMonth: source.archivedFromMonth,
     revision,
@@ -90,7 +95,11 @@ export class PrismaCommitmentsStore implements CommitmentsStore {
     const sources = await this.database.client.commitmentSource.findMany({
       where,
       orderBy: { id: 'asc' },
-      include: { revisions: { orderBy: [...revisionOrder] } },
+      include: {
+        revisions: { orderBy: [...revisionOrder] },
+        financing: { select: { id: true } },
+        investment: { select: { id: true } },
+      },
     });
     const records = sources
       .map((source) => sourceRecord(source, month))
@@ -113,7 +122,11 @@ export class PrismaCommitmentsStore implements CommitmentsStore {
   ): Promise<CommitmentDetail> {
     const source = await this.database.client.commitmentSource.findFirst({
       where: { id, userId },
-      include: { revisions: { orderBy: [...revisionOrder] } },
+      include: {
+        revisions: { orderBy: [...revisionOrder] },
+        financing: { select: { id: true } },
+        investment: { select: { id: true } },
+      },
     });
     if (!source) throw new FinancialError('COMMITMENT_NOT_FOUND');
     return {
@@ -151,10 +164,19 @@ export class PrismaCommitmentsStore implements CommitmentsStore {
     return financialWrite(this.database, userId, async (transaction) => {
       const source = await transaction.commitmentSource.findFirst({
         where: { id, userId },
-        include: { revisions: { orderBy: [...revisionOrder], take: 1 } },
+        include: {
+          revisions: { orderBy: [...revisionOrder], take: 1 },
+          financing: { select: { id: true } },
+          investment: { select: { id: true } },
+        },
       });
       if (!source) throw new FinancialError('COMMITMENT_NOT_FOUND');
       if (source.version !== expectedVersion) throw new FinancialError('VERSION_CONFLICT');
+      if (
+        (source.financing && (input.kind !== 'financing' || input.frequency !== 'monthly')) ||
+        (source.investment && input.kind !== 'investment')
+      )
+        throw new FinancialError('LINKED_SOURCE_KIND_MISMATCH');
       if (source.archivedFromMonth && input.effectiveFromMonth >= source.archivedFromMonth)
         throw new FinancialError('RESOURCE_ARCHIVED');
       if (source.revisions[0] && input.effectiveFromMonth < source.revisions[0].effectiveFromMonth)
@@ -177,7 +199,16 @@ export class PrismaCommitmentsStore implements CommitmentsStore {
         revisionId: revision.id,
         version: updated.version,
       });
-      return sourceRecord({ ...updated, revisions: [revision] }, month, true);
+      return sourceRecord(
+        {
+          ...updated,
+          revisions: [revision],
+          financing: source.financing,
+          investment: source.investment,
+        },
+        month,
+        true,
+      );
     });
   }
   archive(userId: string, id: string, month: string, expectedVersion: number): Promise<void> {

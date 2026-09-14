@@ -42,6 +42,7 @@ The owner already understands everyday spending and transfers a monthly budget t
 - Automatic market prices, foreign-exchange calculations, and portfolio recommendations in the initial release.
 - Tax filing, payroll tax estimation, or automatic loan amortization without separately specified inputs and rules.
 - Invented historic transactions inferred from spreadsheet estimates.
+- FIFO, investment commissions, cost-basis allocation, and automatic realized-profit calculation. Phase 6 records investment movements and manual valuations; this exclusion does not change professional-income commissions.
 
 ## Core experience
 

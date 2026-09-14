@@ -1,6 +1,6 @@
 # ADR 003 — Exact Money and Calendar Semantics
 
-Status: exact arithmetic accepted; phase-4 rounding, validity, and due-day policies approved by the owner on 2026-09-14. Investment precision/cost-basis decisions remain separate.
+Status: exact arithmetic accepted; phase-4 rounding, validity, and due-day policies approved by the owner on 2026-09-14. Phase 6 reuses eight-place quantity precision and excludes cost-basis calculations by owner decision.
 
 ## Context
 
@@ -58,7 +58,7 @@ Frontend input parsing and display must preserve the exact wire value, including
 
 D-01–D-03, D-12, and D-13 are now owner-approved. Money inputs are nonnegative canonical cents up to `999999999999999`; signed calculated output uses the same absolute bound. Quantities/unit prices accept up to 12 integer and 8 fractional digits; rates are fractions between 0 and 1 with up to 8 fractional digits. Scientific notation and excess precision are rejected.
 
-The domain uses bigint coefficients and powers of ten for exact multiplication and half-away-from-zero rounding. This requires no additional dependency. It covers the phase-4 quantities/rates; investment-specific cost basis and precision remain separate decisions.
+The domain uses bigint coefficients and powers of ten for exact multiplication and half-away-from-zero rounding. This requires no additional dependency. Phase-6 investment quantities use exact eight-place units stored in NUMERIC(20,8); no FIFO, average-cost, commission, or realized-profit calculations are performed.
 
 Spanish form inputs support decimal commas and valid dot-grouped thousands. Percentage presentation shifts the decimal point exactly, trimming artificial trailing zeros before round-trip parsing. Currency display uses Intl parts with integer bigint units and an exact cents fraction; no money is divided through a JavaScript floating-point amount for display.
 

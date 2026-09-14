@@ -417,6 +417,7 @@ function SourceForm({
     </Field>
   );
   const ready = reviewed !== null && reviewed.signature === signature;
+  const managedKind = existing && 'managedKind' in existing ? existing.managedKind : null;
   const readOnly =
     existing !== null &&
     existing.archivedFromMonth !== null &&
@@ -521,34 +522,42 @@ function SourceForm({
               ) : (
                 <>
                   <div className="field-grid">
-                    <Field id="commitment-kind" label={t('sources:kind')}>
-                      <select
-                        id="commitment-kind"
-                        className="form-input"
-                        {...form.register('commitmentKind')}
-                      >
-                        {(
-                          [
-                            'fixed',
-                            'subscription',
-                            'professional',
-                            'shared',
-                            'financing',
-                            'investment',
-                          ] as const
-                        ).map((value) => (
-                          <option key={value} value={value}>
-                            {t(`sources:kinds.${value}`)}
-                          </option>
-                        ))}
-                      </select>
-                    </Field>
-                    <Field id="frequency" label={t('sources:frequency')}>
-                      <select id="frequency" className="form-input" {...form.register('frequency')}>
-                        <option value="monthly">{t('sources:monthly')}</option>
-                        <option value="annual">{t('sources:annual')}</option>
-                      </select>
-                    </Field>
+                    <fieldset disabled={managedKind !== null}>
+                      <Field id="commitment-kind" label={t('sources:kind')}>
+                        <select
+                          id="commitment-kind"
+                          className="form-input"
+                          {...form.register('commitmentKind')}
+                        >
+                          {(
+                            [
+                              'fixed',
+                              'subscription',
+                              'professional',
+                              'shared',
+                              'financing',
+                              'investment',
+                            ] as const
+                          ).map((value) => (
+                            <option key={value} value={value}>
+                              {t(`sources:kinds.${value}`)}
+                            </option>
+                          ))}
+                        </select>
+                      </Field>
+                    </fieldset>
+                    <fieldset disabled={managedKind === 'financing'}>
+                      <Field id="frequency" label={t('sources:frequency')}>
+                        <select
+                          id="frequency"
+                          className="form-input"
+                          {...form.register('frequency')}
+                        >
+                          <option value="monthly">{t('sources:monthly')}</option>
+                          <option value="annual">{t('sources:annual')}</option>
+                        </select>
+                      </Field>
+                    </fieldset>
                   </div>
                   {numeric('amount')}
                   {values.frequency === 'monthly' && (

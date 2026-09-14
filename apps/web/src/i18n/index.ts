@@ -11,6 +11,7 @@ import finance from './locales/es-ES/finance.json';
 import accounts from './locales/es-ES/accounts.json';
 import sources from './locales/es-ES/sources.json';
 import planning from './locales/es-ES/planning.json';
+import assets from './locales/es-ES/assets.json';
 
 await i18n.use(initReactI18next).init({
   lng: 'es-ES',
@@ -29,6 +30,7 @@ await i18n.use(initReactI18next).init({
     'accounts',
     'sources',
     'planning',
+    'assets',
   ],
   resources: {
     'es-ES': {
@@ -43,6 +45,7 @@ await i18n.use(initReactI18next).init({
       accounts,
       sources,
       planning,
+      assets,
     },
   },
   interpolation: { escapeValue: false },

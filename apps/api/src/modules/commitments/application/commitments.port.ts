@@ -9,6 +9,7 @@ export interface CommitmentRevisionRecord {
   createdAt: string;
 }
 export interface CommitmentRecord {
+  managedKind: 'financing' | 'investment' | null;
   id: string;
   version: number;
   archivedFromMonth: string | null;

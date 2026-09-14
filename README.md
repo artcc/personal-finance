@@ -6,7 +6,7 @@ The application follows the owner's existing spreadsheet workflow: plan the mont
 
 ## Project status
 
-**Phase 5 — monthly planning implemented; CI verification pending.** The owner reported phase-4 CI green and approved the monthly close/reopen, everyday-allocation, and shortfall policies. Monthly generation, saved snapshots, adjustments, account allocation, historical revisions, and charts based on saved data are now implemented. Current phase-5 runtime results are not yet verified.
+**Phase 6 — financing and simplified investments implemented; CI verification pending.** The owner reported phase-5 CI green. Financing now records payment links and explicit debt; investments record contributions, purchases/sales, quantities, and manual valuations. FIFO, investment commissions, cost basis, and automatic realized-profit calculation are excluded by owner decision.
 
 The agreed technical direction is distinguished from proposed business policies throughout the documentation. See the [decision register](specs/decisions.md) before implementing rules that require owner confirmation.
 
@@ -14,7 +14,7 @@ The agreed technical direction is distinguished from proposed business policies 
 
 Open [the phase-3 visual proposal](specs/design/phase-3-preview.html) directly in a browser: it needs no Node process or compilation. It includes responsive monthly overview, allocation, annual commitment, and alternate states using clearly labeled synthetic data. Design labels are English documentation; the implemented application uses Spanish i18n resources. The owner has approved this visual direction for financial screen implementation.
 
-The implemented web routes are `/register`, `/login`, the private monthly overview at `/`, `/planning/:month`, `/planning/:month/allocation`, `/planning/:month/history`, `/settings/security`, `/accounts`, `/income`, and `/commitments`. There are no default credentials. Registration creates independent accounts; email verification and email delivery are not yet implemented. Server-side password recovery is documented in the development guide. Specialized financing and investment records are the next phase.
+The implemented web routes include access, monthly planning, accounts, income, commitments, `/financing`, and `/investments`, with detail/history screens for the latter two. There are no default credentials. Registration creates independent accounts; email verification and email delivery are not yet implemented. Server-side password recovery is documented in the development guide. Export and manual-data acceptance are the next phase.
 
 ## Product goals
 
@@ -96,6 +96,8 @@ Engineering documentation lives in `specs/`. The `docs/` path is reserved for th
 - [Income](specs/specs/income.md)
 - [Commitments and provisions](specs/specs/commitments.md)
 - [Monthly planning](specs/specs/monthly-planning.md)
+- [Financing](specs/specs/financing.md)
+- [Investment movements](specs/specs/investments.md)
 - [UI/UX direction](specs/design/ui-ux.md)
 - [Screen flows and structural wireframes](specs/design/screen-flows.md)
 

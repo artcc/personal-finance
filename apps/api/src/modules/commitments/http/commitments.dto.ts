@@ -48,6 +48,8 @@ export class CommitmentRevisionDto extends CommitmentWriteDto {
   @ApiProperty({ type: String, format: 'date-time' }) createdAt!: string;
 }
 export class CommitmentRecordDto {
+  @ApiProperty({ type: String, enum: ['financing', 'investment'], nullable: true }) managedKind!:
+    'financing' | 'investment' | null;
   @ApiProperty({ type: String, format: 'uuid' }) id!: string;
   @ApiProperty({ type: Number }) version!: number;
   @ApiProperty({ type: String, nullable: true }) archivedFromMonth!: string | null;

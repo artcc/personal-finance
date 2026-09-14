@@ -26,9 +26,11 @@ Phase-5 resolution (2026-09-14): the owner explicitly selected the recommended o
 - **D-06:** everyday spending is an allocation, not an additional planning charge. With EUR 2,000 income and EUR 1,100 commitments, planned availability remains EUR 900; allocating EUR 600 to everyday spending leaves EUR 300 of that availability still to assign. The UI must label these amounts distinctly.
 - **D-11:** an underfunded plan may close only after explicit shortfall acknowledgement and exact reconciliation of allocations to expected cash. With EUR 1,000 net salary and EUR 1,200 planning charges, the EUR 200 shortfall remains visible even if the EUR 1,000 cash allocation reconciles. Closing neither invents funding nor confirms payment execution.
 
-These decisions authorize the corresponding phase-5 policies, not a claim that they are implemented or validated. D-08 remains proposed for phase-6 investment cost basis.
+These decisions authorize the corresponding phase-5 policies, not a claim that they are implemented or validated.
 
-| ID | Decision | Recorded policy (approved except D-08) | Applies to |
+Phase-6 resolution (2026-09-14): the owner explicitly excluded FIFO and investment commissions, then selected recording movements without automatic realized-profit calculation. D-08 is resolved by removing cost-basis accounting from this release, not by silently substituting weighted average. Existing professional-income commission rules remain unchanged.
+
+| ID | Decision | Recorded policy | Applies to |
 | --- | --- | --- | --- |
 | D-01 | Monthly provision rounding | Allocate each obligation's annual cents across 12 months; floor share plus one cent for the first remainder months in a January–December cycle | Provision engine and acceptance fixtures |
 | D-02 | Joining a provision cycle mid-year | Begin future monthly provisions without automatically catching up; require an explicit opening reserve or additional contribution if reserve sufficiency is shown | Provision UI |
@@ -37,13 +39,13 @@ These decisions authorize the corresponding phase-5 policies, not a claim that t
 | D-05 | Closing and reopening | Explicit close; reopening requires a reason and creates a new editable revision while preserving the closed revision | Monthly lifecycle |
 | D-06 | Everyday spending allocation | Allocate a user-entered part of planned availability to the spending account, without another expense; keep the remaining amount visible | Allocation editor |
 | D-07 | Annual payment splits | Require the owner to enter explicit installment amounts; installment totals must equal the annual obligation | Due-payment schedules |
-| D-08 | Investment cost basis | Select weighted average or FIFO, including fee treatment, after reviewing required use; neither is assumed by initial specs | Sales and partial sales |
+| D-08 | Investment movements | Record contributions, purchases, sales, quantities, and manual valuations; no FIFO, investment commissions, cost allocation, or automatic realized profit | Phase-6 investments |
 | D-09 | Reserve tracking depth | Start with planning provisions and due-payment visibility; no inferred bank reserve balance or automatic month-to-month carry-forward | Final provision spec |
 | D-11 | Underfunded plans | Allow negative availability and show a persistent shortfall; permit closing with explicit acknowledgement; require allocations to reconcile to expected receipts | Monthly close criteria |
 | D-12 | Tax and commission precision | Round each computed component half away from zero to cents; commission based on pre-tax base; support this deducted-commission scenario first | Professional income API |
 | D-13 | Missing calendar due day | Clamp a day-31 schedule and February 29 annual schedules to the last valid day of the relevant month; do not shift weekends/holidays | Payment schedule generation |
 
-Specs reference these IDs. Implementers may use the explicitly approved phase-4 and phase-5 policies above. Unresolved investment choices and any additional financial policies still require confirmation.
+Specs reference these IDs. Implementers may use the explicitly approved phase-4/5 policies and the simplified phase-6 scope. Any additional financial policy still requires confirmation.
 
 ## Withdrawn decisions
 
@@ -53,7 +55,6 @@ Specs reference these IDs. Implementers may use the explicitly approved phase-4 
 
 | ID | Item | Current direction | Needed before |
 | --- | --- | --- | --- |
-| E-02 | Decimal arithmetic implementation | PostgreSQL exact numeric storage; a domain-friendly exact arithmetic implementation selected without coupling domain types to Prisma | Investment arithmetic |
 | E-03 | Host infrastructure | Confirm domain, reverse proxy, trusted proxy configuration, persistent volumes, and Portainer deployment workflow | Production deployment |
 | E-04 | Recovery objectives | Agree backup retention, recovery-point target, recovery-time target, encryption, and off-host destination | Backup automation |
 
@@ -62,6 +63,8 @@ Specs reference these IDs. Implementers may use the explicitly approved phase-4 
 Record the owner-approved choice, date, and affected documents in this file. Update the relevant ADR/spec and examples together. Preserve superseded decisions in ADR history rather than deleting their rationale. Never turn a proposal into an accepted decision solely because code has been written.
 
 ## Resolved engineering choices
+
+- **E-02 — Phase-6 quantity arithmetic:** reuse the existing exact decimal parser and bigint arithmetic with eight fractional places for units. Store quantities as PostgreSQL NUMERIC; no extra dependency or cost-basis engine is required.
 
 - **E-06 — Visual direction, 2026-09-14:** the owner accepted the current financial preview, including its charts and aligned header/content widths, and authorized phase 4. Keep the light theme, deep teal accent, financial hierarchy, and responsive layouts. This approves the design direction; it does not certify accessibility measurements or the still-pending CI run.
 
