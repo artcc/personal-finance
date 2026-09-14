@@ -1,6 +1,6 @@
 # Testing Strategy
 
-Status: planned strategy. No test runner, scripts, CI checks, or application tests exist yet.
+Status: phase-2 foundation checks implemented; local lint passed, runtime/CI checks not yet executed. The broader financial test strategy remains planned for subsequent features.
 
 ## Principles
 
@@ -65,9 +65,15 @@ Add financing and export journeys when those modules are implemented. Keep finan
 
 Review desktop and mobile screenshots for overview, allocation, and commitment editing. Include loading, empty, error, shortfall, and closed states. Verify keyboard order, visible focus, labels, focus restoration after dialogs, contrast, and zoom/reflow. Screenshot comparisons do not replace semantic assertions or accessibility review.
 
-## Future CI gates
+## Implemented foundation checks and CI gates
 
-Once the corresponding scripts exist: formatting, lint, type checking, relevant unit/integration tests, API-client drift, builds, and the small critical E2E set. Record failures accurately. Pin supported tool versions and provide required test services. Coverage reports are diagnostic; no arbitrary coverage percentage substitutes for testing the invariants above.
+The current workflow runs code/configuration formatting, lint, builds, type checking, deterministic API-client generation, migrations, environment unit tests, health HTTP tests, real PostgreSQL singleton/rollback tests, and a small desktop/mobile browser set. Container jobs build and check startup without publishing on ordinary CI runs. The release workflow invokes these checks before publication. See `package.json` for script names and [the development guide](development.md) for ordering.
+
+Foundation tests cover only behavior that exists: environment rejection, live/ready separation, safe infrastructure errors, singleton-owner constraints, transaction rollback, localized API connection, mobile overflow, and retry feedback. They do not imply financial calculations or authentication have been implemented. The database suite requires an explicitly configured disposable database ending in `_test` and will not silently skip when configuration is missing.
+
+Markdown is reviewed separately and excluded from the source/configuration formatting gate to avoid unrelated document rewrites. Pin supported tool versions and provide required test services. Coverage reports are diagnostic; no arbitrary coverage percentage substitutes for testing financial invariants in later phases.
+
+The owner requested no local compilation or tests and no replacement Node installation. Dependencies were installed with scripts disabled; only authorized lint/format operations run locally. A successful lint result does not establish build, migration, browser, container, or CI success.
 
 ## Documentation-only validation proposal
 

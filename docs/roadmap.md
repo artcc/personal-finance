@@ -8,7 +8,8 @@ Phases describe deliverables, dependencies, and completion evidence. Documentati
 - Phase 1: architecture, initial specs, testing strategy, agent rules, and design direction drafted.
 - Owner review and policy decisions remain pending; see the [decision register](decisions.md).
 - With owner permission, the 47 local Markdown links were compared against the project file inventory on 2026-09-14; all target files exist. This checks file destinations only, not business-policy correctness, external URLs, or application behavior.
-- Phases 2–9: not started.
+- Phase 2: source/configuration implemented, dependencies installed without lifecycle scripts, source/configuration formatted with authorization, and local lint passed using the owner's existing Node 26.8.2. Compilation, type checks, database tests, browser tests, Docker builds, and CI execution remain unverified until GitHub Actions runs.
+- Phases 3–9: not started.
 
 ## Phase 0 — Product and financial model
 
@@ -26,9 +27,11 @@ Exit gate: foundational documents are reviewed; relevant financial decisions are
 
 Build the web/API applications, generated API client, development PostgreSQL, Prisma migration baseline, strict TypeScript configuration, quality tooling, test harnesses, i18n, typed environment configuration, and development Compose setup.
 
-Add GitHub Actions checks for available lint, format, type, test, and build commands. Document only commands that actually exist.
+Add GitHub Actions checks for lint, code/configuration format, types, contract generation, tests, application builds, and container startup. Include multi-stage API/web Docker targets and a stable-release workflow (`release: published`) that runs the checks against the exact release commit and then publishes private versioned GHCR images for `linux/amd64` and `linux/arm64`. Provide initial Compose consumption instructions. Publication does not automatically deploy the host.
 
-Exit gate: approved targeted checks show the applications start and the API can use PostgreSQL. CI accurately runs available checks.
+Implemented files include `.github/workflows/ci.yml`, `.github/workflows/release-images.yml`, `infra/docker/Dockerfile`, `compose.dev.yaml`, and `compose.yaml`. See the development and release-image guides for actual commands. Do not claim their CI/runtime checks have passed without a successful run.
+
+Exit gate: CI demonstrates application builds, PostgreSQL connectivity/migrations, the foundation tests, and container startup; release publication is verified with an explicitly authorized GitHub release. Local lint alone does not satisfy the phase's runtime acceptance gate.
 
 ## Phase 3 — Access and polished application shell
 
@@ -77,7 +80,7 @@ Exit gate: representative data can be entered manually and exported accurately; 
 
 ## Phase 8 — Deployment and operation
 
-Implement multi-stage web/API images, production Compose, private GHCR publication, HTTPS integration, healthchecks, structured logs, explicit migrations, automated backups, and operational procedures.
+Use the images, release workflow, and initial Compose files from phase 2. Complete host-specific HTTPS/trusted-proxy integration, operational health/logging policy, migration/update procedures, automated backups, and recovery instructions.
 
 Create `docs/deployment.md` and `docs/backup-restore.md`. Confirm host configuration and recovery objectives. Document image rollback limitations when database migrations are not backward-compatible.
 

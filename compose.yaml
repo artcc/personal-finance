@@ -1,0 +1,60 @@
+name: personal-finance
+
+services:
+  database:
+    image: postgres:18.6-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?Set POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:?Set POSTGRES_DB}
+    volumes:
+      - postgres:/var/lib/postgresql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  migrate:
+    image: ghcr.io/artcc/personal-finance-api:${IMAGE_TAG:?Set a published IMAGE_TAG}
+    restart: 'no'
+    environment:
+      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL with the database service hostname}
+    command: ['node', 'node_modules/prisma/build/index.js', 'migrate', 'deploy']
+    depends_on:
+      database:
+        condition: service_healthy
+
+  api:
+    image: ghcr.io/artcc/personal-finance-api:${IMAGE_TAG:?Set a published IMAGE_TAG}
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL with the database service hostname}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:3000/api/v1/health/ready').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 15s
+      timeout: 5s
+      start_period: 15s
+      retries: 5
+
+  web:
+    image: ghcr.io/artcc/personal-finance-web:${IMAGE_TAG:?Set a published IMAGE_TAG}
+    restart: unless-stopped
+    ports:
+      - '127.0.0.1:${WEB_PORT:-8080}:8080'
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  postgres:

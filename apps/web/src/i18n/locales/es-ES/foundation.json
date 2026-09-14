@@ -1,0 +1,23 @@
+{
+  "badge": "Base técnica",
+  "eyebrow": "Un mes a la vez",
+  "heading": "Más claridad para tu dinero.",
+  "description": "La base de tu planificador está preparada. Próximamente podrás organizar ingresos, compromisos y el reparto entre tus cuentas desde un mismo lugar.",
+  "connectionTitle": "Conexión con la API",
+  "connectionDescription": "Esta comprobación utiliza el cliente generado desde el contrato de la API.",
+  "connectionPending": "Comprobando conexión",
+  "connectionSuccess": "API conectada",
+  "connectionError": "No se ha podido conectar",
+  "connectionErrorHint": "Comprueba que la API esté disponible y vuelve a intentarlo.",
+  "connectionSuccessHint": "La web y la API se comunican correctamente. La conexión con la base de datos se comprueba por separado.",
+  "scopeTitle": "Una base para lo importante",
+  "scopeDescription": "Sin registrar cada compra. Con una visión clara de tu planificación mensual.",
+  "planningTitle": "Planificación mensual",
+  "planningDescription": "Ingresos, compromisos y disponible, con cálculos explicables.",
+  "allocationTitle": "Reparto entre cuentas",
+  "allocationDescription": "Cada cantidad en su lugar, sin contar dos veces el mismo gasto.",
+  "historyTitle": "Historial estable",
+  "historyDescription": "Los cambios futuros respetarán los meses que hayas cerrado.",
+  "upcoming": "Próximas fases",
+  "noFinancialData": "Todavía no hay funciones de acceso ni gestión de datos financieros."
+}

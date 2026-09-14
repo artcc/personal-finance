@@ -6,7 +6,7 @@ The application follows the owner's existing spreadsheet workflow: plan the mont
 
 ## Project status
 
-**Documentation foundation — phases 0 and 1.** Product requirements, architecture decisions, initial specifications, and UI/UX direction are documented. Application code, package manifests, migrations, CI, and deployment configuration have not been implemented. There are no installation or validation commands yet.
+**Phase 2 — technical foundation implemented, CI validation pending.** The repository now contains the pnpm monorepo, API health endpoints, initial localized web page, generated-client pipeline, Prisma baseline, tests, Docker targets, Compose files, CI, and release-image publication workflow. Authentication and financial features start in subsequent phases.
 
 The agreed technical direction is distinguished from proposed business policies throughout the documentation. See the [decision register](docs/decisions.md) before implementing rules that require owner confirmation.
 
@@ -33,7 +33,29 @@ The agreed technical direction is distinguished from proposed business policies 
 | Quality | ESLint, Prettier, type checking, Vitest, HTTP integration tests, Playwright |
 | Delivery | GitHub Actions, private GHCR images, Docker Compose, Portainer |
 
-Exact compatible versions and any additional libraries must be agreed during scaffolding. No dependencies have been installed.
+Dependencies are pinned to approved stable versions and recorded in `pnpm-lock.yaml`. The policy is the newest stable compatible release, excluding alpha, beta, and release candidates. CI/images use Node 26.8.2 and pnpm 12.4.1. TypeScript remains at 5.9.3 because the selected OpenAPI generator and ESLint parser do not yet jointly support TypeScript 7; see ADR 002.
+
+## Local workflow
+
+The owner's workflow keeps compilation and tests in CI. Use the existing Node installation; the helper below downloads only pnpm into the project cache and does not install or switch Node globally.
+
+```sh
+node scripts/pnpm-local.mjs install --ignore-scripts
+node scripts/pnpm-local.mjs lint
+```
+
+Installation scripts are deliberately disabled for this local lint-only workflow. Generated Prisma/API-client files and compiled applications will not exist after this installation. They are generated during CI/container builds. Formatting, if authorized, is available through `node scripts/pnpm-local.mjs format`.
+
+See [development and CI commands](docs/development.md) for the full build/test graph and [release image delivery](docs/release-images.md) for Docker/Portainer consumption.
+
+## Release images
+
+Publishing a stable GitHub release with a tag such as `v0.1.0` triggers `.github/workflows/release-images.yml`. After the exact release commit passes CI, the workflow publishes:
+
+- `ghcr.io/artcc/personal-finance-api:v0.1.0`
+- `ghcr.io/artcc/personal-finance-web:v0.1.0`
+
+Both images support `linux/amd64` and `linux/arm64`. Publication does not deploy the server. Wait for the entire publication workflow to succeed before using the release in Compose/Portainer. No release or images have been published as part of scaffolding.
 
 ## Language policy
 
@@ -54,6 +76,8 @@ All project-authored documentation, code, identifiers, comments, filenames, test
 - [Architecture](docs/architecture.md)
 - [Architecture decision records](docs/adr/README.md)
 - [Testing strategy](docs/testing.md)
+- [Development and CI commands](docs/development.md)
+- [Release image delivery](docs/release-images.md)
 - [Agent instructions](AGENTS.md)
 
 ### Specifications and design
@@ -66,7 +90,7 @@ All project-authored documentation, code, identifiers, comments, filenames, test
 - [UI/UX direction](docs/design/ui-ux.md)
 - [Screen flows and structural wireframes](docs/design/screen-flows.md)
 
-Deployment, backup/restore, export, authentication, financing, and investment specifications will be expanded before their corresponding implementation phases. See the roadmap for ownership of these deliverables.
+Host-specific deployment, backup/restore, export, authentication, financing, and investment specifications will be expanded before their corresponding implementation phases. Basic image delivery and Compose consumption are already documented; the full operational release gate remains in phase 8.
 
 ## Repository
 

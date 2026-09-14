@@ -10,6 +10,11 @@ build/
 *.tsbuildinfo
 .eslintcache
 
+# Reproducible generated code and API contract (built in CI)
+/apps/api/src/generated/
+/apps/api/openapi.json
+/packages/api-client/src/schema.gen.d.ts
+
 # Test output
 coverage/
 playwright-report/

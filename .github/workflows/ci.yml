@@ -1,0 +1,116 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_call:
+    inputs:
+      ref:
+        description: Exact commit to check
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Quality, contract, build, and foundation tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:18.6-alpine
+        env:
+          POSTGRES_USER: personal_finance
+          POSTGRES_PASSWORD: ci-only-password
+          POSTGRES_DB: personal_finance_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U personal_finance -d personal_finance_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://personal_finance:ci-only-password@127.0.0.1:5432/personal_finance_test?schema=public
+      TEST_DATABASE_URL: postgresql://personal_finance:ci-only-password@127.0.0.1:5432/personal_finance_test?schema=public
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          version: 12.4.1
+          run_install: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 26.8.2
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm format:check
+      - run: pnpm build
+      - run: pnpm typecheck
+      - run: pnpm contract:check
+      - run: pnpm db:migrate
+      - run: pnpm test:unit
+      - run: pnpm test:http
+      - run: pnpm test:db
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test:e2e
+      - name: Upload browser evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: browser-evidence-${{ github.run_id }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+  images:
+    name: Container build smoke check
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        target: [api, web]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+          persist-credentials: false
+      - uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e # v4.3.0
+      - uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        with:
+          context: .
+          file: infra/docker/Dockerfile
+          target: ${{ matrix.target }}
+          platforms: linux/amd64
+          push: false
+          load: true
+          tags: personal-finance-${{ matrix.target }}:ci
+          cache-from: type=gha,scope=build-${{ matrix.target }}
+          cache-to: type=gha,mode=max,scope=build-${{ matrix.target }}
+      - name: Check container startup
+        env:
+          TARGET: ${{ matrix.target }}
+        shell: bash
+        run: |
+          trap 'docker rm -f foundation-smoke >/dev/null 2>&1 || true' EXIT
+          docker run -d --name foundation-smoke \
+            -e DATABASE_URL=postgresql://unused:unused@127.0.0.1:1/unused \
+            "personal-finance-${TARGET}:ci"
+          for attempt in {1..20}; do
+            if [[ "$TARGET" == api ]]; then
+              if docker exec foundation-smoke node -e "fetch('http://127.0.0.1:3000/api/v1/health/live').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"; then
+                exit 0
+              fi
+            elif docker exec foundation-smoke wget -q -O /dev/null http://127.0.0.1:8080/healthz; then
+              exit 0
+            fi
+            sleep 2
+          done
+          docker logs foundation-smoke
+          exit 1

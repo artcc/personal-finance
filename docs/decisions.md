@@ -10,6 +10,8 @@ This register separates confirmed requirements from proposals requiring owner ap
 - Modular monolith, pnpm monorepo, and the TypeScript/React/NestJS/PostgreSQL stack described in the architecture.
 - Tests, lint, type checks, clear specifications, agent instructions, README, and MIT licensing.
 - Docker, Docker Compose, and Portainer deployment direction.
+- Phase 2 includes Docker image publication to private GHCR packages on stable GitHub release publication. Both API and web images must pass the release checks before the version is consumed in Docker/Portainer.
+- Use the newest stable mutually compatible dependencies; no alpha, beta, or release candidates. Keep the current macOS Node installation and run only approved lint/format checks locally; builds and tests run in CI.
 - English project content; Spanish frontend translation resources; future languages supported.
 - Polished UI/UX is a product requirement, not a final cosmetic task.
 - MIT copyright holder: Arturo Carretero Calvo.
@@ -41,7 +43,6 @@ Proposed behavior in the specs references these IDs. Implementers must not resol
 
 | ID | Item | Current direction | Needed before |
 | --- | --- | --- | --- |
-| E-01 | Runtime and package versions | Stable compatible Node.js, pnpm, PostgreSQL, and package versions; evaluate compatibility and obtain dependency approval | Scaffolding |
 | E-02 | Decimal arithmetic implementation | PostgreSQL exact numeric storage; a domain-friendly exact arithmetic implementation selected without coupling domain types to Prisma | Investment arithmetic |
 | E-03 | Host infrastructure | Confirm domain, reverse proxy, trusted proxy configuration, persistent volumes, and Portainer deployment workflow | Production deployment |
 | E-04 | Recovery objectives | Agree backup retention, recovery-point target, recovery-time target, encryption, and off-host destination | Backup automation |
@@ -51,3 +52,7 @@ Proposed behavior in the specs references these IDs. Implementers must not resol
 ## How to record a resolution
 
 Record the owner-approved choice, date, and affected documents in this file. Update the relevant ADR/spec and examples together. Preserve superseded decisions in ADR history rather than deleting their rationale. Never turn a proposal into an accepted decision solely because code has been written.
+
+## Resolved engineering choices
+
+- **E-01 — Runtime and packages, 2026-09-14:** the owner authorized project-local dependencies and requested newest stable compatible versions. Node 26.8.2 is the existing local runtime and the CI/container runtime; pnpm 12.4.1 is pinned. PostgreSQL 18.6 and Prisma 7.10.0 are selected, excluding the PostgreSQL 19 beta and Prisma 8 release candidate. TypeScript 5.9.3 is the compatibility intersection for `openapi-typescript` 7.13.0 (`^5.x`) and `typescript-eslint` 8.70.0 (`<6.1.0`); TypeScript 7.0.2 is deferred until those tools support it together. Additional direct versions are pinned in manifests and the lockfile. No alternate Node version is installed locally.

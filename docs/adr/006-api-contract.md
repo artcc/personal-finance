@@ -45,4 +45,6 @@ Handwritten shared interfaces lack runtime contract evidence. GraphQL and RPC ar
 
 ## Follow-up
 
-Select the generator during phase 2 with dependency approval. Specify generated-artifact placement and check commands only after implementation. Authenticate and validate preview endpoints like normal financial reads.
+Phase 2 selects `openapi-typescript` 7.13.0 and `openapi-fetch` 0.17.0. `pnpm build` compiles the API, exports `apps/api/openapi.json`, generates `packages/api-client/src/schema.gen.d.ts`, builds the client, and compiles the web application. Generated artifacts are ignored by Git and recreated in CI; there is no manually maintained response type or committed generated artifact to drift. `pnpm contract:check` compares regenerated schema/client bytes against the build's outputs to detect nondeterminism. Consumer type checks establish contract compatibility.
+
+Only system health endpoints exist in phase 2 and expose no financial data. Implement authentication before financial endpoints in phase 3. Authenticate and validate future financial previews like normal financial reads.

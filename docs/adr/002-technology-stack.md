@@ -1,6 +1,6 @@
 # ADR 002 — Technology Stack
 
-Status: accepted direction; exact versions pending. Date: 2026-09-14.
+Status: accepted direction; phase-2 versions selected with owner approval. Date: 2026-09-14.
 
 ## Context
 
@@ -10,7 +10,7 @@ The owner accepted a TypeScript stack covering both applications, a typed contra
 
 | Concern | Technology |
 | --- | --- |
-| Runtime/toolchain | Compatible stable Node.js and pnpm versions, strict TypeScript, pnpm workspaces |
+| Runtime/toolchain | Node 26.8.2, pnpm 12.4.1, strict TypeScript 5.9.3, pnpm workspaces |
 | Web | React, Vite, React Router, TanStack Query |
 | Forms | React Hook Form and Zod |
 | Components | Tailwind CSS and shadcn/ui, customized through shared tokens |
@@ -28,7 +28,7 @@ The owner accepted a TypeScript stack covering both applications, a typed contra
 - Generated client artifacts require a deterministic generation/check workflow.
 - Prisma types stay in infrastructure and mappings, not financial domain types.
 - Test integration with NestJS decorators and the chosen build pipeline must be verified during scaffolding.
-- Selection of an OpenAPI generator, exact-decimal implementation, password-hashing implementation, and optional UI assets remains open.
+- The OpenAPI pipeline uses `openapi-typescript` 7.13.0 and `openapi-fetch` 0.17.0. Exact-decimal implementation, password hashing, and optional UI assets remain open.
 
 ## Alternatives considered
 
@@ -36,4 +36,6 @@ A separate backend language and a more minimal HTTP framework are viable, but th
 
 ## Follow-up
 
-Resolve E-01 and obtain approval before dependency installation or updates. Pin runtime/package-manager versions and commit the resulting lockfile only when a commit is authorized. Never use unreviewed `latest` production image tags as a release strategy.
+E-01 is resolved for scaffolding. The policy is newest stable compatible releases, not LTS by default. Prisma 7.10.0 excludes the 8.0.0 release candidate; PostgreSQL 18.6 excludes the 19 beta. TypeScript 5.9.3 remains necessary because the selected generator requires `^5.x` and the ESLint parser requires `<6.1.0`, although TypeScript 7.0.2 exists. Do not suppress peer errors or introduce prereleases to force an upgrade.
+
+Node 26.8.2 remains the owner's existing local version and is pinned in CI/Docker. The local pnpm helper keeps package-manager caches inside the project; no Node switching or global installation is performed. Obtain approval for subsequent dependency changes. Commit the lockfile only when a commit is authorized. Deploy explicit release tags or immutable digests, not a mutable `latest` alias.

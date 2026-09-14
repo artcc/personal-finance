@@ -1,6 +1,6 @@
 # Architecture
 
-Status: accepted modular-monolith and stack direction; detailed implementation proposals are recorded in the ADRs. No application code exists yet.
+Status: phase-2 foundation implemented; runtime/CI verification pending. Detailed financial implementation proposals remain recorded in the ADRs.
 
 ## System shape
 
@@ -65,7 +65,7 @@ compose.dev.yaml
 .env.example
 ```
 
-This tree describes the target layout. Empty application directories and placeholder configuration are not required during documentation phases. Shared tooling is extracted only when actual shared configuration exists.
+This tree describes the target business-module layout. The phase-2 implementation contains the API system/health module and shared configuration/database infrastructure, the web foundation page, and the API-client package. Future business-module directories are created when implemented. Shared tooling currently lives at the root instead of an empty tooling package.
 
 ## Backend boundaries
 
@@ -115,7 +115,7 @@ Cross-module domain imports are limited to truly shared primitives, such as `Mon
 - Financing and investment plans link to canonical planning sources. Actual investment operations are separate records.
 - Financial records are entered manually. Plan provenance points to application source records and revisions; no workbook references or import batches are required in the runtime schema.
 
-Schema details, indexes, numeric precision limits, and migration design are phase-2/feature deliverables, not implemented facts.
+The phase-2 baseline creates only an empty `owners` table with a UUID identifier and a database-enforced singleton marker. No owner, credentials, sessions, or financial records are seeded. Prisma migrations own this schema; the singleton check supplements the unique constraint. Financial schema details and numeric precision limits remain feature deliverables.
 
 ## Consistency and history
 
@@ -149,10 +149,13 @@ Do not emit credentials, session tokens, full financial payloads, or data export
 
 - Pin compatible tool versions and maintain one committed lockfile after dependency approval.
 - Build immutable, non-root web/API images with separate build and runtime stages.
-- GitHub Actions runs agreed quality checks and, when configured, publishes private versioned images to GHCR.
+- GitHub Actions runs the implemented checks on pushes to `main` and pull requests. A reusable CI entry point lets stable GitHub release publication check the exact release commit before publishing API/web images to private GHCR packages.
+- Phase 2 provides version and full-commit image tags, OCI source/revision metadata, amd64/arm64 publication, and digest summaries. It does not automatically update Portainer or create releases. See [release image delivery](release-images.md).
 - Compose defines readiness, durable database storage, and configuration without committed secrets.
 - Backups and a demonstrated restore procedure are release deliverables.
 - Detailed host integration and recovery objectives remain E-03/E-04 decisions.
+
+Generated OpenAPI JSON, client declarations, and Prisma source are reproducible build artifacts rather than hand-authored or committed files. The build regenerates them in dependency order, type-checks consumers, and CI checks regeneration determinism. The generated-client package copies its schema declarations into its compiled output. There is no duplicate handwritten response model.
 
 ## Deliberate complexity limits
 

@@ -1,0 +1,20 @@
+generator client {
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  moduleFormat        = "esm"
+  engineType          = "client"
+  importFileExtension = "js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Credentials and sessions are intentionally added in the authentication phase.
+model Owner {
+  id        String   @id @default(uuid()) @db.Uuid
+  singleton Boolean  @unique @default(true)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@map("owners")
+}

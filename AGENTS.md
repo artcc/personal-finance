@@ -60,7 +60,9 @@ Build a private, single-owner monthly financial planner. Read [the product defin
 - Propose the smallest relevant check first and describe what it establishes.
 - Do not run full test suites automatically. Broaden approved checks only when new failures or changes justify it and permission covers the scope.
 - Write meaningful tests for financial rules, persistence invariants, and important journeys. Avoid tests that merely mirror implementation.
-- Document commands only after they exist. This documentation-only repository currently has no runnable app or quality scripts.
+- Document commands only after they exist. See `package.json` and [the development guide](docs/development.md) for the implemented scripts.
+- The owner currently runs only approved lint/format checks locally using the existing Node installation. Do not install another Node version or run local builds, type checks, code generation, tests, or containers without new authorization. Builds and tests are configured in CI.
+- Use `node scripts/pnpm-local.mjs` for local pnpm operations so caches/state remain inside the project. Local dependency installation uses `install --ignore-scripts`.
 - CI will run the agreed checks automatically once implemented; do not claim CI success without actual evidence.
 
 ## Files, Git, and scope

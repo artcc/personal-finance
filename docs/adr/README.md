@@ -5,7 +5,7 @@ An **accepted direction** reflects the previously accepted architecture/technolo
 | ADR | Subject | Status |
 | --- | --- | --- |
 | [001](001-modular-monolith.md) | Modular monolith and boundaries | Accepted direction |
-| [002](002-technology-stack.md) | Technology stack and monorepo | Accepted direction; versions pending |
+| [002](002-technology-stack.md) | Technology stack and monorepo | Accepted direction; phase-2 versions selected |
 | [003](003-money-and-dates.md) | Exact money, decimals, dates, and rounding | Exact arithmetic accepted; policy details proposed |
 | [004](004-monthly-history.md) | Saved monthly history and revisions | Historical preservation accepted; lifecycle proposed |
 | [005](005-authentication.md) | Single-owner authentication | Proposed implementation |
