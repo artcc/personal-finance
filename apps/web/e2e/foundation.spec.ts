@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
-import common from '../src/i18n/locales/es-ES/common.json';
-import foundation from '../src/i18n/locales/es-ES/foundation.json';
+import common from '../src/i18n/locales/es-ES/common.json' with { type: 'json' };
+import foundation from '../src/i18n/locales/es-ES/foundation.json' with { type: 'json' };
 
 test('the Spanish foundation page connects to the API without horizontal overflow', async ({
   page,
