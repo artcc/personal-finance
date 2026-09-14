@@ -4,11 +4,14 @@ import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter } from '@nestjs/platform-fastify';
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import type { OpenAPIObject } from '@nestjs/swagger';
 import { AppModule } from './app.module.js';
 import type { Environment } from './shared/environment.js';
 import { HttpErrorFilter } from './shared/http-error.filter.js';
 
-export async function createApplication(environment: Environment) {
+export async function createApplication(
+  environment: Environment,
+): Promise<{ app: NestFastifyApplication; document: OpenAPIObject }> {
   const adapter = new FastifyAdapter({
     logger: environment.NODE_ENV !== 'test',
     genReqId: () => randomUUID(),
