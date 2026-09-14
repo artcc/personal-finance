@@ -30,9 +30,13 @@ export function AppShell() {
           <span aria-hidden="true">▦</span>
           {t('overview')}
         </NavLink>
-        {(
-          ['allocation', 'accounts', 'income', 'commitments', 'financing', 'investments'] as const
-        ).map((item) => (
+        {(['accounts', 'income', 'commitments'] as const).map((item) => (
+          <NavLink key={item} to={`/${item}`} onClick={() => drawer.current?.close()}>
+            <span aria-hidden="true">◦</span>
+            {t(item)}
+          </NavLink>
+        ))}
+        {(['allocation', 'financing', 'investments'] as const).map((item) => (
           <span className="nav-future" key={item}>
             <span aria-hidden="true">◦</span>
             {t(item)}
@@ -80,25 +84,27 @@ export function AppShell() {
       </dialog>
       <div className="workspace-content">
         <header className="workspace-header">
-          <Button
-            className="mobile-menu"
-            variant="outline"
-            onClick={() => drawer.current?.showModal()}
-            aria-label={t('openNavigation')}
-          >
-            ☰
-          </Button>
-          <span className="workspace-breadcrumb">{t('workspace')}</span>
-          <NavLink
-            to="/settings/security"
-            className="profile-link"
-            aria-label={t('openProfile', { name })}
-          >
-            <span className="profile-name">{name}</span>
-            <span className="profile-avatar" aria-hidden="true">
-              {name.slice(0, 1).toLocaleUpperCase()}
-            </span>
-          </NavLink>
+          <div className="workspace-header-inner">
+            <Button
+              className="mobile-menu"
+              variant="outline"
+              onClick={() => drawer.current?.showModal()}
+              aria-label={t('openNavigation')}
+            >
+              ☰
+            </Button>
+            <span className="workspace-breadcrumb">{t('workspace')}</span>
+            <NavLink
+              to="/settings/security"
+              className="profile-link"
+              aria-label={t('openProfile', { name })}
+            >
+              <span className="profile-name">{name}</span>
+              <span className="profile-avatar" aria-hidden="true">
+                {name.slice(0, 1).toLocaleUpperCase()}
+              </span>
+            </NavLink>
+          </div>
         </header>
         <main id="private-content" className="private-content" tabIndex={-1} ref={main}>
           {signOut.isError && (

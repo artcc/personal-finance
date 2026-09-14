@@ -5,13 +5,12 @@ import { z } from 'zod';
 import { useMutation } from '@tanstack/react-query';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { notifySessionChanged, queryClient } from '../../app/query-client';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { ConnectionError, LoadingState } from '../../components/ui/feedback';
 import { ApiError } from '../../lib/api-error';
 import { login, register as registerAccount } from './auth-api';
-import { sessionKey, useSession } from './session';
+import { replaceSession, useSession } from './session';
 
 export function AccessPage({ mode }: { mode: 'login' | 'register' }) {
   const { t } = useTranslation(['auth', 'common']);
@@ -55,10 +54,7 @@ export function AccessPage({ mode }: { mode: 'login' | 'register' }) {
           })
         : login({ email: values.email, password: values.password }),
     onSuccess: async (data) => {
-      await queryClient.cancelQueries();
-      queryClient.clear();
-      queryClient.setQueryData(sessionKey, data);
-      notifySessionChanged();
+      await replaceSession(data);
       form.reset();
       navigate('/', { replace: true });
     },

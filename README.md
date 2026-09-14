@@ -6,15 +6,15 @@ The application follows the owner's existing spreadsheet workflow: plan the mont
 
 ## Project status
 
-**Phase 3 — registration, authentication, and private shell implemented; CI and visual review pending.** Phase-2 CI success was reported by the owner. This change adds independent user registration/login, protected server-side sessions, per-user session management, localized access screens, and responsive navigation. Financial modules remain subsequent-phase work.
+**Phase 4 — financial configuration implemented; CI verification pending.** Accounts/spaces, recurring and one-month income, commitments, exact previews, immutable source revisions, and audit events are implemented. The owner approved the visual direction and phase-4 financial rules. The phase-3 logout cache correction and regression tests are included; functional confirmation still depends on CI.
 
-The agreed technical direction is distinguished from proposed business policies throughout the documentation. See the [decision register](docs/decisions.md) before implementing rules that require owner confirmation.
+The agreed technical direction is distinguished from proposed business policies throughout the documentation. See the [decision register](specs/decisions.md) before implementing rules that require owner confirmation.
 
 ### Design review
 
-Open [the phase-3 visual proposal](docs/design/phase-3-preview.html) directly in a browser: it needs no Node process or compilation. It includes responsive monthly overview, allocation, annual commitment, and alternate states using clearly labeled synthetic data. Design labels are English documentation; the implemented application uses Spanish i18n resources. Financial designs remain subject to owner review before those screens are built.
+Open [the phase-3 visual proposal](specs/design/phase-3-preview.html) directly in a browser: it needs no Node process or compilation. It includes responsive monthly overview, allocation, annual commitment, and alternate states using clearly labeled synthetic data. Design labels are English documentation; the implemented application uses Spanish i18n resources. The owner has approved this visual direction for financial screen implementation.
 
-The implemented web routes are `/register`, `/login`, the private `/` workspace, and `/settings/security`. There are no default credentials. Registration creates independent accounts; email verification and email delivery are not yet implemented. Server-side password recovery is documented in the development guide.
+The implemented web routes are `/register`, `/login`, the private `/` workspace, `/settings/security`, `/accounts`, `/income`, and `/commitments`. There are no default credentials. Registration creates independent accounts; email verification and email delivery are not yet implemented. Server-side password recovery is documented in the development guide. Complete monthly plans, account allocation, and dashboard charts are the next phase.
 
 ## Product goals
 
@@ -52,7 +52,7 @@ node scripts/pnpm-local.mjs lint
 
 Installation scripts are deliberately disabled for this local lint-only workflow. Generated Prisma/API-client files and compiled applications will not exist after this installation. They are generated during CI/container builds. Formatting, if authorized, is available through `node scripts/pnpm-local.mjs format`.
 
-See [development and CI commands](docs/development.md) for the full build/test graph and [release image delivery](docs/release-images.md) for Docker/Portainer consumption.
+See [development and CI commands](specs/development.md) for the full build/test graph and [release image delivery](specs/release-images.md) for Docker/Portainer consumption.
 
 ## Release images
 
@@ -69,33 +69,35 @@ All project-authored documentation, code, identifiers, comments, filenames, test
 
 ## Documentation
 
+Engineering documentation lives in `specs/`. The `docs/` path is reserved for the future static project website and its GitHub Pages deployment.
+
 ### Product and domain
 
-- [Product definition](docs/product.md)
-- [Roadmap and delivery gates](docs/roadmap.md)
-- [Decision register](docs/decisions.md)
-- [Domain glossary](docs/domain/glossary.md)
-- [Spreadsheet mapping and reference figures](docs/domain/spreadsheet-mapping.md)
+- [Product definition](specs/product.md)
+- [Roadmap and delivery gates](specs/roadmap.md)
+- [Decision register](specs/decisions.md)
+- [Domain glossary](specs/domain/glossary.md)
+- [Spreadsheet mapping and reference figures](specs/domain/spreadsheet-mapping.md)
 
 ### Engineering
 
-- [Architecture](docs/architecture.md)
-- [Architecture decision records](docs/adr/README.md)
-- [Testing strategy](docs/testing.md)
-- [Development and CI commands](docs/development.md)
-- [Release image delivery](docs/release-images.md)
+- [Architecture](specs/architecture.md)
+- [Architecture decision records](specs/adr/README.md)
+- [Testing strategy](specs/testing.md)
+- [Development and CI commands](specs/development.md)
+- [Release image delivery](specs/release-images.md)
 - [Agent instructions](AGENTS.md)
 
 ### Specifications and design
 
-- [Specification index](docs/specs/README.md)
-- [Registration, authentication, and sessions](docs/specs/authentication.md)
-- [Accounts and allocation](docs/specs/accounts.md)
-- [Income](docs/specs/income.md)
-- [Commitments and provisions](docs/specs/commitments.md)
-- [Monthly planning](docs/specs/monthly-planning.md)
-- [UI/UX direction](docs/design/ui-ux.md)
-- [Screen flows and structural wireframes](docs/design/screen-flows.md)
+- [Specification index](specs/specs/README.md)
+- [Registration, authentication, and sessions](specs/specs/authentication.md)
+- [Accounts and allocation](specs/specs/accounts.md)
+- [Income](specs/specs/income.md)
+- [Commitments and provisions](specs/specs/commitments.md)
+- [Monthly planning](specs/specs/monthly-planning.md)
+- [UI/UX direction](specs/design/ui-ux.md)
+- [Screen flows and structural wireframes](specs/design/screen-flows.md)
 
 Host-specific deployment, backup/restore, export, financing, and investment specifications will be expanded before their corresponding implementation phases. Authentication is specified in phase 3. Basic image delivery and Compose consumption are documented; the full operational release gate remains in phase 8.
 

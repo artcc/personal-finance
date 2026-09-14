@@ -48,6 +48,9 @@ export function FoundationPage() {
               </span>
               <h3>{t(`${item}Title`)}</h3>
               <p>{t(`${item}Description`)}</p>
+              <Button asChild variant="outline">
+                <Link to={`/${item}`}>{t('openModule')}</Link>
+              </Button>
             </article>
           ))}
         </div>

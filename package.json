@@ -19,9 +19,9 @@
     "build": "pnpm build:api && pnpm api:generate && pnpm --filter @personal-finance/api-client build && pnpm --filter @personal-finance/web build",
     "typecheck": "pnpm -r typecheck",
     "contract:check": "node scripts/check-contract.mjs",
-    "test:unit": "vitest run apps/api/test/environment.test.ts apps/api/test/session-policy.test.ts",
+    "test:unit": "vitest run apps/api/test/environment.test.ts apps/api/test/session-policy.test.ts apps/api/test/financial-rules.test.ts apps/web/test/session-cache.test.ts apps/web/test/money-presentation.test.ts",
     "test:http": "vitest run apps/api/test/health.test.ts",
-    "test:db": "vitest run apps/api/test/database.integration.test.ts apps/api/test/auth.integration.test.ts",
+    "test:db": "vitest run apps/api/test/database.integration.test.ts apps/api/test/auth.integration.test.ts apps/api/test/financial-configuration.integration.test.ts",
     "test:e2e": "playwright test",
     "dev": "pnpm build:api && pnpm api:generate && pnpm --filter @personal-finance/api-client build && pnpm --parallel --filter @personal-finance/api --filter @personal-finance/web dev"
   },

@@ -16,6 +16,10 @@ model User {
   legacySingleton Boolean     @default(true) @map("singleton") @ignore
   createdAt       DateTime    @default(now()) @map("created_at") @db.Timestamptz(3)
   credential      Credential?
+  accounts        Account[]
+  incomeSources   IncomeSource[]
+  commitments     CommitmentSource[]
+  financialEvents FinancialEvent[]
 
   @@map("users")
 }
@@ -50,4 +54,147 @@ model Session {
   @@index([userId, revokedAt])
   @@index([expiresAt])
   @@map("sessions")
+}
+
+model Account {
+  id                String @id @default(uuid()) @db.Uuid
+  userId            String @map("user_id") @db.Uuid
+  name              String @db.VarChar(120)
+  institution       String? @db.VarChar(120)
+  reference         String? @db.VarChar(120)
+  currency          String @default("EUR") @db.Char(3)
+  archivedFromMonth String? @map("archived_from_month") @db.Char(7)
+  version           Int @default(1)
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+  user              User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  spaces            Space[]
+  incomeRevisions   IncomeRevision[] @relation("IncomeAccount")
+  commitmentRevisions CommitmentRevision[] @relation("CommitmentAccount")
+  @@unique([id, userId])
+  @@index([userId, name, id])
+  @@map("accounts")
+}
+
+model Space {
+  id                String @id @default(uuid()) @db.Uuid
+  accountId         String @map("account_id") @db.Uuid
+  userId            String @map("user_id") @db.Uuid
+  name              String @db.VarChar(120)
+  archivedFromMonth String? @map("archived_from_month") @db.Char(7)
+  version           Int @default(1)
+  account           Account @relation(fields: [accountId, userId], references: [id, userId], onDelete: Restrict)
+  incomeRevisions   IncomeRevision[] @relation("IncomeSpace")
+  commitmentRevisions CommitmentRevision[] @relation("CommitmentSpace")
+  @@unique([id, accountId, userId])
+  @@index([userId, accountId, name, id])
+  @@map("spaces")
+}
+
+model IncomeSource {
+  id                String @id @default(uuid()) @db.Uuid
+  userId            String @map("user_id") @db.Uuid
+  recurrence        String @db.VarChar(12)
+  oneOffMonth       String? @map("one_off_month") @db.Char(7)
+  archivedFromMonth String? @map("archived_from_month") @db.Char(7)
+  version           Int @default(1)
+  user              User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  revisions         IncomeRevision[]
+  @@unique([id, userId])
+  @@index([userId, recurrence, id])
+  @@map("income_sources")
+}
+
+model IncomeRevision {
+  id                String @id @default(uuid()) @db.Uuid
+  sourceId          String @map("source_id") @db.Uuid
+  userId            String @map("user_id") @db.Uuid
+  version           Int
+  name              String @db.VarChar(120)
+  effectiveFromMonth String @map("effective_from_month") @db.Char(7)
+  startsOn          DateTime @map("starts_on") @db.Date
+  endsOn            DateTime? @map("ends_on") @db.Date
+  accountId         String @map("account_id") @db.Uuid
+  spaceId           String? @map("space_id") @db.Uuid
+  input             Json
+  baseCents         BigInt @map("base_cents")
+  vatCents          BigInt @map("vat_cents")
+  withholdingCents  BigInt @map("withholding_cents")
+  commissionCents   BigInt @map("commission_cents")
+  cashCents         BigInt @map("cash_cents")
+  reserveCents      BigInt @map("reserve_cents")
+  spendableCents    BigInt @map("spendable_cents")
+  vatRate           Decimal @map("vat_rate") @db.Decimal(9, 8)
+  withholdingRate   Decimal @map("withholding_rate") @db.Decimal(9, 8)
+  commissionRate    Decimal @map("commission_rate") @db.Decimal(9, 8)
+  hourlyRate        Decimal? @map("hourly_rate") @db.Decimal(20, 8)
+  hours             Decimal? @db.Decimal(20, 8)
+  calculationVersion String @default("income-v1") @map("calculation_version")
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  source            IncomeSource @relation(fields: [sourceId, userId], references: [id, userId], onDelete: Cascade)
+  account           Account @relation("IncomeAccount", fields: [accountId, userId], references: [id, userId], onDelete: Restrict)
+  space             Space? @relation("IncomeSpace", fields: [spaceId, accountId, userId], references: [id, accountId, userId], onDelete: Restrict)
+  @@unique([sourceId, version])
+  @@index([userId, accountId])
+  @@map("income_revisions")
+}
+
+model CommitmentSource {
+  id                String @id @default(uuid()) @db.Uuid
+  userId            String @map("user_id") @db.Uuid
+  archivedFromMonth String? @map("archived_from_month") @db.Char(7)
+  version           Int @default(1)
+  user              User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  revisions         CommitmentRevision[]
+  @@unique([id, userId])
+  @@index([userId, id])
+  @@map("commitment_sources")
+}
+
+model CommitmentRevision {
+  id                String @id @default(uuid()) @db.Uuid
+  sourceId          String @map("source_id") @db.Uuid
+  userId            String @map("user_id") @db.Uuid
+  version           Int
+  name              String @db.VarChar(120)
+  effectiveFromMonth String @map("effective_from_month") @db.Char(7)
+  startsOn          DateTime @map("starts_on") @db.Date
+  endsOn            DateTime? @map("ends_on") @db.Date
+  accountId         String @map("account_id") @db.Uuid
+  spaceId           String? @map("space_id") @db.Uuid
+  input             Json
+  amountCents       BigInt @map("amount_cents")
+  calculationVersion String @default("commitment-v1") @map("calculation_version")
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  source            CommitmentSource @relation(fields: [sourceId, userId], references: [id, userId], onDelete: Cascade)
+  account           Account @relation("CommitmentAccount", fields: [accountId, userId], references: [id, userId], onDelete: Restrict)
+  space             Space? @relation("CommitmentSpace", fields: [spaceId, accountId, userId], references: [id, accountId, userId], onDelete: Restrict)
+  installments      CommitmentInstallment[]
+  @@unique([sourceId, version])
+  @@index([userId, accountId])
+  @@map("commitment_revisions")
+}
+
+model CommitmentInstallment {
+  revisionId String @map("revision_id") @db.Uuid
+  ordinal    Int
+  month      Int
+  day        Int
+  amountCents BigInt @map("amount_cents")
+  revision   CommitmentRevision @relation(fields: [revisionId], references: [id], onDelete: Cascade)
+  @@id([revisionId, ordinal])
+  @@map("commitment_installments")
+}
+
+model FinancialEvent {
+  id         String @id @default(uuid()) @db.Uuid
+  userId     String @map("user_id") @db.Uuid
+  entityType String @map("entity_type") @db.VarChar(32)
+  entityId   String @map("entity_id") @db.Uuid
+  action     String @db.VarChar(32)
+  payload    Json
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  user       User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, entityType, entityId])
+  @@map("financial_events")
 }

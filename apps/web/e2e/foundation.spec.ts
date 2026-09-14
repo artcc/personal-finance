@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 import type { Page } from '@playwright/test';
 import { randomUUID } from 'node:crypto';
 import common from '../src/i18n/locales/es-ES/common.json' with { type: 'json' };
@@ -20,6 +20,26 @@ async function registerUser(page: Page) {
   await expect(page).toHaveURL('/');
   await expect(page.getByRole('heading', { name: workspace.emptyTitle })).toBeVisible();
   return email;
+}
+
+async function closeAllSessions(page: Page) {
+  await page.getByRole('button', { name: security.logoutAll, exact: true }).click();
+  const responsePromise = page.waitForResponse(
+    (response) =>
+      new URL(response.url()).pathname === '/api/v1/auth/logout-all' &&
+      response.request().method() === 'POST',
+  );
+  await page
+    .getByRole('dialog')
+    .getByRole('button', { name: security.confirmAction, exact: true })
+    .click();
+  const response = await responsePromise;
+  expect(response.status(), 'The server must confirm logout before the UI redirects').toBe(204);
+  await response.finished();
+  expect(await page.context().cookies()).not.toContainEqual(
+    expect.objectContaining({ name: 'pf_session' }),
+  );
+  await expect(page).toHaveURL('/login');
 }
 
 test('registration, session persistence, mobile navigation, and logout protect the workspace', async ({
@@ -45,12 +65,7 @@ test('registration, session persistence, mobile navigation, and logout protect t
   if (isMobile) await page.getByRole('button', { name: shell.openNavigation }).click();
   await page.getByRole('link', { name: shell.security, exact: true }).click();
   await expect(page.getByRole('heading', { name: security.currentSession })).toBeVisible();
-  await page.getByRole('button', { name: security.logoutAll, exact: true }).click();
-  await page
-    .getByRole('dialog')
-    .getByRole('button', { name: security.confirmAction, exact: true })
-    .click();
-  await expect(page).toHaveURL('/login');
+  await closeAllSessions(page);
   await expect(otherTab).toHaveURL('/login');
   await otherTab.close();
   await page.goto('/settings/security');
@@ -62,12 +77,7 @@ test('login rejects invalid credentials and session loading recovers from a netw
 }) => {
   const email = await registerUser(page);
   await page.goto('/settings/security');
-  await page.getByRole('button', { name: security.logoutAll, exact: true }).click();
-  await page
-    .getByRole('dialog')
-    .getByRole('button', { name: security.confirmAction, exact: true })
-    .click();
-  await expect(page).toHaveURL('/login');
+  await closeAllSessions(page);
   await page.getByLabel(auth.email, { exact: true }).fill(email);
   await page.getByLabel(auth.password, { exact: true }).fill('An incorrect browser password');
   await page.getByRole('button', { name: auth.loginAction, exact: true }).click();

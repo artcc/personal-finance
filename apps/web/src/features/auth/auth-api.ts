@@ -1,5 +1,6 @@
 import { api } from '../../lib/api';
-import { ApiError, requireData, requireSuccess } from '../../lib/api-error';
+import { requireData, requireSuccess } from '../../lib/api-error';
+import { csrfHeaders } from '../../lib/csrf';
 import { queryClient } from '../../app/query-client';
 import { clearSession, sessionKey } from './session';
 import type { Session } from './session';
@@ -14,12 +15,6 @@ export async function register(input: {
   password: string;
 }): Promise<Session> {
   return requireData(await api.POST('/api/v1/auth/register', { body: input }));
-}
-
-function csrfHeaders() {
-  const session = queryClient.getQueryData<Session | null>(sessionKey);
-  if (!session) throw new ApiError('AUTH_REQUIRED');
-  return { 'X-CSRF-Token': session.csrfToken };
 }
 
 export async function logout(all = false): Promise<void> {

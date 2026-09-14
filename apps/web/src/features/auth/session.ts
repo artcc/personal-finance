@@ -22,9 +22,15 @@ export function useSession() {
   });
 }
 
-export async function clearSession(): Promise<void> {
+export async function replaceSession(session: Session | null): Promise<void> {
   await queryClient.cancelQueries();
-  queryClient.clear();
-  queryClient.setQueryData(sessionKey, null);
+  clearPrivateQueries();
+  queryClient.getMutationCache().clear();
+  // Retain the query observed by mounted guards; replacing the cache would detach them.
+  queryClient.setQueryData<Session | null>(sessionKey, session);
   notifySessionChanged();
+}
+
+export function clearSession(): Promise<void> {
+  return replaceSession(null);
 }

@@ -7,14 +7,41 @@ import auth from './locales/es-ES/auth.json';
 import shell from './locales/es-ES/shell.json';
 import workspace from './locales/es-ES/workspace.json';
 import security from './locales/es-ES/security.json';
+import finance from './locales/es-ES/finance.json';
+import accounts from './locales/es-ES/accounts.json';
+import sources from './locales/es-ES/sources.json';
 
 await i18n.use(initReactI18next).init({
   lng: 'es-ES',
   fallbackLng: 'es-ES',
   supportedLngs: ['es-ES'],
   defaultNS: 'common',
-  ns: ['common', 'foundation', 'errors', 'auth', 'shell', 'workspace', 'security'],
-  resources: { 'es-ES': { common, foundation, errors, auth, shell, workspace, security } },
+  ns: [
+    'common',
+    'foundation',
+    'errors',
+    'auth',
+    'shell',
+    'workspace',
+    'security',
+    'finance',
+    'accounts',
+    'sources',
+  ],
+  resources: {
+    'es-ES': {
+      common,
+      foundation,
+      errors,
+      auth,
+      shell,
+      workspace,
+      security,
+      finance,
+      accounts,
+      sources,
+    },
+  },
   interpolation: { escapeValue: false },
   returnNull: false,
 });

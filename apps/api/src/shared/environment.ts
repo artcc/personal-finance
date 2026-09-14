@@ -8,6 +8,17 @@ const schema = z
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
     HOST: z.string().min(1).default('127.0.0.1'),
     PORT: z.coerce.number().int().min(1).max(65535).default(3000),
+    PLANNING_TIME_ZONE: z
+      .string()
+      .default('Europe/Madrid')
+      .refine((value) => {
+        try {
+          new Intl.DateTimeFormat('en', { timeZone: value });
+          return true;
+        } catch {
+          return false;
+        }
+      }),
     APP_ORIGIN: z.string().default('http://127.0.0.1:5173'),
     TRUST_PROXY: z
       .string()

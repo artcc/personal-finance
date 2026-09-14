@@ -2,7 +2,9 @@
 
 ## Product boundaries
 
-Build a self-hosted monthly financial planner with web registration and independent user accounts. Read [the product definition](docs/product.md) and [architecture](docs/architecture.md) before implementing features. Each user's financial data is private to that user. Everyday purchase tracking, data import, and bank synchronization are outside the initial scope. Users enter data manually; export remains in scope.
+Build a self-hosted monthly financial planner with web registration and independent user accounts. Read [the product definition](specs/product.md) and [architecture](specs/architecture.md) before implementing features. Each user's financial data is private to that user. Everyday purchase tracking, data import, and bank synchronization are outside the initial scope. Users enter data manually; export remains in scope.
+
+Keep engineering specifications, ADRs, and design references under `specs/`. Reserve `docs/` for the static website to be built and published with GitHub Pages in the final phase.
 
 ## Language
 
@@ -16,7 +18,7 @@ Build a self-hosted monthly financial planner with web registration and independ
 
 1. Read directly related source files, specifications, ADRs, and existing instructions.
 2. Inspect existing work and preserve changes you did not create.
-3. Check [the decision register](docs/decisions.md). Do not implement a proposed financial policy as though it were approved.
+3. Check [the decision register](specs/decisions.md). Do not implement a proposed financial policy as though it were approved.
 4. When fixing a bug, explain its root cause before making the fix.
 5. Keep changes minimal, coherent, and within the requested phase or feature.
 
@@ -47,7 +49,7 @@ Build a self-hosted monthly financial planner with web registration and independ
 
 ## UI/UX
 
-- Follow [the UI/UX direction](docs/design/ui-ux.md) and [screen flows](docs/design/screen-flows.md).
+- Follow [the UI/UX direction](specs/design/ui-ux.md) and [screen flows](specs/design/screen-flows.md).
 - Treat design quality as acceptance criteria: spacing, typography, visual hierarchy, mobile behavior, and states must be implemented deliberately.
 - Use shared semantic tokens and reusable component variants rather than one-off styling.
 - Include empty, loading, error, read-only, and negative-availability states where relevant.
@@ -61,7 +63,7 @@ Build a self-hosted monthly financial planner with web registration and independ
 - Propose the smallest relevant check first and describe what it establishes.
 - Do not run full test suites automatically. Broaden approved checks only when new failures or changes justify it and permission covers the scope.
 - Write meaningful tests for financial rules, persistence invariants, and important journeys. Avoid tests that merely mirror implementation.
-- Document commands only after they exist. See `package.json` and [the development guide](docs/development.md) for the implemented scripts.
+- Document commands only after they exist. See `package.json` and [the development guide](specs/development.md) for the implemented scripts.
 - The owner currently runs only approved lint/format checks locally using the existing Node installation. Do not install another Node version or run local builds, type checks, code generation, tests, or containers without new authorization. Builds and tests are configured in CI.
 - Use `node scripts/pnpm-local.mjs` for local pnpm operations so caches/state remain inside the project. Local dependency installation uses `install --ignore-scripts`.
 - CI will run the agreed checks automatically once implemented; do not claim CI success without actual evidence.

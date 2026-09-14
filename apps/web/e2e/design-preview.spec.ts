@@ -1,11 +1,11 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 test('capture the synthetic financial design proposal for owner review', async ({
   page,
 }, testInfo) => {
-  await page.goto(pathToFileURL(resolve('docs/design/phase-3-preview.html')).href);
+  await page.goto(pathToFileURL(resolve('specs/design/phase-3-preview.html')).href);
   for (const [button, name] of [
     ['Monthly overview', 'overview'],
     ['Account allocation', 'allocation'],

@@ -26,6 +26,7 @@ export default defineConfig({
         HOST: '127.0.0.1',
         PORT: '3000',
         APP_ORIGIN: 'http://127.0.0.1:4173',
+        TRUST_PROXY: '127.0.0.1/32',
         DATABASE_URL:
           process.env['TEST_DATABASE_URL'] ?? 'postgresql://unused:unused@127.0.0.1:1/unused',
       },

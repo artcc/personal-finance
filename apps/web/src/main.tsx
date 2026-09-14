@@ -7,6 +7,8 @@ import { FoundationPage } from './features/foundation/foundation-page';
 import { AppShell } from './app/app-shell';
 import { AccessPage } from './features/auth/access-page';
 import { SecurityPage } from './features/auth/security-page';
+import { AccountsPage } from './features/accounts/accounts-page';
+import { SourcesPage } from './features/finance/sources-page';
 import { queryClient } from './app/query-client';
 import i18n from './i18n';
 import './styles.css';
@@ -27,6 +29,9 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <FoundationPage /> },
+      { path: 'accounts', element: <AccountsPage /> },
+      { path: 'income', element: <SourcesPage key="income" kind="income" /> },
+      { path: 'commitments', element: <SourcesPage key="commitments" kind="commitments" /> },
       { path: 'settings/security', element: <SecurityPage /> },
     ],
   },

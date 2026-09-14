@@ -1,0 +1,62 @@
+# Decision Register
+
+This register separates confirmed requirements from proposals requiring owner approval. An ADR marked **accepted direction** records the accepted stack or architecture direction; it does not imply that every business policy has been accepted.
+
+## Confirmed requirements
+
+- Self-hosted application with web registration/login and multiple independent users. The owner explicitly replaced the single-owner restriction during phase 3; every user's financial data remains isolated.
+- Monthly planning rather than everyday purchase tracking.
+- Manual data entry; no data import. Export and operational backups remain in scope. The workbook is optional historical reference, not an implementation dependency.
+- Modular monolith, pnpm monorepo, and the TypeScript/React/NestJS/PostgreSQL stack described in the architecture.
+- Tests, lint, type checks, clear specifications, agent instructions, README, and MIT licensing.
+- Docker, Docker Compose, and Portainer deployment direction.
+- Phase 2 includes Docker image publication to private GHCR packages on stable GitHub release publication. Both API and web images must pass the release checks before the version is consumed in Docker/Portainer.
+- Use the newest stable mutually compatible dependencies; no alpha, beta, or release candidates. Keep the current macOS Node installation and run only approved lint/format checks locally; builds and tests run in CI.
+- English project content; Spanish frontend translation resources; future languages supported.
+- Polished UI/UX is a product requirement, not a final cosmetic task.
+- MIT copyright holder: Arturo Carretero Calvo.
+
+## Business policies to confirm
+
+Phase-4 resolution (2026-09-14): the owner explicitly approved D-01, D-02, D-03, D-04, D-07, D-09, D-12, and D-13 in the phase-4 clarification. Their recorded defaults below are now approved implementation policies. D-05, D-06, D-08, and D-11 remain proposed for later phases.
+
+| ID | Decision | Proposed default | Needed before |
+| --- | --- | --- | --- |
+| D-01 | Monthly provision rounding | Allocate each obligation's annual cents across 12 months; floor share plus one cent for the first remainder months in a January–December cycle | Provision engine and acceptance fixtures |
+| D-02 | Joining a provision cycle mid-year | Begin future monthly provisions without automatically catching up; require an explicit opening reserve or additional contribution if reserve sufficiency is shown | Provision UI |
+| D-03 | Effective dates within a month | Planning uses inclusive `startsOn`/`endsOn` overlap with the month; full monthly charge on overlap, no daily proration; due schedules remain separate | Income and commitment scheduling |
+| D-04 | Professional income and taxes | Separate expected cash receipts, collected-VAT reserve, and spendable income; withholdings reduce receipt and are not reserved again; commission is deducted once from receipt | Professional income calculations |
+| D-05 | Closing and reopening | Explicit close; reopening requires a reason and creates a new editable revision while preserving the closed revision | Monthly lifecycle |
+| D-06 | Everyday spending allocation | Allocate a user-entered part of planned availability to the spending account, without another expense; keep the remaining amount visible | Allocation editor |
+| D-07 | Annual payment splits | Require the owner to enter explicit installment amounts; installment totals must equal the annual obligation | Due-payment schedules |
+| D-08 | Investment cost basis | Select weighted average or FIFO, including fee treatment, after reviewing required use; neither is assumed by initial specs | Sales and partial sales |
+| D-09 | Reserve tracking depth | Start with planning provisions and due-payment visibility; no inferred bank reserve balance or automatic month-to-month carry-forward | Final provision spec |
+| D-11 | Underfunded plans | Allow negative availability and show a persistent shortfall; permit closing with explicit acknowledgement; require allocations to reconcile to expected receipts | Monthly close criteria |
+| D-12 | Tax and commission precision | Round each computed component half away from zero to cents; commission based on pre-tax base; support this deducted-commission scenario first | Professional income API |
+| D-13 | Missing calendar due day | Clamp a day-31 schedule and February 29 annual schedules to the last valid day of the relevant month; do not shift weekends/holidays | Payment schedule generation |
+
+Specs reference these IDs. Implementers must not resolve the remaining proposals silently. Phase-4 calculations may implement the explicitly approved policies above; later-phase policies still require confirmation.
+
+## Withdrawn decisions
+
+- **D-10 — Import opening values:** withdrawn on 2026-09-14 after the owner explicitly excluded data import. Do not build import previews, mappings, batches, or commit workflows. Manually reported financing/investment opening amounts still require explicit values and as-of dates in their feature specifications; do not infer execution history.
+
+## Engineering and design follow-ups
+
+| ID | Item | Current direction | Needed before |
+| --- | --- | --- | --- |
+| E-02 | Decimal arithmetic implementation | PostgreSQL exact numeric storage; a domain-friendly exact arithmetic implementation selected without coupling domain types to Prisma | Investment arithmetic |
+| E-03 | Host infrastructure | Confirm domain, reverse proxy, trusted proxy configuration, persistent volumes, and Portainer deployment workflow | Production deployment |
+| E-04 | Recovery objectives | Agree backup retention, recovery-point target, recovery-time target, encryption, and off-host destination | Backup automation |
+
+## How to record a resolution
+
+Record the owner-approved choice, date, and affected documents in this file. Update the relevant ADR/spec and examples together. Preserve superseded decisions in ADR history rather than deleting their rationale. Never turn a proposal into an accepted decision solely because code has been written.
+
+## Resolved engineering choices
+
+- **E-06 — Visual direction, 2026-09-14:** the owner accepted the current financial preview, including its charts and aligned header/content widths, and authorized phase 4. Keep the light theme, deep teal accent, financial hierarchy, and responsive layouts. This approves the design direction; it does not certify accessibility measurements or the still-pending CI run.
+
+- **E-05 — Access model, 2026-09-14:** the owner requested web registration/login and confirmed multiple independent users. ADR 009 supersedes the single-owner proposal. Phase 3 uses server-side sessions, Node's stable scrypt implementation, protected cookies, same-origin/CSRF checks, and bounded access attempts. Defaults and the server-side password recovery procedure are specified in the authentication spec. Email is a login identifier; outbound email delivery/verification is not implemented in this phase.
+
+- **E-01 — Runtime and packages, 2026-09-14:** the owner authorized project-local dependencies and requested newest stable compatible versions. Node 26.8.2 is the existing local runtime and the CI/container runtime; pnpm 12.4.1 is pinned. PostgreSQL 18.6 and Prisma 7.10.0 are selected, excluding the PostgreSQL 19 beta and Prisma 8 release candidate. TypeScript 5.9.3 is the compatibility intersection for `openapi-typescript` 7.13.0 (`^5.x`) and `typescript-eslint` 8.70.0 (`<6.1.0`); TypeScript 7.0.2 is deferred until those tools support it together. Additional direct versions are pinned in manifests and the lockfile. No alternate Node version is installed locally.

@@ -33,6 +33,7 @@ services:
       DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL with the database service hostname}
       APP_ORIGIN: ${APP_ORIGIN:?Set the public HTTPS application origin}
       TRUST_PROXY: ${TRUST_PROXY:-false}
+      PLANNING_TIME_ZONE: ${PLANNING_TIME_ZONE:-Europe/Madrid}
     depends_on:
       migrate:
         condition: service_completed_successfully
