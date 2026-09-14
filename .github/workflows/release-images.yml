@@ -37,9 +37,9 @@ jobs:
       ref: ${{ github.sha }}
 
   publish:
-    name: Publish ${{ matrix.target }}
+    name: Publish ${{ matrix.target }} (${{ matrix.arch }})
     needs: [release-metadata, checks]
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
     timeout-minutes: 45
     permissions:
       contents: read
@@ -48,12 +48,17 @@ jobs:
       fail-fast: false
       matrix:
         target: [api, web]
+        arch: [amd64, arm64]
+        include:
+          - arch: amd64
+            runner: ubuntu-24.04
+          - arch: arm64
+            runner: ubuntu-24.04-arm
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.sha }}
           persist-credentials: false
-      - uses: docker/setup-qemu-action@1f40c72289eff860ee54a304f1438e3cff362e0a # v4.3.0
       - uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e # v4.3.0
       - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
@@ -67,22 +72,56 @@ jobs:
           context: .
           file: infra/docker/Dockerfile
           target: ${{ matrix.target }}
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/${{ matrix.arch }}
           push: true
           tags: |
-            ghcr.io/artcc/personal-finance-${{ matrix.target }}:${{ needs.release-metadata.outputs.version }}
-            ghcr.io/artcc/personal-finance-${{ matrix.target }}:sha-${{ github.sha }}
+            ghcr.io/artcc/personal-finance-${{ matrix.target }}:${{ needs.release-metadata.outputs.version }}-${{ matrix.arch }}
+            ghcr.io/artcc/personal-finance-${{ matrix.target }}:sha-${{ github.sha }}-${{ matrix.arch }}
           labels: |
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.version=${{ needs.release-metadata.outputs.version }}
             org.opencontainers.image.licenses=MIT
-          cache-from: type=gha,scope=release-${{ matrix.target }}
-          cache-to: type=gha,mode=max,scope=release-${{ matrix.target }}
+          cache-from: type=gha,scope=release-${{ matrix.target }}-${{ matrix.arch }}
+          cache-to: type=gha,mode=max,scope=release-${{ matrix.target }}-${{ matrix.arch }}
       - name: Record published digest
         env:
           IMAGE: ghcr.io/artcc/personal-finance-${{ matrix.target }}
           DIGEST: ${{ steps.image.outputs.digest }}
-          VERSION: ${{ needs.release-metadata.outputs.version }}
+          VERSION: ${{ needs.release-metadata.outputs.version }}-${{ matrix.arch }}
         run: |
           printf '### %s\n\nTag: `%s`\n\nDigest: `%s@%s`\n' "$IMAGE" "$VERSION" "$IMAGE" "$DIGEST" >> "$GITHUB_STEP_SUMMARY"
+
+  manifests:
+    name: Publish ${{ matrix.target }} multi-platform tags
+    needs: [release-metadata, publish]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [api, web]
+    steps:
+      - uses: docker/setup-buildx-action@37fe631027851001ddb9b187196cc803df7f5f0e # v4.3.0
+      - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create multi-platform tags
+        env:
+          IMAGE: ghcr.io/artcc/personal-finance-${{ matrix.target }}
+          VERSION: ${{ needs.release-metadata.outputs.version }}
+          REVISION: ${{ github.sha }}
+        run: |
+          docker buildx imagetools create \
+            --tag "$IMAGE:$VERSION" \
+            --tag "$IMAGE:sha-$REVISION" \
+            "$IMAGE:$VERSION-amd64" \
+            "$IMAGE:$VERSION-arm64"
+          printf '### %s\n\n```text\n' "$IMAGE" >> "$GITHUB_STEP_SUMMARY"
+          docker buildx imagetools inspect "$IMAGE:$VERSION" >> "$GITHUB_STEP_SUMMARY"
+          printf '\n```\n' >> "$GITHUB_STEP_SUMMARY"

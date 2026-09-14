@@ -1,6 +1,6 @@
 # Release Image Delivery
 
-Status: phase-2 workflow and Docker/Compose configuration implemented; CI success reported by the owner, first image publication still unverified. Full host operations and backup/restore acceptance remain in phase 8.
+Status: release-image publication uses native AMD64/ARM64 runners. The owner supplied failed API and web logs for `v0.0.1`; the native-build correction has not yet been executed in CI. Full host operations and backup/restore acceptance remain in phase 8.
 
 Phase-3 update: the owner reported phase-2 CI green. Access now requires `APP_ORIGIN` to match the public HTTPS origin; configure `TRUST_PROXY` only for known proxy IPs/CIDRs. The database migration adds independent registered users and sessions without discarding existing identity UUIDs. First release publication and host-specific operations still need separate verification.
 
@@ -14,8 +14,9 @@ Publish a stable GitHub release
   -> Check out the release event's exact commit SHA
   -> Reusable CI: lint, format, build, types, contract, migrations, tests
   -> Container build/startup checks
-  -> Build API and web images for amd64 + arm64
-  -> Push private GHCR packages with version/SHA tags
+  -> Build API and web images on native amd64 and arm64 runners
+  -> Push architecture-specific GHCR version/SHA tags
+  -> After all four builds succeed, create multi-platform version/SHA tags
   -> Record image digests in workflow summaries
   -> Owner selects the version for Docker/Portainer deployment
 ```
@@ -31,9 +32,19 @@ All checks and builds use the same event commit, not the moving head of `main`. 
 
 Tags are readable identifiers; registry digests identify immutable image content. Workflow summaries include both tag and digest. There is no mutable `latest` tag. OCI metadata records source repository, revision, release version, and license.
 
-Both targets publish `linux/amd64` and `linux/arm64`. Ordinary CI smoke-checks amd64 containers; the release build produces the additional arm64 images. An arm64 build alone is not an arm64 runtime test.
+Both targets publish `linux/amd64` and `linux/arm64`. Each target is built separately on `ubuntu-24.04` (AMD64) and `ubuntu-24.04-arm` (ARM64), without QEMU. Build caches are scoped by target and architecture. Intermediate tags append `-amd64` or `-arm64` to the release version and full-commit tag. Once all four builds succeed, `docker buildx imagetools create` combines the architecture-specific release tags into the version and commit tags consumed by Compose.
+
+Ordinary CI smoke-checks amd64 containers; release jobs compile both architectures natively. An arm64 build alone is not an arm64 runtime test.
 
 API and web publication is not atomic. If one matrix job fails after the other publishes, do not deploy that version until the entire workflow succeeds. Reruns may rebuild a tag; use recorded digests when exact artifact identity is required.
+
+### ARM64 generation failure
+
+The `v0.0.1` release run `34893325202` at commit `9d56333604daf844907c37f7ff04eaafd7e73400` generated Prisma successfully on AMD64, while both API and web builds failed at ARM64 `prisma generate` under QEMU with `get-dmmf wasm`, `P1012`, and 102 errors. Diagnostics rejected existing identifiers and valid literals such as `true` and `Cascade`, pointing to the emulated validator execution rather than absent model fields. The workflow now builds each architecture natively; the Prisma schema, dependency versions, and Docker runtime targets are unchanged.
+
+A rerun of that existing release uses its original commit and workflow. Publish a new release tag containing the correction after committing and pushing it; a rerun alone will not pick up changes from `main`.
+
+Local evidence (2026-09-14): with owner authorization, `node scripts/pnpm-local.mjs exec prettier --check .github/workflows/release-images.yml` passed. No local container build or runtime test was executed; native ARM64 generation and multi-platform publication require a successful corrected workflow run.
 
 ## GitHub/GHCR configuration
 
