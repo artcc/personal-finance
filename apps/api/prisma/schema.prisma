@@ -256,6 +256,7 @@ model Financing {
   planningSource   CommitmentSource @relation(fields: [planningSourceId, userId], references: [id, userId], onDelete: Restrict)
   balances         FinancingBalance[]
   @@unique([id, userId])
+  @@unique([planningSourceId, userId])
   @@index([userId, name, id])
   @@map("financings")
 }
@@ -290,6 +291,7 @@ model Investment {
   entries          InvestmentEntry[]
   valuations       InvestmentValuation[]
   @@unique([id, userId])
+  @@unique([planningSourceId, userId])
   @@index([userId, name, id])
   @@map("investments")
 }
