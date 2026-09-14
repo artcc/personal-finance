@@ -21,6 +21,8 @@ The helper invokes the pinned pnpm through npm using project-local npm cache, XD
 
 `--ignore-scripts` avoids dependency lifecycle execution locally. Consequently, do not expect generated Prisma code, generated API types, or compiled applications to exist after this install. Lint does not require those artifacts.
 
+CI and Docker installations use the pnpm 12 `allowBuilds` policy in `pnpm-workspace.yaml`: Prisma, its engines, and esbuild may run installation scripts; the optional Scarf analytics script is explicitly denied. `strictDepBuilds` stays enabled so unreviewed scripts fail installation. The removed `onlyBuiltDependencies` setting must not be used. Local `--ignore-scripts` still disables all these scripts, even when the shared policy allows them.
+
 With explicit permission, format source/configuration using:
 
 ```sh
@@ -93,3 +95,5 @@ Vite proxies `/api` to the API so the browser uses one origin. The localized fou
 ## Evidence boundary
 
 Local dependency installation and ESLint have completed using the existing Node runtime. With owner authorization, Prettier was applied to source/configuration and ESLint passed again afterward. No local build, type check, migration, unit/HTTP/database/browser test, or container execution has been performed. GitHub workflow files describe future execution and are not evidence of a successful run.
+
+The first reported CI run failed during dependency installation with `ERR_PNPM_IGNORED_BUILDS`: the workspace still used the removed `onlyBuiltDependencies` option. It has been replaced by the explicit `allowBuilds` policy above. A new CI run is required to verify this correction; the earlier local lint/format results do not validate it.

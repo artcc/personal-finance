@@ -9,9 +9,11 @@ minimumReleaseAgeExclude:
   - react-i18next@17.0.14
   - zod@4.6.5
 
-onlyBuiltDependencies:
-  - '@prisma/engines'
-  - esbuild
-  - prisma
+allowBuilds:
+  '@prisma/engines': true
+  '@scarf/scarf': false
+  esbuild: true
+  prisma: true
 
+strictDepBuilds: true
 strictPeerDependencies: true
