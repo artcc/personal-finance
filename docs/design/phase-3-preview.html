@@ -80,7 +80,7 @@
       }
       #stage {
         container-type: inline-size;
-        max-width: 1280px;
+        max-width: 100%;
         margin: auto;
         transition: max-width 0.15s ease;
       }
@@ -906,6 +906,9 @@
         background: linear-gradient(110deg, white, #edf2f3, white);
       }
       @container (max-width: 900px) {
+        .topbar {
+          padding: 0 24px;
+        }
         .insights-grid {
           grid-template-columns: minmax(0, 1.35fr) minmax(230px, 1fr);
         }
@@ -957,7 +960,7 @@
         }
         .topbar {
           height: 64px;
-          padding: 0 20px;
+          padding: 0 16px;
         }
         .profile-name {
           display: none;

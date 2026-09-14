@@ -13,8 +13,6 @@ import { ApiError } from '../../lib/api-error';
 import { login, register as registerAccount } from './auth-api';
 import { sessionKey, useSession } from './session';
 
-type FormValues = { email: string; password: string; displayName?: string; confirmation?: string };
-
 export function AccessPage({ mode }: { mode: 'login' | 'register' }) {
   const { t } = useTranslation(['auth', 'common']);
   const navigate = useNavigate();
@@ -41,7 +39,9 @@ export function AccessPage({ mode }: { mode: 'login' | 'register' }) {
         }),
     [mode],
   );
-  const form = useForm<FormValues>({
+  type FormInput = z.input<typeof schema>;
+  type FormValues = z.output<typeof schema>;
+  const form = useForm<FormInput, unknown, FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { email: '', password: '', displayName: '', confirmation: '' },
   });
@@ -67,7 +67,7 @@ export function AccessPage({ mode }: { mode: 'login' | 'register' }) {
   if (session.isError) return <ConnectionError retry={() => void session.refetch()} />;
   if (session.data) return <Navigate to="/" replace />;
 
-  const fieldError = (field: keyof FormValues) => {
+  const fieldError = (field: keyof FormInput) => {
     const message = form.formState.errors[field]?.message;
     return message ? (
       <p id={`${field}-error`} className="field-error">

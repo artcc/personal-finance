@@ -61,6 +61,7 @@ Light mode is the proposed initial target. Dark mode is a later optional feature
 
 - Base spacing scale: 4, 8, 12, 16, 24, 32, and 48px.
 - Desktop canvas padding: 32px; tablet 24px; mobile 16px.
+- Align headers and their associated content to the same horizontal bounds and responsive gutters. Avoid applying a second, narrower width cap only to the content. The review frame fills its review header's width except when deliberately simulating a mobile viewport.
 - Content max width: approximately 1280px; reading/form columns approximately 640–760px.
 - Sidebar: approximately 232px on desktop.
 - Cards: 16px radius; controls: 10px; status pills reserved for small labels.
